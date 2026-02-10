@@ -13,13 +13,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <script>
-        // Configuração do Tailwind para as cores exatas do INEP/Unichristus
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        inep: { 50: '#f0f9ff', 100: '#e0f2fe', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e' },
-                        emerald: { 50: '#ecfdf5', 600: '#059669', 900: '#064e3b' }
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' }
                     }
                 }
             }
@@ -28,134 +26,152 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         
-        /* UI Components */
-        .bloom-step { transition: all 0.2s; border: 1px solid #e2e8f0; cursor: pointer; }
-        .bloom-step.active { border-color: #0284c7; background-color: #e0f2fe; color: #0369a1; font-weight: 700; transform: scale(1.02); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        
-        .type-card { transition: all 0.2s; cursor: pointer; }
-        .type-card:hover { border-color: #bae6fd; }
-        .type-card.active { border-color: #0284c7; background-color: #f0f9ff; ring: 1px; ring-color: #0284c7; }
-        
-        .diff-btn { transition: all 0.2s; }
-        .diff-btn.active { border: 2px solid #0284c7; background-color: #f0f9ff; color: #0369a1; }
-        
-        .mode-tab { transition: all 0.2s; }
-        .mode-tab.active { background-color: white; color: #0369a1; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        /* UI Components Fiéis às Imagens */
+        .input-field { transition: all 0.2s; }
+        .input-field:focus { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); border-color: #2563eb; }
 
-        /* Typography for Generated Content */
-        .prose h1 { color: #0369a1; font-size: 1.25rem; font-weight: 800; border-bottom: 2px solid #e0f2fe; padding-bottom: 0.5rem; margin-top: 1.5rem; }
-        .prose h2 { color: #1e293b; font-size: 1.1rem; font-weight: 700; margin-top: 1.25rem; }
-        .prose p { margin-bottom: 1rem; line-height: 1.6; text-align: justify; color: #334155; }
-        .prose strong { color: #0f172a; font-weight: 700; }
+        .bloom-btn { transition: all 0.2s; border: 1px solid #e2e8f0; }
+        .bloom-btn.active { background-color: #dbeafe; border-color: #2563eb; color: #1e40af; font-weight: 700; transform: scale(1.02); }
+
+        .type-card { transition: all 0.3s ease; border: 1px solid #e2e8f0; cursor: pointer; }
+        .type-card:hover { border-color: #93c5fd; }
+        .type-card.active { border-color: #2563eb; background-color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); ring: 1px ring-color: #2563eb; }
+        
+        /* Animação do Conteúdo Interno do Card */
+        .card-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease; }
+        .type-card.active .card-content { max-height: 600px; opacity: 1; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f1f5f9; }
+
+        .qty-btn { transition: all 0.2s; }
+        .qty-btn:active { transform: scale(0.95); }
+        .qty-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Estilo do Conteúdo Gerado */
+        .prose h1 { color: #1e40af; font-weight: 800; font-size: 1.5rem; margin-top: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+        .prose strong { color: #1e3a8a; }
         
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-slate-900">
 
     <header class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50 flex items-center justify-between shadow-sm no-print">
         <div class="flex items-center gap-3">
-            <div class="bg-inep-600 p-2 rounded-lg text-white shadow-md"><i data-lucide="graduation-cap"></i></div>
+            <div class="bg-brand-600 p-2 rounded-lg text-white shadow-md"><i data-lucide="graduation-cap"></i></div>
             <div>
                 <h1 class="text-xl font-bold text-slate-900 leading-none">Academicus AI</h1>
                 <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Núcleo de Apoio Pedagógico</p>
             </div>
         </div>
-        <div class="bg-inep-50 text-inep-700 px-3 py-1.5 rounded-full border border-inep-100 font-bold text-[10px] flex items-center gap-2">
+        <div class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-100 font-bold text-[10px] flex items-center gap-2">
             <i data-lucide="sparkles" class="w-3 h-3"></i> Powered by Gemini 3 Flash
         </div>
     </header>
 
-    <main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 w-full flex-1">
+    <main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 w-full">
         
-        <aside class="lg:col-span-4 xl:col-span-3 space-y-5 no-print">
+        <aside class="lg:col-span-4 xl:col-span-3 space-y-6 no-print">
             
-            <div class="bg-slate-200/60 p-1 rounded-xl flex gap-1 font-bold">
-                <button onclick="updateState('mode', 'generator')" id="tab-gen" class="mode-tab active flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2">
-                    <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i> Design
+            <div class="bg-slate-200/50 p-1 rounded-xl flex gap-1 font-bold">
+                <button onclick="setMode('generator')" id="tab-gen" class="flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm transition-all">
+                    <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i> Design de Avaliação
                 </button>
-                <button onclick="updateState('mode', 'auditor')" id="tab-aud" class="mode-tab flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 text-slate-500">
-                    <i data-lucide="clipboard-check" class="w-3.5 h-3.5"></i> Auditoria
+                <button onclick="setMode('auditor')" id="tab-aud" class="flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all">
+                    <i data-lucide="clipboard-check" class="w-3.5 h-3.5"></i> Auditoria Técnica
                 </button>
             </div>
 
-            <div id="panel-generator" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-5">
+            <div id="panel-generator" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-6">
                 
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Curso / Área</label>
-                        <input type="text" id="input-curso" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-inep-600 focus:ring-4 focus:ring-inep-100 transition-all" placeholder="Ex: Medicina, Direito...">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Objeto de Conhecimento</label>
-                        <textarea id="input-conteudo" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-inep-600 focus:ring-4 focus:ring-inep-100 transition-all" placeholder="Tema, competência ou habilidade..."></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase flex gap-1 items-center">
-                            <i data-lucide="target" class="w-3 h-3"></i> Objetivo de Aprendizagem (Opcional)
-                        </label>
-                        <input type="text" id="input-objetivo" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-inep-600" placeholder="Ex: Analisar criticamente...">
+                <div>
+                    <h3 class="flex items-center gap-2 text-sm font-bold text-slate-800 mb-4">
+                        <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-600"></i> Parâmetros da Questão
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Curso / Área de Conhecimento</label>
+                            <input type="text" id="curso" class="input-field w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none placeholder:text-slate-400" placeholder="Ex: Medicina, Direito Civil...">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Objeto de Conhecimento</label>
+                            <textarea id="conteudo" rows="3" class="input-field w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none placeholder:text-slate-400" placeholder="Descreva o tema específico..."></textarea>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <label class="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase flex items-center gap-1">
+                                <i data-lucide="target" class="w-3 h-3"></i> Objetivo de Aprendizagem (Opcional)
+                            </label>
+                            <input type="text" id="objetivo" class="w-full bg-transparent text-xs outline-none text-slate-700 placeholder:text-slate-300" placeholder="Ex: Analisar criticamente...">
+                        </div>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase flex items-center gap-1.5">
-                        <i data-lucide="bar-chart-3" class="w-3 h-3"></i> Nível de Dificuldade
-                    </label>
+                    <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase flex items-center gap-1.5"><i data-lucide="bar-chart-3" class="w-3 h-3"></i> Nível de Dificuldade</label>
                     <div class="grid grid-cols-3 gap-2">
-                        <button onclick="updateState('difficulty', 'Fácil')" id="diff-Fácil" class="diff-btn py-2 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500">Fácil</button>
-                        <button onclick="updateState('difficulty', 'Médio')" id="diff-Médio" class="diff-btn active py-2 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500">Médio</button>
-                        <button onclick="updateState('difficulty', 'Difícil')" id="diff-Difícil" class="diff-btn py-2 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500">Difícil</button>
+                        <button onclick="setDiff('Fácil')" class="diff-btn py-2.5 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500 hover:bg-slate-50">Fácil</button>
+                        <button onclick="setDiff('Médio')" class="diff-btn active py-2.5 rounded-lg border border-brand-600 bg-brand-50 text-brand-700 text-[10px] font-bold">Médio</button>
+                        <button onclick="setDiff('Difícil')" class="diff-btn py-2.5 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500 hover:bg-slate-50">Difícil</button>
                     </div>
                 </div>
 
-                <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase">Taxonomia de Bloom</label>
-                        <span id="bloom-badge" class="text-[9px] font-bold bg-inep-100 text-inep-700 px-2 rounded">CRIAR</span>
+                <div class="p-4 border border-indigo-100 bg-indigo-50/30 rounded-xl">
+                    <div class="flex justify-between items-center mb-3">
+                        <label class="text-[10px] font-bold text-indigo-900 uppercase flex gap-1 items-center"><i data-lucide="brain-circuit" class="w-3 h-3"></i> Taxonomia de Bloom</label>
+                        <span id="bloom-badge" class="text-[9px] font-bold bg-white text-indigo-600 px-2 py-0.5 rounded border border-indigo-100">CRIAR</span>
                     </div>
                     <div class="flex flex-col items-center gap-1">
-                        <button onclick="updateState('bloom', 'Criar')" id="bloom-Criar" class="bloom-step active w-[50%] py-1.5 rounded text-[10px]">Criar</button>
-                        <button onclick="updateState('bloom', 'Avaliar')" id="bloom-Avaliar" class="bloom-step w-[60%] py-1.5 rounded text-[10px]">Avaliar</button>
-                        <button onclick="updateState('bloom', 'Analisar')" id="bloom-Analisar" class="bloom-step w-[70%] py-1.5 rounded text-[10px]">Analisar</button>
-                        <button onclick="updateState('bloom', 'Aplicar')" id="bloom-Aplicar" class="bloom-step w-[80%] py-1.5 rounded text-[10px]">Aplicar</button>
-                        <button onclick="updateState('bloom', 'Entender')" id="bloom-Entender" class="bloom-step w-[90%] py-1.5 rounded text-[10px]">Entender</button>
-                        <button onclick="updateState('bloom', 'Lembrar')" id="bloom-Lembrar" class="bloom-step w-full py-1.5 rounded text-[10px]">Lembrar</button>
+                        <button onclick="setBloom('Criar')" id="btn-Criar" class="bloom-btn active w-[50%] py-1.5 rounded text-[10px]">Criar</button>
+                        <button onclick="setBloom('Avaliar')" id="btn-Avaliar" class="bloom-btn w-[60%] py-1.5 rounded text-[10px]">Avaliar</button>
+                        <button onclick="setBloom('Analisar')" id="btn-Analisar" class="bloom-btn w-[70%] py-1.5 rounded text-[10px]">Analisar</button>
+                        <button onclick="setBloom('Aplicar')" id="btn-Aplicar" class="bloom-btn w-[80%] py-1.5 rounded text-[10px]">Aplicar</button>
+                        <button onclick="setBloom('Entender')" id="btn-Entender" class="bloom-btn w-[90%] py-1.5 rounded text-[10px]">Entender</button>
+                        <button onclick="setBloom('Lembrar')" id="btn-Lembrar" class="bloom-btn w-full py-1.5 rounded text-[10px]">Lembrar</button>
+                    </div>
+                    <div id="bloom-desc" class="mt-3 text-[10px] text-indigo-800 italic leading-relaxed bg-white p-2 rounded border border-indigo-100">
+                        <strong>Criar:</strong> Colocar elementos juntos para formar um todo coerente. <br>Verbos: Planejar, Produzir.
                     </div>
                 </div>
 
                 <div class="pt-4 border-t border-slate-100">
-                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2">Modelo da Questão</label>
-                    <div id="types-container" class="space-y-2"></div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-3">Modelo da Questão</label>
+                    <div id="types-container" class="space-y-3">
+                        </div>
                 </div>
 
-                <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200">
-                    <span class="text-[10px] font-bold text-slate-500 uppercase flex gap-2"><i data-lucide="layers" class="w-3.5 h-3.5"></i> Quantidade</span>
-                    <div class="flex items-center gap-3">
-                        <button onclick="updateState('quantity', Math.max(1, state.quantity - 1))" class="w-6 h-6 bg-white border rounded flex items-center justify-center hover:bg-slate-100"><i data-lucide="minus" class="w-3 h-3"></i></button>
-                        <span id="qty-display" class="text-sm font-bold text-slate-700">1</span>
-                        <button onclick="updateState('quantity', Math.min(10, state.quantity + 1))" class="w-6 h-6 bg-white border rounded flex items-center justify-center hover:bg-slate-100"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                <div class="pt-4 border-t border-slate-100 space-y-4">
+                    <div class="flex items-center justify-between bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="layers" class="w-4 h-4 text-slate-400"></i>
+                            <span class="text-xs font-bold text-slate-700">Quantidade de Questões</span>
+                        </div>
+                        <div class="flex items-center gap-3 bg-slate-50 rounded-lg p-1 border border-slate-200">
+                            <button onclick="updateQty(-1)" class="qty-btn w-7 h-7 flex items-center justify-center bg-white border border-slate-200 rounded text-slate-600 hover:text-brand-600"><i data-lucide="minus" class="w-3 h-3"></i></button>
+                            <span id="qty-val" class="text-sm font-bold text-slate-800 w-4 text-center">1</span>
+                            <button onclick="updateQty(1)" class="qty-btn w-7 h-7 flex items-center justify-center bg-white border border-slate-200 rounded text-slate-600 hover:text-brand-600"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                        </div>
                     </div>
-                </div>
 
-                <button onclick="handleGenerate()" id="btn-generate" class="w-full bg-inep-600 hover:bg-inep-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-inep-200 flex items-center justify-center gap-2 active:scale-[0.98] transition-all">
-                    <span>Gerar Questão</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
+                    <button onclick="gerar()" id="btn-main" class="w-full bg-slate-100 text-slate-400 font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-brand-600 hover:text-white hover:shadow-lg hover:shadow-brand-200 group">
+                        <span>Gerar Questão Avaliativa</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
             </div>
 
             <div id="panel-auditor" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
                 <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex gap-3">
                     <i data-lucide="microscope" class="w-5 h-5 text-emerald-600 shrink-0"></i>
                     <div>
-                        <h4 class="text-xs font-bold text-emerald-800">Auditoria Técnica ENADE</h4>
-                        <p class="text-[10px] text-emerald-700 mt-1">Análise de psicometria, distratores e taxonomia.</p>
+                        <h4 class="text-xs font-bold text-emerald-800">Auditoria Técnica</h4>
+                        <p class="text-[10px] text-emerald-700 mt-1">Análise psicométrica e cognitiva.</p>
                     </div>
                 </div>
-                <textarea id="audit-input" rows="15" class="w-full px-4 py-3 rounded-xl border border-emerald-100 bg-emerald-50/20 text-[11px] font-mono outline-none focus:border-emerald-600 text-slate-700" placeholder="Cole a questão completa aqui..."></textarea>
-                <button onclick="handleAudit()" id="btn-audit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2">
+                <textarea id="audit-input" rows="15" class="w-full px-4 py-3 rounded-xl border border-emerald-100 bg-emerald-50/20 text-[11px] font-mono outline-none focus:border-emerald-500 text-slate-700" placeholder="Cole a questão completa aqui..."></textarea>
+                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2">
                     <span>Auditar Questão</span>
                     <i data-lucide="check-circle-2" class="w-4 h-4"></i>
                 </button>
@@ -163,13 +179,13 @@
         </aside>
 
         <div class="lg:col-span-8 xl:col-span-9 flex flex-col h-full">
-            <div id="result-container" class="bg-white min-h-[850px] rounded-[2.5rem] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center p-12 transition-all relative">
+            <div id="result-area" class="bg-white min-h-[850px] rounded-[2.5rem] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center p-12 transition-all relative">
                 
-                <div id="export-actions" class="hidden absolute top-6 right-6 flex gap-2 no-print z-10">
-                    <button onclick="exportDocx()" class="bg-white border border-slate-200 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-50 text-xs font-bold shadow-sm flex items-center gap-2">
+                <div id="export-tools" class="hidden absolute top-8 right-8 flex gap-2 no-print z-20">
+                    <button onclick="exportWord()" class="bg-white border border-slate-200 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-50 text-xs font-bold shadow-sm flex items-center gap-2">
                         <i data-lucide="file-text" class="w-4 h-4"></i> Word
                     </button>
-                    <button onclick="exportPdf()" class="bg-white border border-slate-200 text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 text-xs font-bold shadow-sm flex items-center gap-2">
+                    <button onclick="exportPDF()" class="bg-white border border-slate-200 text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 text-xs font-bold shadow-sm flex items-center gap-2">
                         <i data-lucide="file-type-2" class="w-4 h-4"></i> PDF
                     </button>
                 </div>
@@ -177,154 +193,145 @@
                 <div id="placeholder" class="animate-fade-in">
                     <div class="bg-slate-50 p-8 rounded-full mb-6 inline-block ring-8 ring-slate-50/50"><i data-lucide="sparkles" class="w-12 h-12 text-slate-300"></i></div>
                     <h3 class="text-xl font-bold text-slate-400 uppercase">Aguardando Input</h3>
-                    <p class="text-slate-400 max-w-sm mx-auto mt-3 text-sm">Utilize os controles à esquerda para gerar itens avaliativos de alta complexidade.</p>
+                    <p class="text-slate-400 max-w-sm mx-auto mt-3 text-sm">Preencha os parâmetros à esquerda e clique em "Gerar" para criar uma questão de alta qualidade.</p>
                 </div>
                 
-                <div id="ai-content" class="hidden text-left w-full max-w-4xl prose prose-slate"></div>
+                <div id="ai-output" class="hidden text-left w-full max-w-4xl prose prose-slate"></div>
             </div>
         </div>
     </main>
 
     <script>
-        // --- GERENCIAMENTO DE ESTADO (MIMETIZANDO REACT) ---
-        const state = {
-            mode: 'generator', // 'generator' | 'auditor'
-            curso: '',
-            conteudo: '',
-            objetivo: '',
-            difficulty: 'Médio',
+        // --- DADOS E ESTADO ---
+        const BLOOM_INFO = {
+            "Criar": { verbs: "Gerar, Planejar, Produzir", desc: "Colocar elementos juntos para formar um todo coerente." },
+            "Avaliar": { verbs: "Julgar, Criticar, Concluir", desc: "Fazer julgamentos baseados em critérios e padrões." },
+            "Analisar": { verbs: "Diferenciar, Organizar, Comparar", desc: "Decompor o material em partes e determinar relações." },
+            "Aplicar": { verbs: "Executar, Implementar, Usar", desc: "Usar um procedimento em uma determinada situação." },
+            "Entender": { verbs: "Explicar, Resumir, Inferir", desc: "Construir significado a partir de mensagens." },
+            "Lembrar": { verbs: "Citar, Definir, Listar", desc: "Recuperar conhecimento relevante da memória." }
+        };
+
+        const TYPES = {
+            "SINGLE": { title: "Resposta Única", icon: "check-circle", desc: "Formato clássico com enunciado fechado.", example: "Qual estrutura celular faz respiração?\na) Ribossomo\nb) Mitocôndria..." },
+            "INCOMPLETE": { title: "Afirmação Incompleta", icon: "pen-tool", desc: "Frase que termina abruptamente.", example: "A inércia é definida como...\na) repouso..." },
+            "MULTIPLE": { title: "Complementação Múltipla", icon: "layers", desc: "Lista de asserções (I, II, III).", example: "I. O céu é azul.\nII. A água molha.\nÉ correto em..." },
+            "ASSERTION": { title: "Asserção e Razão", icon: "git-compare", desc: "Duas afirmações conectadas por PORQUE.", example: "Asserção I... PORQUE Asserção II..." },
+            "DISCURSIVE": { title: "Discursiva", icon: "file-text", desc: "Questão aberta com tópicos.", example: "Redija texto sobre IA abordando: a) Riscos..." }
+        };
+
+        let state = {
+            mode: 'generator',
             bloom: 'Criar',
-            type: 'SINGLE_ANSWER',
+            difficulty: 'Médio',
+            type: 'SINGLE',
             quantity: 1,
-            multiRange: 4,     // Para questões I a IV
-            assertionKey: 'A', // Para questões Asserção/Razão
+            multiRange: 4,
+            assertionKey: 'A'
         };
 
-        // DADOS CONSTANTES (DO SEU ARQUIVO constants.ts)
-        const DATA = {
-            BLOOM: {
-                "Criar": "Gerar, Planejar, Produzir.",
-                "Avaliar": "Julgar, Criticar, Concluir.",
-                "Analisar": "Diferenciar, Organizar, Comparar.",
-                "Aplicar": "Executar, Implementar, Usar.",
-                "Entender": "Explicar, Resumir, Inferir.",
-                "Lembrar": "Citar, Definir, Listar."
-            },
-            TYPES: {
-                "SINGLE_ANSWER": { title: "Resposta Única", icon: "check-circle", desc: "Clássica. Identificar a única correta.", example: "Qual estrutura celular faz respiração?\na) Ribossomo\nb) Mitocôndria..." },
-                "INCOMPLETE_STATEMENT": { title: "Afirmação Incompleta", icon: "pen-tool", desc: "Frase que termina sem pontuação.", example: "A inércia é definida como...\na) repouso..." },
-                "MULTIPLE_COMPLEMENTATION": { title: "Complementação Múltipla", icon: "layers", desc: "Lista romana (I, II, III).", example: "I. O céu é azul.\nII. A água molha.\nÉ correto em..." },
-                "ASSERTION_REASON": { title: "Asserção e Razão", icon: "git-compare", desc: "Duas afirmações + PORQUE.", example: "Asserção I... PORQUE Asserção II..." },
-                "DISCURSIVE": { title: "Discursiva", icon: "file-text", desc: "Aberta com tópicos obrigatórios.", example: "Redija texto abordando: a) Benefícios..." }
-            }
-        };
+        // --- RENDERIZAÇÃO ---
+        function renderTypes() {
+            const container = document.getElementById('types-container');
+            container.innerHTML = '';
 
-        // --- FUNÇÃO DE UPDATE (O "SETSTATE" DO VANILLA JS) ---
-        function updateState(key, value) {
-            state[key] = value;
-            renderUI();
-        }
-
-        // --- RENDERIZAÇÃO DA UI ---
-        function renderUI() {
-            // 1. Alternar Modos
-            const isGen = state.mode === 'generator';
-            document.getElementById('panel-generator').classList.toggle('hidden', !isGen);
-            document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
-            
-            // Abas
-            const tabGen = document.getElementById('tab-gen');
-            const tabAud = document.getElementById('tab-aud');
-            tabGen.className = `mode-tab flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 ${isGen ? 'active font-bold text-inep-700' : 'text-slate-500'}`;
-            tabAud.className = `mode-tab flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 ${!isGen ? 'active font-bold text-inep-700' : 'text-slate-500'}`;
-
-            // 2. Dificuldade
-            ['Fácil', 'Médio', 'Difícil'].forEach(lvl => {
-                const btn = document.getElementById(`diff-${lvl}`);
-                btn.className = `diff-btn py-2 rounded-lg border border-slate-200 text-[10px] font-bold ${state.difficulty === lvl ? 'active' : 'text-slate-500'}`;
-            });
-
-            // 3. Bloom
-            document.getElementById('bloom-badge').innerText = state.bloom.toUpperCase();
-            Object.keys(DATA.BLOOM).forEach(lvl => {
-                const btn = document.getElementById(`bloom-${lvl}`);
-                btn.classList.toggle('active', state.bloom === lvl);
-            });
-
-            // 4. Quantidade
-            document.getElementById('qty-display').innerText = state.quantity;
-
-            // 5. Lista de Tipos (Lógica Complexa do React portada para JS)
-            const typesContainer = document.getElementById('types-container');
-            typesContainer.innerHTML = '';
-            
-            Object.entries(DATA.TYPES).forEach(([key, info]) => {
+            Object.entries(TYPES).forEach(([key, info]) => {
                 const active = state.type === key;
                 const card = document.createElement('div');
-                card.className = `type-card p-3 rounded-xl border ${active ? 'active border-inep-600' : 'border-slate-200'}`;
-                card.onclick = () => updateState('type', key);
+                card.className = `type-card p-4 rounded-xl bg-white ${active ? 'active' : 'border-slate-200'}`;
+                card.onclick = () => { state.type = key; renderTypes(); updateGenerateButton(); };
 
-                // Controles Específicos (Conditionals do React)
-                let extras = '';
-                
-                // Lógica para Múltipla Escolha (I a III, IV, V)
-                if (active && key === 'MULTIPLE_COMPLEMENTATION') {
-                    extras = `
-                        <div class="mt-3 pt-3 border-t border-slate-100 animate-fade-in">
-                            <p class="text-[9px] font-bold text-slate-400 uppercase mb-2">Itens Romanos</p>
+                // Conteúdo Extra (I-V ou A-E)
+                let extraControls = '';
+                if (key === 'MULTIPLE') {
+                    extraControls = `
+                        <div class="mt-4 pt-3 border-t border-slate-100">
+                            <p class="text-[9px] font-bold text-slate-400 uppercase mb-2">Quantidade de Itens</p>
                             <div class="flex gap-2">
-                                ${[3, 4, 5].map(n => `
-                                    <button onclick="event.stopPropagation(); updateState('multiRange', ${n})" 
-                                    class="px-2 py-1 text-[9px] border rounded ${state.multiRange === n ? 'bg-inep-600 text-white' : 'bg-white text-slate-500'}">
-                                    I a ${n === 3 ? 'III' : n === 4 ? 'IV' : 'V'}
-                                    </button>
-                                `).join('')}
+                                ${[3,4,5].map(n => `<button onclick="event.stopPropagation(); state.multiRange=${n}; renderTypes();" class="px-3 py-1 text-[10px] border rounded ${state.multiRange===n ? 'bg-brand-600 text-white border-brand-600' : 'bg-white text-slate-500 hover:bg-slate-50'}">I a ${n===3?'III':n===4?'IV':'V'}</button>`).join('')}
                             </div>
                         </div>`;
                 }
-
-                // Lógica para Asserção (Gabarito A-E)
-                if (active && key === 'ASSERTION_REASON') {
-                    extras = `
-                        <div class="mt-3 pt-3 border-t border-slate-100 animate-fade-in">
-                            <p class="text-[9px] font-bold text-slate-400 uppercase mb-2">Forçar Gabarito</p>
+                if (key === 'ASSERTION') {
+                    extraControls = `
+                        <div class="mt-4 pt-3 border-t border-slate-100">
+                            <p class="text-[9px] font-bold text-slate-400 uppercase mb-2">Definir Gabarito (Engenharia Reversa)</p>
                             <div class="flex gap-1">
-                                ${['A', 'B', 'C', 'D', 'E'].map(l => `
-                                    <button onclick="event.stopPropagation(); updateState('assertionKey', '${l}')" 
-                                    class="w-6 h-6 flex items-center justify-center text-[9px] border rounded ${state.assertionKey === l ? 'bg-inep-600 text-white' : 'bg-white text-slate-500'}">
-                                    ${l}
-                                    </button>
-                                `).join('')}
+                                ${['A','B','C','D','E'].map(l => `<button onclick="event.stopPropagation(); state.assertionKey='${l}'; renderTypes();" class="w-8 h-8 flex items-center justify-center text-[10px] font-bold border rounded ${state.assertionKey===l ? 'bg-brand-600 text-white border-brand-600' : 'bg-white text-slate-500 hover:bg-slate-50'}">${l}</button>`).join('')}
                             </div>
                         </div>`;
                 }
 
                 card.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="${active ? 'text-inep-600' : 'text-slate-400'}"><i data-lucide="${info.icon}" class="w-4 h-4"></i></div>
-                        <div class="flex-1">
-                            <h4 class="text-[11px] font-bold ${active ? 'text-inep-900' : 'text-slate-600'}">${info.title}</h4>
-                            ${active ? `<p class="text-[9px] text-slate-500 mt-0.5">${info.desc}</p>` : ''}
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="${active?'text-brand-600':'text-slate-400'}"><i data-lucide="${info.icon}" class="w-5 h-5"></i></div>
+                            <span class="text-xs font-bold ${active?'text-brand-700':'text-slate-600'}">${info.title}</span>
                         </div>
-                        ${active ? '<i data-lucide="check" class="w-3.5 h-3.5 text-inep-600"></i>' : ''}
+                        ${active ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-brand-600"></i>' : ''}
                     </div>
-                    ${extras}
+                    <div class="card-content">
+                        <p class="text-[10px] text-slate-500 leading-relaxed mb-3">${info.desc}</p>
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 text-[10px] text-slate-500 font-mono whitespace-pre-wrap flex gap-2">
+                            <i data-lucide="sparkles" class="w-3 h-3 text-brand-400 shrink-0 mt-0.5"></i>
+                            <span>${info.example}</span>
+                        </div>
+                        ${extraControls}
+                    </div>
                 `;
-                typesContainer.appendChild(card);
+                container.appendChild(card);
             });
             lucide.createIcons();
         }
 
-        // --- COMUNICAÇÃO COM API (VERCEL HANDLER) ---
-        async function callAPI(prompt, btnId) {
-            const btn = document.getElementById(btnId);
-            const originalText = btn.innerHTML;
-            const container = document.getElementById('result-container');
-            const aiContent = document.getElementById('ai-content');
-            const placeholder = document.getElementById('placeholder');
-            const exportActions = document.getElementById('export-actions');
+        // --- UPDATE FUNCTIONS ---
+        function setMode(mode) {
+            state.mode = mode;
+            const isGen = mode === 'generator';
+            document.getElementById('panel-generator').classList.toggle('hidden', !isGen);
+            document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
+            document.getElementById('tab-gen').className = isGen ? 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm transition-all font-bold' : 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all';
+            document.getElementById('tab-aud').className = !isGen ? 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm transition-all font-bold' : 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all';
+        }
 
-            // Loading State
+        function setDiff(val) {
+            document.querySelectorAll('.diff-btn').forEach(b => {
+                b.className = 'diff-btn py-2.5 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500 hover:bg-slate-50';
+            });
+            event.target.className = 'diff-btn active py-2.5 rounded-lg border border-brand-600 bg-brand-50 text-brand-700 text-[10px] font-bold';
+            state.difficulty = val;
+        }
+
+        function setBloom(val) {
+            document.querySelectorAll('.bloom-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${val}`).classList.add('active');
+            state.bloom = val;
+            document.getElementById('bloom-badge').innerText = val.toUpperCase();
+            document.getElementById('bloom-desc').innerHTML = `<strong>${val}:</strong> ${BLOOM_INFO[val].desc} <br><span class="text-indigo-400 text-[9px] uppercase tracking-wide mt-1 block">Verbos: ${BLOOM_INFO[val].verbs}</span>`;
+        }
+
+        function updateQty(amount) {
+            const newVal = state.quantity + amount;
+            if (newVal >= 1 && newVal <= 10) {
+                state.quantity = newVal;
+                document.getElementById('qty-val').innerText = newVal;
+            }
+        }
+
+        function updateGenerateButton() {
+            const btn = document.getElementById('btn-main');
+            btn.className = "w-full bg-brand-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-200 hover:bg-brand-700 active:scale-[0.98]";
+        }
+
+        // --- API CALLS (VERCEL) ---
+        async function fetchAI(prompt, btnId) {
+            const btn = document.getElementById(btnId);
+            const originalHTML = btn.innerHTML;
+            const resultArea = document.getElementById('result-area');
+            const placeholder = document.getElementById('placeholder');
+            const output = document.getElementById('ai-output');
+            const tools = document.getElementById('export-tools');
+
             btn.disabled = true;
             btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Processando...`;
             lucide.createIcons();
@@ -332,98 +339,88 @@
             try {
                 const response = await fetch('/api/gemini', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ prompt })
                 });
-
                 const data = await response.json();
-                if (data.error) throw new Error(data.error);
-
-                // Show Result
-                placeholder.classList.add('hidden');
-                container.classList.remove('border-dashed', 'items-center', 'justify-center', 'text-center');
-                container.classList.add('bg-white', 'p-16');
                 
-                aiContent.innerHTML = marked.parse(data.text);
-                aiContent.classList.remove('hidden');
-                exportActions.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                resultArea.classList.remove('border-dashed', 'items-center', 'justify-center', 'text-center');
+                resultArea.classList.add('bg-white', 'p-16', 'shadow-sm'); // Visual Limpo
+                
+                output.innerHTML = marked.parse(data.text);
+                output.classList.remove('hidden');
+                tools.classList.remove('hidden');
 
             } catch (error) {
-                alert("Erro: " + error.message + "\nVerifique se a GEMINI_API_KEY está configurada no Vercel.");
+                alert("Erro ao conectar com a IA.");
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = originalText;
+                btn.innerHTML = originalHTML;
                 lucide.createIcons();
             }
         }
 
-        // --- LÓGICA DE GERAÇÃO DE PROMPTS ---
-        function handleGenerate() {
-            state.curso = document.getElementById('input-curso').value;
-            state.conteudo = document.getElementById('input-conteudo').value;
-            state.objetivo = document.getElementById('input-objetivo').value;
+        function gerar() {
+            const curso = document.getElementById('curso').value;
+            const conteudo = document.getElementById('conteudo').value;
+            const objetivo = document.getElementById('objetivo').value;
+            
+            if (!curso || !conteudo) return alert("Preencha Curso e Objeto de Conhecimento.");
+            updateGenerateButton(); // Ativa visual azul
 
-            if (!state.curso || !state.conteudo) return alert("Preencha Curso e Objeto de Conhecimento.");
-
-            // Lógica Específica para Tipos Complexos
-            let extraInstruction = "";
-            if (state.type === 'MULTIPLE_COMPLEMENTATION') {
-                extraInstruction = `Estrutura Obrigatória: Crie ${state.multiRange} itens romanos (I a ${state.multiRange === 3 ? 'III' : state.multiRange === 4 ? 'IV' : 'V'}).`;
-            } else if (state.type === 'ASSERTION_REASON') {
-                extraInstruction = `Engenharia Reversa: O gabarito DEVE ser a alternativa ${state.assertionKey}. Construa as asserções para que isso seja verdade.`;
-            }
+            let extras = "";
+            if (state.type === 'MULTIPLE') extras = `ITENS ROMANOS OBRIGATÓRIOS: I a ${state.multiRange===3?'III':state.multiRange===4?'IV':'V'}.`;
+            if (state.type === 'ASSERTION') extras = `GABARITO OBRIGATÓRIO: Letra ${state.assertionKey} (Engenharia Reversa).`;
 
             const prompt = `
-                ATUE COMO ESPECIALISTA INEP.
-                Gere ${state.quantity} questão(ões) do tipo ${DATA.TYPES[state.type].title}.
-                
-                CONTEXTO:
-                - Curso: ${state.curso}
-                - Tema: ${state.conteudo}
-                - Objetivo: ${state.objetivo}
-                - Dificuldade: ${state.difficulty}
-                - Bloom: ${state.bloom} (${DATA.BLOOM[state.bloom]})
-                
-                REGRAS:
-                ${extraInstruction}
-                - Separe questões com "---"
-                - Inclua Gabarito Comentado e Justificativa.
-                - Use referências reais.
+            ESPECIALISTA INEP/ENADE.
+            Gere ${state.quantity} questão(ões) inédita(s) do tipo ${TYPES[state.type].title}.
+            
+            CONTEXTO:
+            - Curso: ${curso}
+            - Tema: ${conteudo}
+            - Objetivo Aprendizagem: ${objetivo}
+            - Dificuldade: ${state.difficulty}
+            - Bloom: ${state.bloom}
+            ${extras}
+            
+            SAÍDA:
+            - Enunciado claro.
+            - Alternativas (A-E).
+            - Gabarito Comentado e Justificativa Pedagógica no final.
+            Use separador "---" entre questões.
             `;
-            callAPI(prompt, 'btn-generate');
+            fetchAI(prompt, 'btn-main');
         }
 
-        function handleAudit() {
-            const text = document.getElementById('audit-input').value;
-            if (!text) return alert("Cole a questão para auditar.");
-            const prompt = `AUDITORIA PEDAGÓGICA ENADE:\nAnalise a questão abaixo quanto à psicometria, clareza e taxonomia:\n\n${text}`;
-            callAPI(prompt, 'btn-audit');
+        function auditar() {
+            const txt = document.getElementById('audit-input').value;
+            if(!txt) return alert("Cole uma questão.");
+            fetchAI(`AUDITORIA ENADE:\nAnalise psicometria e taxonomia:\n${txt}`, 'btn-aud');
         }
 
-        // --- EXPORTAÇÃO ---
-        async function exportDocx() {
+        // --- EXPORT ---
+        async function exportWord() {
             const { Document, Packer, Paragraph, TextRun } = docx;
-            const text = document.getElementById('ai-content').innerText;
-            const doc = new Document({
-                sections: [{
-                    children: [
-                        new Paragraph({ children: [new TextRun({ text: "Academicus AI - Relatório", bold: true, size: 32 })] }),
-                        new Paragraph({ children: [new TextRun({ text: text, size: 24 })] })
-                    ]
-                }]
-            });
+            const text = document.getElementById('ai-output').innerText;
+            const doc = new Document({ sections: [{ children: [new Paragraph({ children: [new TextRun({text: "Academicus AI - Relatório", bold: true, size: 32}), new TextRun({text: "\n\n"+text, size: 24})]})]}]});
             const blob = await Packer.toBlob(doc);
             saveAs(blob, "Questao_Academicus.docx");
         }
 
-        function exportPdf() {
-            const el = document.getElementById('ai-content');
+        function exportPDF() {
+            const el = document.getElementById('ai-output');
             html2pdf().set({ margin: 1, filename: 'Academicus.pdf' }).from(el).save();
         }
 
         // Init
-        renderUI();
+        renderTypes();
+        setBloom('Criar');
         lucide.createIcons();
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
