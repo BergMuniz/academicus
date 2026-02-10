@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Academicus AI | Inteligência Avaliativa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academicus AI | Núcleo de Apoio Pedagógico</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -17,541 +17,342 @@
             theme: {
                 extend: {
                     colors: {
-                        inep: {
-                            50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc',
-                            400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1',
-                            800: '#075985', 900: '#0c4a6e',
-                        },
-                        emerald: { 50: '#ecfdf5', 600: '#059669', 700: '#047857' }
-                    },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+                    }
                 }
             }
         }
     </script>
-    
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        body { background-color: #f8fafc; color: #334155; -webkit-font-smoothing: antialiased; }
-
-        /* --- COMPONENTES VISUAIS (Baseado nas imagens) --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         
-        /* Inputs Estilizados */
-        .input-inep {
-            width: 100%; padding: 12px 16px; border-radius: 12px;
-            border: 1px solid #e2e8f0; background: white; color: #0f172a;
-            font-size: 0.95rem; transition: all 0.2s; outline: none;
-        }
-        .input-inep:focus { border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1); }
-        .input-inep::placeholder { color: #94a3b8; }
+        /* UI Elements */
+        .input-field { transition: all 0.2s; }
+        .input-field:focus { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); border-color: #2563eb; }
+        .bloom-btn { transition: all 0.2s; border: 1px solid #e2e8f0; }
+        .bloom-btn:hover { transform: scale(1.01); }
+        .type-card { transition: all 0.3s ease; border: 1px solid #e2e8f0; cursor: pointer; }
+        .type-card:hover { border-color: #93c5fd; }
+        .type-card.active { border-color: #2563eb; background-color: white; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.15); ring: 1px ring-color: #2563eb; }
+        .card-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.4s ease; }
+        .type-card.active .card-content { max-height: 1500px; opacity: 1; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
+        .diff-card { transition: all 0.2s; cursor: pointer; }
+        .diff-bar { transition: all 0.3s ease; }
 
-        /* Card de Dificuldade (Barras Coloridas) */
-        .diff-card {
-            position: relative; border-radius: 12px; border: 1px solid #e2e8f0;
-            background: white; padding: 10px; display: flex; flex-direction: column;
-            align-items: center; justify-content: flex-end; height: 100px;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .diff-card:hover { border-color: #bae6fd; background: #f8fafc; }
-        .diff-bar { width: 100%; border-radius: 6px 6px 0 0; transition: all 0.3s; margin-bottom: 8px; }
-        
-        /* Estados Ativos de Dificuldade */
-        .diff-card[data-active="true"][data-level="Fácil"] { background: #f0f9ff; border-color: #7dd3fc; ring: 2px solid #e0f2fe; }
-        .diff-card[data-active="true"][data-level="Fácil"] .diff-bar { background: #38bdf8; height: 35%; }
-        .diff-card[data-active="true"][data-level="Médio"] { background: #eff6ff; border-color: #60a5fa; ring: 2px solid #dbeafe; }
-        .diff-card[data-active="true"][data-level="Médio"] .diff-bar { background: #3b82f6; height: 65%; }
-        .diff-card[data-active="true"][data-level="Difícil"] { background: #eef2ff; border-color: #818cf8; ring: 2px solid #e0e7ff; }
-        .diff-card[data-active="true"][data-level="Difícil"] .diff-bar { background: #6366f1; height: 100%; }
-        
-        /* Estados Inativos */
-        .diff-card[data-active="false"] .diff-bar { background: #e2e8f0; }
-        .diff-card[data-active="false"][data-level="Fácil"] .diff-bar { height: 35%; }
-        .diff-card[data-active="false"][data-level="Médio"] .diff-bar { height: 65%; }
-        .diff-card[data-active="false"][data-level="Difícil"] .diff-bar { height: 100%; }
-
-        /* Pirâmide de Bloom (Invertida) */
-        .bloom-btn {
-            border: 1px solid #e2e8f0; background: white; color: #64748b;
-            font-size: 0.85rem; font-weight: 600; padding: 10px;
-            border-radius: 10px; transition: all 0.2s; text-align: center;
-            position: relative;
-        }
-        .bloom-btn:hover { border-color: #cbd5e1; color: #334155; }
-        .bloom-btn.active {
-            background: #e0f2fe; border-color: #38bdf8; color: #0369a1;
-            box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.15);
-            font-weight: 700; transform: scale(1.02); z-index: 10;
-        }
-
-        /* Card de Tipo de Questão */
-        .type-card {
-            border: 1px solid #e2e8f0; border-radius: 12px; background: white;
-            padding: 16px; cursor: pointer; transition: all 0.2s;
-            overflow: hidden; /* Para a animação de expandir */
-        }
-        .type-card:hover { border-color: #bae6fd; background: #f8fafc; }
-        .type-card.active {
-            border-color: #0ea5e9; background: white;
-            box-shadow: 0 4px 12px -2px rgba(14, 165, 233, 0.15);
-            ring: 1px solid #0ea5e9;
-        }
-        .type-icon { transition: all 0.2s; }
-        .type-card.active .type-icon { color: #0284c7; transform: scale(1.1); }
-        .radio-dot {
-            width: 18px; height: 18px; border-radius: 50%; border: 2px solid #cbd5e1;
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-        }
-        .type-card.active .radio-dot { border-color: #0284c7; }
-        .radio-dot::after {
-            content: ''; width: 8px; height: 8px; background: #0284c7;
-            border-radius: 50%; opacity: 0; transform: scale(0); transition: all 0.2s;
-        }
-        .type-card.active .radio-dot::after { opacity: 1; transform: scale(1); }
-
-        /* RESULTADO (Markdown Styles) */
-        .prose h3 { color: #0c4a6e; font-size: 1.15rem; font-weight: 800; border-bottom: 2px solid #e0f2fe; margin-top: 1.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; }
+        /* --- ESTILO DA PROVA (SAÍDA DA IA) --- */
+        .prose h3 { color: #1e3a8a; font-size: 1.1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 800; text-transform: uppercase; }
         .prose strong { color: #0f172a; font-weight: 700; }
-        .prose p { margin-bottom: 1rem; line-height: 1.6; text-align: justify; color: #334155; }
-        .prose ul { padding-left: 0; list-style: none; }
-        .prose li { margin-bottom: 0.5rem; }
+        .prose p { margin-bottom: 1rem; line-height: 1.7; text-align: justify; color: #334155; font-size: 0.95rem; }
+        .prose ul { list-style: none; padding-left: 0; }
+        .prose li { margin-bottom: 0.8rem; padding: 0.5rem 0.5rem 0.5rem 0; border-bottom: 1px dashed #f1f5f9; }
         
+        /* CAIXA DE GABARITO PROFISSIONAL */
         .gabarito-box {
-            background: #f0fdf4; border: 1px solid #86efac; border-left: 5px solid #16a34a;
-            padding: 1.5rem; border-radius: 12px; margin-top: 2rem;
+            background-color: #f0fdf4;
+            border: 1px solid #86efac;
+            border-left: 4px solid #16a34a;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            page-break-inside: avoid;
         }
+        .gabarito-title {
+            color: #166534;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .gabarito-content { font-size: 0.9rem; color: #14532d; }
+        
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="min-h-screen flex flex-col text-slate-900">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm h-16">
-        <div class="max-w-7xl mx-auto px-4 lg:px-6 h-full flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="bg-inep-600 p-2 rounded-lg text-white shadow-md shadow-inep-200">
-                    <i data-lucide="graduation-cap" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold text-slate-900 leading-none tracking-tight">Academicus AI</h1>
-                    <p class="text-xs text-slate-500 font-medium mt-0.5">Inteligência Avaliativa para Ensino Superior</p>
-                </div>
+    <header class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50 flex items-center justify-between shadow-sm no-print">
+        <div class="flex items-center gap-3">
+            <div class="bg-brand-600 p-2 rounded-lg text-white shadow-md"><i data-lucide="graduation-cap"></i></div>
+            <div>
+                <h1 class="text-xl font-bold text-slate-900 leading-none">Academicus AI</h1>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Núcleo de Apoio Pedagógico</p>
             </div>
-            
-            <div class="flex bg-slate-100 p-1 rounded-xl">
-                <button onclick="setMode('generator')" id="tab-gen" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-inep-700 shadow-sm font-bold text-sm transition-all">
-                    <i data-lucide="pen-tool" class="w-4 h-4"></i> <span class="hidden sm:inline">Design de Avaliação</span>
-                </button>
-                <button onclick="setMode('auditor')" id="tab-aud" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-500 hover:text-slate-700 font-medium text-sm transition-all">
-                    <i data-lucide="clipboard-check" class="w-4 h-4"></i> <span class="hidden sm:inline">Auditoria Técnica</span>
-                </button>
-            </div>
+        </div>
+        <div class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-100 font-bold text-[10px] flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-3 h-3"></i> Powered by Gemini 2.0
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto w-full p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1">
+    <main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 w-full">
         
-        <aside class="lg:col-span-5 space-y-6">
-            
-            <div id="panel-generator" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
-                    <h2 className="font-bold text-slate-800 text-lg flex items-center gap-2">
-                        <i data-lucide="sparkles" class="w-4 h-4 text-inep-600"></i> Parâmetros da Questão
-                    </h2>
-                    <p class="text-xs text-slate-500 mt-1">Configure abaixo para gerar uma questão inédita alinhada à Taxonomia de Bloom.</p>
-                </div>
-
-                <div class="p-6 space-y-6">
+        <aside class="lg:col-span-4 xl:col-span-3 space-y-6 no-print">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-6">
+                <div>
+                    <h3 class="flex items-center gap-2 text-sm font-bold text-slate-800 mb-4">
+                        <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-600"></i> Parâmetros
+                    </h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Curso / Área</label>
-                            <input id="curso" class="input-inep" placeholder="Ex: Medicina, Direito Civil, Engenharia...">
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Curso</label>
+                            <input type="text" id="curso" class="input-field w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none placeholder:text-slate-400" placeholder="Ex: Psicologia, Direito...">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Objeto de Conhecimento</label>
-                            <textarea id="conteudo" rows="3" class="input-inep resize-none" placeholder="Descreva o tema específico, competência ou habilidade..."></textarea>
-                            <input id="objetivo" class="mt-2 w-full bg-transparent text-xs text-slate-500 placeholder:text-slate-400 outline-none border-b border-dashed border-slate-300 focus:border-inep-400" placeholder="🎯 Objetivo de Aprendizagem (Opcional)...">
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Objeto de Conhecimento</label>
+                            <textarea id="conteudo" rows="3" class="input-field w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none placeholder:text-slate-400" placeholder="Ex: Terapia Cognitivo-Comportamental..."></textarea>
                         </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                            <i data-lucide="bar-chart-3" class="w-4 h-4 text-slate-400"></i> Nível de Dificuldade
-                        </label>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card" data-active="false" data-level="Fácil">
-                                <div class="diff-bar"></div>
-                                <span class="text-xs font-bold text-slate-600">Fácil</span>
-                            </div>
-                            <div onclick="setDiff('Médio')" id="diff-Médio" class="diff-card" data-active="true" data-level="Médio">
-                                <div class="diff-bar"></div>
-                                <span class="text-xs font-bold text-inep-700">Médio</span>
-                            </div>
-                            <div onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card" data-active="false" data-level="Difícil">
-                                <div class="diff-bar"></div>
-                                <span class="text-xs font-bold text-slate-600">Difícil</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <label class="block text-sm font-bold text-slate-700 flex items-center gap-2">
-                                <i data-lucide="brain-circuit" class="w-4 h-4 text-indigo-500"></i> Taxonomia de Bloom
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <label class="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase flex items-center gap-1">
+                                <i data-lucide="target" class="w-3 h-3"></i> Objetivo (Opcional)
                             </label>
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Nível Cognitivo</span>
+                            <input type="text" id="objetivo" class="w-full bg-transparent text-xs outline-none text-slate-700 placeholder:text-slate-300" placeholder="Ex: Analisar criticamente...">
                         </div>
-                        
-                        <div class="flex flex-col items-center gap-1.5 w-full mb-4">
-                            <button onclick="setBloom('Criar')" id="bloom-Criar" class="bloom-btn" style="width: 45%">Criar</button>
-                            <button onclick="setBloom('Avaliar')" id="bloom-Avaliar" class="bloom-btn" style="width: 56%">Avaliar</button>
-                            <button onclick="setBloom('Analisar')" id="bloom-Analisar" class="bloom-btn" style="width: 67%">Analisar</button>
-                            <button onclick="setBloom('Aplicar')" id="bloom-Aplicar" class="bloom-btn" style="width: 78%">Aplicar</button>
-                            <button onclick="setBloom('Entender')" id="bloom-Entender" class="bloom-btn" style="width: 89%">Entender</button>
-                            <button onclick="setBloom('Lembrar')" id="bloom-Lembrar" class="bloom-btn" style="width: 100%">Lembrar</button>
-                        </div>
-
-                        <div id="bloom-info" class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm transition-colors">
-                            <p id="bloom-verb" class="font-bold text-slate-800 mb-1">Lembrar:</p>
-                            <p id="bloom-desc" class="text-slate-600 italic mb-2">Recuperar conhecimento relevante da memória.</p>
-                            <p id="bloom-list" class="text-[10px] uppercase font-bold text-slate-400">VERBOS: CITAR, DEFINIR, LISTAR</p>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-3">Modelo da Questão</label>
-                        <div class="space-y-3">
-                            
-                            <div onclick="setType('SINGLE')" id="type-SINGLE" class="type-card active">
-                                <div class="flex items-center gap-3">
-                                    <div class="type-icon text-inep-600"><i data-lucide="check-circle-2" class="w-5 h-5"></i></div>
-                                    <div class="flex-1 font-bold text-sm text-slate-800">Resposta Única</div>
-                                    <div class="radio-dot"></div>
-                                </div>
-                                <div class="expandable-content pl-8 mt-2 text-xs text-slate-500 hidden">
-                                    Questão clássica com enunciado fechado e uma única alternativa correta.
-                                </div>
-                            </div>
-
-                            <div onclick="setType('ASSERTION')" id="type-ASSERTION" class="type-card">
-                                <div class="flex items-center gap-3">
-                                    <div class="type-icon text-slate-400"><i data-lucide="git-compare" class="w-5 h-5"></i></div>
-                                    <div class="flex-1 font-bold text-sm text-slate-800">Asserção e Razão</div>
-                                    <div class="radio-dot"></div>
-                                </div>
-                                <div id="assertion-options" class="hidden pl-8 mt-3 pt-3 border-t border-slate-100 animate-fade-in">
-                                    <p class="text-[10px] font-bold text-inep-600 uppercase mb-2">Definir Gabarito (Engenharia Reversa):</p>
-                                    <div class="flex gap-2">
-                                        <button onclick="event.stopPropagation(); setAssertionKey('A')" class="w-8 h-8 rounded border border-slate-200 text-xs font-bold hover:bg-slate-50">A</button>
-                                        <button onclick="event.stopPropagation(); setAssertionKey('B')" class="w-8 h-8 rounded border border-slate-200 text-xs font-bold hover:bg-slate-50">B</button>
-                                        <button onclick="event.stopPropagation(); setAssertionKey('C')" class="w-8 h-8 rounded border border-slate-200 text-xs font-bold hover:bg-slate-50">C</button>
-                                        <button onclick="event.stopPropagation(); setAssertionKey('D')" class="w-8 h-8 rounded border border-inep-600 bg-inep-600 text-white text-xs font-bold shadow-md">D</button>
-                                        <button onclick="event.stopPropagation(); setAssertionKey('E')" class="w-8 h-8 rounded border border-slate-200 text-xs font-bold hover:bg-slate-50">E</button>
-                                    </div>
-                                    <p id="assertion-text" class="text-[10px] text-slate-500 mt-2 italic bg-slate-50 p-2 rounded">A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.</p>
-                                </div>
-                            </div>
-                            
-                            <div onclick="setType('DISCURSIVE')" id="type-DISCURSIVE" class="type-card">
-                                <div class="flex items-center gap-3">
-                                    <div class="type-icon text-slate-400"><i data-lucide="file-text" class="w-5 h-5"></i></div>
-                                    <div class="flex-1 font-bold text-sm text-slate-800">Discursiva</div>
-                                    <div class="radio-dot"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button onclick="gerar()" id="btn-main" class="w-full bg-inep-600 hover:bg-inep-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-inep-600/20 flex items-center justify-center gap-2 transition-all active:scale-95 text-lg">
-                        <span>Gerar Questão</span>
-                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div id="panel-auditor" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
-                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex gap-3">
-                    <i data-lucide="microscope" class="w-5 h-5 text-emerald-600 shrink-0"></i>
-                    <div>
-                        <h4 class="text-sm font-bold text-emerald-800">Auditor Pedagógico</h4>
-                        <p class="text-xs text-emerald-700 mt-1">Cole a questão completa (enunciado + alternativas) para análise técnica.</p>
                     </div>
                 </div>
-                <textarea id="audit-input" rows="10" class="w-full p-3 rounded-xl border border-emerald-200 bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none text-sm font-mono" placeholder="Cole aqui..."></textarea>
-                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2">
-                    <span>Auditar Questão</span>
-                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase">Nível de Dificuldade</label>
+                    <div class="grid grid-cols-3 gap-3 h-16">
+                        <button onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card w-full h-full rounded-lg border border-slate-200 bg-white flex flex-col justify-center items-center"><span class="text-xs font-bold text-slate-400">Fácil</span></button>
+                        <button onclick="setDiff('Médio')" id="diff-Médio" class="diff-card w-full h-full rounded-lg border border-brand-300 bg-brand-50 flex flex-col justify-center items-center"><span class="text-xs font-bold text-brand-600">Médio</span></button>
+                        <button onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card w-full h-full rounded-lg border border-slate-200 bg-white flex flex-col justify-center items-center"><span class="text-xs font-bold text-slate-400">Difícil</span></button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase">Nível Cognitivo (Bloom)</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="setBloom('Lembrar')" id="btn-Lembrar" class="bloom-btn py-2 rounded text-[10px] text-slate-600 bg-white">Lembrar</button>
+                        <button onclick="setBloom('Entender')" id="btn-Entender" class="bloom-btn py-2 rounded text-[10px] text-slate-600 bg-white">Entender</button>
+                        <button onclick="setBloom('Aplicar')" id="btn-Aplicar" class="bloom-btn py-2 rounded text-[10px] text-slate-600 bg-white">Aplicar</button>
+                        <button onclick="setBloom('Analisar')" id="btn-Analisar" class="bloom-btn py-2 rounded text-[10px] text-slate-600 bg-white">Analisar</button>
+                        <button onclick="setBloom('Avaliar')" id="btn-Avaliar" class="bloom-btn py-2 rounded text-[10px] text-slate-600 bg-white">Avaliar</button>
+                        <button onclick="setBloom('Criar')" id="btn-Criar" class="bloom-btn py-2 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700 border-indigo-200">Criar</button>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100">
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-3">Modelo da Questão</label>
+                    <div id="types-container" class="space-y-3"></div>
+                </div>
+
+                <button onclick="gerar()" id="btn-main" class="w-full bg-brand-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-brand-700 shadow-lg shadow-brand-200/50 mt-4">
+                    <span>Gerar Questão</span>
+                    <i data-lucide="zap" class="w-4 h-4"></i>
                 </button>
             </div>
         </aside>
 
-        <div class="lg:col-span-7 flex flex-col h-full">
-            <div class="bg-white min-h-[800px] border border-slate-200 rounded-2xl shadow-sm p-8 lg:p-12 relative flex-1">
+        <div class="lg:col-span-8 xl:col-span-9 flex flex-col h-full">
+            <div id="result-area" class="bg-white min-h-[850px] rounded-[2rem] border border-slate-200 shadow-sm flex flex-col relative overflow-hidden transition-all">
                 
-                <div id="tools" class="flex justify-end gap-2 mb-8 opacity-0 transition-opacity">
-                    <button onclick="exportWord()" class="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:border-inep-300 transition-all">
-                        <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i> Word
+                <div id="export-tools" class="hidden absolute top-6 right-6 flex gap-2 z-20 no-print">
+                    <button onclick="exportWord()" class="bg-white border border-slate-200 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-50 text-xs font-bold shadow-sm flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-4 h-4"></i> Word
                     </button>
-                    <button onclick="exportPdf()" class="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:border-red-300 transition-all">
-                        <i data-lucide="file" class="w-4 h-4 text-red-600"></i> PDF
+                    <button onclick="exportPDF()" class="bg-white border border-slate-200 text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 text-xs font-bold shadow-sm flex items-center gap-2">
+                        <i data-lucide="file-type-2" class="w-4 h-4"></i> PDF
                     </button>
                 </div>
 
-                <div id="placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                    <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6 border border-slate-100">
-                        <i data-lucide="sparkles" class="w-10 h-10 text-slate-300"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-400 mb-2">Aguardando Input</h3>
-                    <p class="text-sm text-slate-400 max-w-xs">Preencha os parâmetros à esquerda e clique em "Gerar" para criar uma questão de alta qualidade.</p>
+                <div id="placeholder" class="flex-1 flex flex-col items-center justify-center text-center p-12">
+                    <div class="bg-slate-50 p-6 rounded-full mb-6 ring-1 ring-slate-100"><i data-lucide="pen-tool" class="w-10 h-10 text-slate-300"></i></div>
+                    <h3 class="text-lg font-bold text-slate-400">Área de Criação</h3>
+                    <p class="text-slate-400 text-sm mt-2">Configure os parâmetros ao lado para iniciar.</p>
                 </div>
-
-                <div id="output" class="hidden prose prose-slate max-w-none"></div>
+                
+                <div id="ai-output" class="hidden text-left w-full max-w-4xl mx-auto p-12 prose prose-slate"></div>
             </div>
         </div>
-
     </main>
 
     <script>
-        // --- CONSTANTES ---
-        const BLOOM_INFO = {
-            'Lembrar': { verb: 'Lembrar', desc: 'Recuperar conhecimento relevante da memória.', list: 'CITAR, DEFINIR, LISTAR', color: 'sky' },
-            'Entender': { verb: 'Entender', desc: 'Construir significado a partir de mensagens.', list: 'RESUMIR, EXPLICAR', color: 'sky' },
-            'Aplicar': { verb: 'Aplicar', desc: 'Usar um procedimento em uma situação.', list: 'EXECUTAR, IMPLEMENTAR', color: 'blue' },
-            'Analisar': { verb: 'Analisar', desc: 'Separar material em partes constituintes.', list: 'DIFERENCIAR, ORGANIZAR', color: 'blue' },
-            'Avaliar': { verb: 'Avaliar', desc: 'Fazer julgamentos baseados em critérios.', list: 'CHECAR, CRITICAR', color: 'indigo' },
-            'Criar': { verb: 'Criar', desc: 'Colocar elementos juntos para formar um todo.', list: 'GERAR, PLANEJAR', color: 'indigo' }
+        // --- DADOS E TIPOS ---
+        const TYPES = {
+            "SINGLE": { title: "Resposta Única", icon: "check-circle", desc: "Clássica múltipla escolha (A-E)." },
+            "MULTIPLE": { title: "Complementação Múltipla", icon: "layers", desc: "Itens Romanos (I, II, III) com somatória." },
+            "ASSERTION": { title: "Asserção e Razão", icon: "git-compare", desc: "Duas afirmações conectadas por PORQUE." },
+            "DISCURSIVE": { title: "Discursiva", icon: "align-left", desc: "Questão aberta com padrão de resposta." }
         };
 
-        const ASSERTION_TEXTS = {
-            'A': 'As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.',
-            'B': 'As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.',
-            'C': 'A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.',
-            'D': 'A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.',
-            'E': 'As asserções I e II são proposições falsas.'
-        };
-
-        // --- ESTADO ---
-        let STATE = {
-            mode: 'generator',
-            diff: 'Médio',
-            bloom: 'Lembrar',
+        let state = {
             type: 'SINGLE',
-            assertionKey: 'D'
+            bloom: 'Criar',
+            difficulty: 'Médio',
+            multiRange: 4,
+            assertionKey: 'A'
         };
 
-        // --- INIT ---
-        function init() {
-            lucide.createIcons();
-            setBloom('Lembrar'); // Default
-        }
+        // --- RENDERIZAÇÃO DA UI ---
+        function renderTypes() {
+            const container = document.getElementById('types-container');
+            container.innerHTML = '';
 
-        // --- UI FUNCTIONS ---
-        function setMode(mode) {
-            STATE.mode = mode;
-            const isGen = mode === 'generator';
-            document.getElementById('panel-generator').classList.toggle('hidden', !isGen);
-            document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
-            
-            // Toggle Tab Styles
-            const btnGen = document.getElementById('tab-gen');
-            const btnAud = document.getElementById('tab-aud');
-            
-            if(isGen) {
-                btnGen.className = "flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-inep-700 shadow-sm font-bold text-sm transition-all";
-                btnAud.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-slate-500 hover:text-slate-700 font-medium text-sm transition-all";
-            } else {
-                btnGen.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-slate-500 hover:text-slate-700 font-medium text-sm transition-all";
-                btnAud.className = "flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-emerald-700 shadow-sm font-bold text-sm transition-all";
-            }
-        }
+            Object.entries(TYPES).forEach(([key, info]) => {
+                const active = state.type === key;
+                const card = document.createElement('div');
+                card.className = `type-card p-4 rounded-xl bg-white ${active ? 'active' : 'border-slate-200'}`;
+                card.onclick = () => { state.type = key; renderTypes(); };
 
-        function setDiff(val) {
-            STATE.diff = val;
-            document.querySelectorAll('.diff-card').forEach(el => {
-                const isActive = el.getAttribute('data-level') === val;
-                el.setAttribute('data-active', isActive);
-                // Atualiza cor do texto
-                const span = el.querySelector('span');
-                if(isActive) {
-                    if(val === 'Médio') span.className = "text-xs font-bold text-inep-700";
-                    else if(val === 'Fácil') span.className = "text-xs font-bold text-sky-700";
-                    else span.className = "text-xs font-bold text-indigo-700";
-                } else {
-                    span.className = "text-xs font-bold text-slate-600";
+                // Controles extras para tipos complexos
+                let extraControls = '';
+                if (key === 'MULTIPLE' && active) {
+                    extraControls = `
+                        <div class="mt-3 pt-3 border-t border-slate-100 flex gap-2">
+                            ${[3,4,5].map(n => `<button onclick="event.stopPropagation(); state.multiRange=${n}; renderTypes();" class="px-2 py-1 text-[10px] font-bold border rounded ${state.multiRange===n ? 'bg-brand-600 text-white' : 'bg-white text-slate-500'}">I a ${n===3?'III':n===4?'IV':'V'}</button>`).join('')}
+                        </div>`;
                 }
+                if (key === 'ASSERTION' && active) {
+                    extraControls = `
+                        <div class="mt-3 pt-3 border-t border-slate-100 flex gap-2">
+                            ${['A','B','C','D','E'].map(l => `<button onclick="event.stopPropagation(); state.assertionKey='${l}'; renderTypes();" class="w-6 h-6 flex items-center justify-center text-[10px] font-bold border rounded ${state.assertionKey===l ? 'bg-brand-600 text-white' : 'bg-white text-slate-500'}">${l}</button>`).join('')}
+                        </div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="${active?'text-brand-600':'text-slate-400'}"><i data-lucide="${info.icon}" class="w-5 h-5"></i></div>
+                            <span class="text-xs font-bold ${active?'text-brand-700':'text-slate-600'}">${info.title}</span>
+                        </div>
+                        ${active ? '<i data-lucide="check" class="w-4 h-4 text-brand-600"></i>' : ''}
+                    </div>
+                    <div class="card-content">
+                        <p class="text-[10px] text-slate-500 leading-relaxed">${info.desc}</p>
+                        ${extraControls}
+                    </div>
+                `;
+                container.appendChild(card);
             });
+            lucide.createIcons();
+        }
+
+        // --- SELETORES DE ESTADO ---
+        function setDiff(val) {
+            ['Fácil', 'Médio', 'Difícil'].forEach(l => {
+                document.getElementById(`diff-${l}`).className = 'diff-card w-full h-full rounded-lg border border-slate-200 bg-white flex flex-col justify-center items-center text-slate-400';
+            });
+            const active = document.getElementById(`diff-${val}`);
+            active.className = 'diff-card w-full h-full rounded-lg border border-brand-500 bg-brand-50 flex flex-col justify-center items-center text-brand-700 ring-1 ring-brand-500';
+            state.difficulty = val;
         }
 
         function setBloom(val) {
-            STATE.bloom = val;
-            // Update Buttons
-            document.querySelectorAll('.bloom-btn').forEach(btn => {
-                if(btn.id === `bloom-${val}`) btn.classList.add('active');
-                else btn.classList.remove('active');
-            });
-            // Update Info Box
-            const info = BLOOM_INFO[val];
-            const box = document.getElementById('bloom-info');
-            box.className = `bg-${info.color}-50 border border-${info.color}-200 rounded-xl p-4 text-sm transition-colors`;
-            document.getElementById('bloom-verb').innerText = `${val}:`;
-            document.getElementById('bloom-verb').className = `font-bold text-${info.color}-900 mb-1`;
-            document.getElementById('bloom-desc').innerText = info.desc;
-            document.getElementById('bloom-desc').className = `text-${info.color}-700 italic mb-2`;
-            document.getElementById('bloom-list').innerText = `VERBOS: ${info.list}`;
-            document.getElementById('bloom-list').className = `text-[10px] uppercase font-bold text-${info.color}-400`;
+            document.querySelectorAll('.bloom-btn').forEach(b => b.className = 'bloom-btn py-2 rounded text-[10px] text-slate-600 bg-white');
+            const btn = document.getElementById(`btn-${val}`);
+            btn.className = 'bloom-btn py-2 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700 border-indigo-200 ring-1 ring-indigo-300';
+            state.bloom = val;
         }
 
-        function setType(val) {
-            STATE.type = val;
-            ['SINGLE', 'ASSERTION', 'DISCURSIVE'].forEach(t => {
-                const el = document.getElementById(`type-${t}`);
-                if(t === val) {
-                    el.classList.add('active');
-                    el.querySelector('.type-icon').className = "type-icon text-inep-600";
-                    if(t === 'SINGLE') el.querySelector('.expandable-content').classList.remove('hidden');
-                    if(t === 'ASSERTION') document.getElementById('assertion-options').classList.remove('hidden');
-                } else {
-                    el.classList.remove('active');
-                    el.querySelector('.type-icon').className = "type-icon text-slate-400";
-                    if(t === 'SINGLE') el.querySelector('.expandable-content').classList.add('hidden');
-                    if(t === 'ASSERTION') document.getElementById('assertion-options').classList.add('hidden');
-                }
-            });
-        }
-
-        function setAssertionKey(key) {
-            STATE.assertionKey = key;
-            // Update Buttons UI
-            const btns = document.getElementById('assertion-options').querySelectorAll('button');
-            btns.forEach(b => {
-                if(b.innerText === key) {
-                    b.className = "w-8 h-8 rounded border border-inep-600 bg-inep-600 text-white text-xs font-bold shadow-md transform scale-105";
-                } else {
-                    b.className = "w-8 h-8 rounded border border-slate-200 text-xs font-bold hover:bg-slate-50 text-slate-500";
-                }
-            });
-            // Update Text
-            document.getElementById('assertion-text').innerText = ASSERTION_TEXTS[key];
-        }
-
-        // --- BACKEND CONNECTION (API Vercel) ---
+        // --- GERAÇÃO (PROMPT ENGENHARIA REVERSA) ---
         async function gerar() {
-            const course = document.getElementById('curso').value;
-            const content = document.getElementById('conteudo').value;
-            const objective = document.getElementById('objetivo').value;
-
-            if(!course || !content) return alert("Preencha Curso e Objeto de Conhecimento.");
+            const curso = document.getElementById('curso').value;
+            const conteudo = document.getElementById('conteudo').value;
+            const objetivo = document.getElementById('objetivo').value;
+            
+            if (!curso || !conteudo) return alert("Preencha Curso e Objeto de Conhecimento.");
 
             const btn = document.getElementById('btn-main');
-            const originalBtn = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-5 h-5"></i> Processando...`;
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Criando...`;
             btn.disabled = true;
 
-            // Prompt Construction (Baseado no seu constants.ts)
-            let promptExtras = "";
-            if (STATE.type === 'ASSERTION') {
-                promptExtras = `
-                Configuração do Gabarito (Engenharia Reversa):
-                • Gabarito OBRIGATÓRIO: Alternativa ${STATE.assertionKey}
-                
-                Estrutura Rígida:
-                1. Texto de Suporte (min 10 linhas) com citação real.
-                2. Asserção I.
-                3. PORQUE (centralizado).
-                4. Asserção II.
-                5. Alternativas Padrão INEP (A=I e II verdadeiras...).
-                `;
+            // Configuração do Prompt
+            let extras = "";
+            let specificConstraint = "";
+            if (state.type === 'MULTIPLE') {
+                extras = `ITENS ROMANOS OBRIGATÓRIOS: I a ${state.multiRange===3?'III':state.multiRange===4?'IV':'V'}.`;
+            }
+            if (state.type === 'ASSERTION') {
+                extras = `GABARITO OBRIGATÓRIO: Letra ${state.assertionKey}.`;
             }
 
+            // O PROMPT "MILITAR" PARA FORMATAÇÃO PERFEITA
             const prompt = `
-            Atue como especialista do INEP. Crie uma questão universitária.
-            Contexto: Curso de ${course}, sobre "${content}".
-            ${objective ? `Objetivo: ${objective}` : ''}
+            ATUE COMO ESPECIALISTA DO INEP/ENADE.
+            Crie uma questão técnica, rigorosa e inédita, seguindo estritamente a taxonomia de Bloom indicada.
             
-            Parâmetros:
-            - Dificuldade: ${STATE.diff}
-            - Bloom: ${STATE.bloom} (${BLOOM_INFO[STATE.bloom].list})
-            - Tipo: ${STATE.type}
-            ${promptExtras}
+            DADOS DA QUESTÃO:
+            - Tipo: ${TYPES[state.type].title}
+            - Curso: ${curso}
+            - Tópico: ${conteudo}
+            - Objetivo: ${objetivo}
+            - Bloom: ${state.bloom}
+            - Dificuldade: ${state.difficulty}
+            ${extras}
+            
+            REGRA DE OURO DE FORMATAÇÃO (MARKDOWN + HTML):
+            Não use introduções ("Claro", "Aqui está"). Siga EXATAMENTE este template visual:
 
-            FORMATO DE SAÍDA (MARKDOWN):
-            1. Texto de Suporte (Não escreva "Texto-Base"). Finalize com referência bibliográfica real.
-            2. Enunciado/Comando.
-            3. Alternativas (Lista vertical a,b,c,d,e).
-            4. --- (Linha Horizontal)
-            5. Relatório Técnico (Feedback):
-               - Gabarito: [Letra]
-               - Justificativa técnica.
-               - Análise dos distratores.
+            ### Enunciado
+            (Escreva aqui um texto base contextualizador rico, seguido do comando da questão em negrito).
+
+            ### Alternativas
+            A) ...
+            B) ...
+            C) ...
+            D) ...
+            E) ...
+
+            <div class="gabarito-box">
+            <div class="gabarito-title">🔍 GABARITO E ANÁLISE</div>
+            <div class="gabarito-content">
+            <p><strong>✅ Resposta Correta:</strong> (Letra)</p>
+            <p><strong>💡 Justificativa Pedagógica:</strong> (Explique detalhadamente o porquê da resposta correta e refute as erradas).</p>
+            </div>
+            </div>
             `;
 
             try {
+                // Chamada ao Backend (que agora usa Auto-Descoberta)
                 const response = await fetch('/api/gemini', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ prompt })
                 });
-
-                const data = await response.json();
-                if(data.error) throw new Error(data.error);
-
-                // Show Result
-                document.getElementById('placeholder').classList.add('hidden');
-                document.getElementById('output').classList.remove('hidden');
-                document.getElementById('tools').classList.remove('opacity-0');
                 
-                document.getElementById('output').innerHTML = marked.parse(data.text);
+                const data = await response.json();
+                
+                if (data.error) throw new Error(data.error);
 
-            } catch (err) {
-                alert("Erro: " + err.message);
+                // Exibição
+                document.getElementById('placeholder').classList.add('hidden');
+                document.getElementById('export-tools').classList.remove('hidden');
+                const output = document.getElementById('ai-output');
+                output.classList.remove('hidden');
+                output.innerHTML = marked.parse(data.text); // Renderiza o Markdown + HTML da IA
+
+            } catch (error) {
+                alert("Erro: " + error.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = originalBtn;
+                btn.innerHTML = originalHTML;
                 lucide.createIcons();
             }
         }
 
-        async function auditar() {
-            const input = document.getElementById('audit-input').value;
-            if(!input) return alert("Cole a questão.");
-            
-            const btn = document.getElementById('btn-aud');
-            const original = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-5 h-5"></i> Analisando...`;
-            btn.disabled = true;
-
-            const prompt = `AUDITORIA PEDAGÓGICA INEP. Analise a questão: \n${input}\n\nSaída: Relatório de conformidade, viés e falhas técnicas.`;
-            
-            try {
-                const response = await fetch('/api/gemini', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt })
-                });
-                const data = await response.json();
-                
-                document.getElementById('placeholder').classList.add('hidden');
-                document.getElementById('output').classList.remove('hidden');
-                document.getElementById('tools').classList.remove('opacity-0');
-                document.getElementById('output').innerHTML = marked.parse(data.text);
-            } catch(e) {
-                alert(e.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = original;
-                lucide.createIcons();
-            }
+        // --- EXPORTAÇÃO ---
+        async function exportWord() {
+            const { Document, Packer, Paragraph, TextRun } = docx;
+            const text = document.getElementById('ai-output').innerText; // Pega texto limpo
+            const doc = new Document({ sections: [{ children: [new Paragraph({ children: [new TextRun({text: "Academicus AI - Questão Gerada", bold: true, size: 32}), new TextRun({text: "\n\n"+text, size: 24})]})]}]});
+            const blob = await Packer.toBlob(doc);
+            saveAs(blob, "Questao_Academicus.docx");
         }
 
-        // Export Functions
-        function exportWord() {
-            const text = document.getElementById('output').innerText;
-            const doc = new docx.Document({ sections: [{ children: [new docx.Paragraph({ children: [new docx.TextRun(text)] })] }] });
-            docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao_Academicus.docx"));
-        }
-        function exportPdf() {
-            const el = document.getElementById('output');
-            html2pdf().set({ margin: 10, filename: 'Questao_Academicus.pdf' }).from(el).save();
+        function exportPDF() {
+            const el = document.getElementById('ai-output');
+            html2pdf().set({ margin: 1, filename: 'Academicus.pdf' }).from(el).save();
         }
 
-        init();
+        // Inicialização
+        renderTypes();
+        lucide.createIcons();
     </script>
 </body>
 </html>
