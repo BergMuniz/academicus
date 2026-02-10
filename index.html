@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academicus AI | NAP Unichristus</title>
+    <title>Academicus AI | Núcleo de Apoio Pedagógico</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -17,7 +17,10 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' }
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+                        bloomSky: { 100: '#e0f2fe', 600: '#0284c7', 800: '#075985' },
+                        bloomBlue: { 100: '#dbeafe', 600: '#2563eb', 800: '#1e40af' },
+                        bloomIndigo: { 100: '#e0e7ff', 600: '#4f46e5', 800: '#3730a3' }
                     }
                 }
             }
@@ -28,26 +31,28 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         
-        /* UI Components Fiéis às Imagens */
         .input-field { transition: all 0.2s; }
         .input-field:focus { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); border-color: #2563eb; }
 
         .bloom-btn { transition: all 0.2s; border: 1px solid #e2e8f0; }
-        .bloom-btn.active { background-color: #dbeafe; border-color: #2563eb; color: #1e40af; font-weight: 700; transform: scale(1.02); }
-
+        .bloom-btn:hover { transform: scale(1.01); }
+        
         .type-card { transition: all 0.3s ease; border: 1px solid #e2e8f0; cursor: pointer; }
         .type-card:hover { border-color: #93c5fd; }
-        .type-card.active { border-color: #2563eb; background-color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); ring: 1px ring-color: #2563eb; }
+        .type-card.active { border-color: #2563eb; background-color: white; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.15); ring: 1px ring-color: #2563eb; }
         
-        /* Animação do Conteúdo Interno do Card */
-        .card-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease; }
-        .type-card.active .card-content { max-height: 600px; opacity: 1; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f1f5f9; }
+        /* Aumentei o max-height para garantir que os textos longos e botões caibam */
+        .card-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.4s ease; }
+        .type-card.active .card-content { max-height: 800px; opacity: 1; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
 
         .qty-btn { transition: all 0.2s; }
         .qty-btn:active { transform: scale(0.95); }
         .qty-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Estilo do Conteúdo Gerado */
+        .diff-card { transition: all 0.2s; cursor: pointer; }
+        .diff-card:hover .diff-bar { opacity: 0.8; }
+        .diff-bar { transition: all 0.3s ease; }
+
         .prose h1 { color: #1e40af; font-weight: 800; font-size: 1.5rem; margin-top: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
         .prose strong { color: #1e3a8a; }
         
@@ -111,35 +116,43 @@
 
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase flex items-center gap-1.5"><i data-lucide="bar-chart-3" class="w-3 h-3"></i> Nível de Dificuldade</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setDiff('Fácil')" class="diff-btn py-2.5 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500 hover:bg-slate-50">Fácil</button>
-                        <button onclick="setDiff('Médio')" class="diff-btn active py-2.5 rounded-lg border border-brand-600 bg-brand-50 text-brand-700 text-[10px] font-bold">Médio</button>
-                        <button onclick="setDiff('Difícil')" class="diff-btn py-2.5 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500 hover:bg-slate-50">Difícil</button>
+                    <div class="grid grid-cols-3 gap-3 h-24">
+                        <button onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card group relative w-full h-full rounded-xl border border-slate-200 bg-white hover:border-sky-200 flex flex-col justify-end items-center p-2">
+                            <div id="bar-Fácil" class="diff-bar w-full h-1/3 bg-slate-200 rounded-t-sm mb-2 group-hover:bg-sky-100"></div>
+                            <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500">Fácil</span>
+                        </button>
+                        <button onclick="setDiff('Médio')" id="diff-Médio" class="diff-card group relative w-full h-full rounded-xl border border-slate-200 bg-white hover:border-blue-200 flex flex-col justify-end items-center p-2">
+                            <div id="bar-Médio" class="diff-bar w-full h-2/3 bg-blue-500 rounded-t-sm mb-2 shadow-sm"></div>
+                            <span class="text-[10px] font-bold text-blue-600">Médio</span>
+                        </button>
+                        <button onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card group relative w-full h-full rounded-xl border border-slate-200 bg-white hover:border-indigo-200 flex flex-col justify-end items-center p-2">
+                            <div id="bar-Difícil" class="diff-bar w-full h-full bg-slate-200 rounded-t-sm mb-2 group-hover:bg-indigo-100"></div>
+                            <span class="text-[10px] font-bold text-slate-400 group-hover:text-slate-500">Difícil</span>
+                        </button>
                     </div>
                 </div>
 
-                <div class="p-4 border border-indigo-100 bg-indigo-50/30 rounded-xl">
+                <div id="bloom-container" class="p-4 border border-slate-200 bg-slate-50/50 rounded-xl transition-colors">
                     <div class="flex justify-between items-center mb-3">
-                        <label class="text-[10px] font-bold text-indigo-900 uppercase flex gap-1 items-center"><i data-lucide="brain-circuit" class="w-3 h-3"></i> Taxonomia de Bloom</label>
-                        <span id="bloom-badge" class="text-[9px] font-bold bg-white text-indigo-600 px-2 py-0.5 rounded border border-indigo-100">CRIAR</span>
+                        <label class="text-[10px] font-bold text-slate-600 uppercase flex gap-1 items-center"><i data-lucide="brain-circuit" class="w-3 h-3"></i> Taxonomia de Bloom</label>
+                        <span id="bloom-badge" class="text-[9px] font-bold bg-white text-slate-600 px-2 py-0.5 rounded border border-slate-200">CRIAR</span>
                     </div>
                     <div class="flex flex-col items-center gap-1">
-                        <button onclick="setBloom('Criar')" id="btn-Criar" class="bloom-btn active w-[50%] py-1.5 rounded text-[10px]">Criar</button>
+                        <button onclick="setBloom('Criar')" id="btn-Criar" class="bloom-btn w-[50%] py-1.5 rounded text-[10px]">Criar</button>
                         <button onclick="setBloom('Avaliar')" id="btn-Avaliar" class="bloom-btn w-[60%] py-1.5 rounded text-[10px]">Avaliar</button>
                         <button onclick="setBloom('Analisar')" id="btn-Analisar" class="bloom-btn w-[70%] py-1.5 rounded text-[10px]">Analisar</button>
                         <button onclick="setBloom('Aplicar')" id="btn-Aplicar" class="bloom-btn w-[80%] py-1.5 rounded text-[10px]">Aplicar</button>
                         <button onclick="setBloom('Entender')" id="btn-Entender" class="bloom-btn w-[90%] py-1.5 rounded text-[10px]">Entender</button>
                         <button onclick="setBloom('Lembrar')" id="btn-Lembrar" class="bloom-btn w-full py-1.5 rounded text-[10px]">Lembrar</button>
                     </div>
-                    <div id="bloom-desc" class="mt-3 text-[10px] text-indigo-800 italic leading-relaxed bg-white p-2 rounded border border-indigo-100">
-                        <strong>Criar:</strong> Colocar elementos juntos para formar um todo coerente. <br>Verbos: Planejar, Produzir.
+                    <div id="bloom-desc" class="mt-3 text-[10px] text-slate-600 italic leading-relaxed bg-white p-2 rounded border border-slate-200">
+                        Selecione um nível acima.
                     </div>
                 </div>
 
                 <div class="pt-4 border-t border-slate-100">
                     <label class="block text-[10px] font-bold text-slate-500 uppercase mb-3">Modelo da Questão</label>
-                    <div id="types-container" class="space-y-3">
-                        </div>
+                    <div id="types-container" class="space-y-3"></div>
                 </div>
 
                 <div class="pt-4 border-t border-slate-100 space-y-4">
@@ -202,22 +215,47 @@
     </main>
 
     <script>
-        // --- DADOS E ESTADO ---
+        // DADOS EXATOS DAS IMAGENS (NADA SIMPLIFICADO)
         const BLOOM_INFO = {
-            "Criar": { verbs: "Gerar, Planejar, Produzir", desc: "Colocar elementos juntos para formar um todo coerente." },
-            "Avaliar": { verbs: "Julgar, Criticar, Concluir", desc: "Fazer julgamentos baseados em critérios e padrões." },
-            "Analisar": { verbs: "Diferenciar, Organizar, Comparar", desc: "Decompor o material em partes e determinar relações." },
-            "Aplicar": { verbs: "Executar, Implementar, Usar", desc: "Usar um procedimento em uma determinada situação." },
-            "Entender": { verbs: "Explicar, Resumir, Inferir", desc: "Construir significado a partir de mensagens." },
-            "Lembrar": { verbs: "Citar, Definir, Listar", desc: "Recuperar conhecimento relevante da memória." }
+            "Criar": { verbs: "Gerar, Planejar, Produzir, Desenvolver, Combinar", desc: "Colocar elementos juntos para formar um todo coerente ou funcional.", color: "bloomIndigo" },
+            "Avaliar": { verbs: "Julgar, Criticar, Julgar, Hipotetizar, Concluir", desc: "Fazer julgamentos baseados em critérios e padrões.", color: "bloomIndigo" },
+            "Analisar": { verbs: "Diferenciar, Organizar, Atribuir, Comparar", desc: "Decompor o material em partes e determinar relações.", color: "bloomBlue" },
+            "Aplicar": { verbs: "Executar, Implementar, Usar, Demonstrar", desc: "Usar um procedimento em uma determinada situação.", color: "bloomBlue" },
+            "Entender": { verbs: "Explicar, Resumir, Inferir, Parafrasear", desc: "Construir significado a partir de mensagens.", color: "bloomSky" },
+            "Lembrar": { verbs: "Citar, Definir, Listar, Identificar, Recordar", desc: "Recuperar conhecimento relevante da memória.", color: "bloomSky" }
         };
 
         const TYPES = {
-            "SINGLE": { title: "Resposta Única", icon: "check-circle", desc: "Formato clássico com enunciado fechado.", example: "Qual estrutura celular faz respiração?\na) Ribossomo\nb) Mitocôndria..." },
-            "INCOMPLETE": { title: "Afirmação Incompleta", icon: "pen-tool", desc: "Frase que termina abruptamente.", example: "A inércia é definida como...\na) repouso..." },
-            "MULTIPLE": { title: "Complementação Múltipla", icon: "layers", desc: "Lista de asserções (I, II, III).", example: "I. O céu é azul.\nII. A água molha.\nÉ correto em..." },
-            "ASSERTION": { title: "Asserção e Razão", icon: "git-compare", desc: "Duas afirmações conectadas por PORQUE.", example: "Asserção I... PORQUE Asserção II..." },
-            "DISCURSIVE": { title: "Discursiva", icon: "file-text", desc: "Questão aberta com tópicos.", example: "Redija texto sobre IA abordando: a) Riscos..." }
+            "SINGLE": { 
+                title: "Resposta Única", 
+                icon: "check-circle", 
+                desc: "Formato clássico com enunciado fechado. Exige que o aluno identifique a única alternativa correta entre distractores plausíveis.", 
+                example: "Enunciado: Qual estrutura celular é responsável pela respiração aeróbica?\na) Ribossomo.\nb) Mitocôndria.\nc) Complexo de Golgi.\nd) Retículo Endoplasmático." 
+            },
+            "INCOMPLETE": { 
+                title: "Afirmação Incompleta", 
+                icon: "pen-tool", 
+                desc: "O enunciado é uma frase que termina abruptamente sem pontuação final. As alternativas completam a frase gramatical e semanticamente.", 
+                example: "No contexto da física newtoniana, a inércia pode ser definida como a tendência de um corpo em\na) aumentar sua velocidade...\nb) permanecer em seu estado de repouso..." 
+            },
+            "MULTIPLE": { 
+                title: "Complementação Múltipla", 
+                icon: "layers", 
+                desc: "Apresenta uma lista de asserções (I, II, III...) seguida de alternativas que agrupam as corretas. Exige análise combinatória de conhecimentos.", 
+                example: "I. A água ferve a 100ºC ao nível do mar.\nII. O gelo é menos denso que a água líquida.\nIII. A molécula de água é apolar.\n\nÉ correto o que se afirma em\na) I, apenas.\nb) II, apenas.\nc) I e II, apenas." 
+            },
+            "ASSERTION": { 
+                title: "Asserção e Razão", 
+                icon: "git-compare", 
+                desc: "Duas afirmações conectadas pela palavra PORQUE. O aluno deve julgar a veracidade de cada uma e a relação de causalidade entre elas.", 
+                example: "Asserção I: O céu é azul durante o dia.\n\nPORQUE\n\nAsserção II: A atmosfera dispersa preferencialmente a luz solar de menor comprimento de onda." 
+            },
+            "DISCURSIVE": { 
+                title: "Discursiva", 
+                icon: "file-text", 
+                desc: "Questão aberta que exige a produção de um texto. Inclui comando base e tópicos obrigatórios (scaffolding) para guiar a resposta.", 
+                example: "Comando: Redija um texto dissertativo sobre os impactos da Inteligência Artificial na educação superior." 
+            }
         };
 
         let state = {
@@ -230,7 +268,6 @@
             assertionKey: 'A'
         };
 
-        // --- RENDERIZAÇÃO ---
         function renderTypes() {
             const container = document.getElementById('types-container');
             container.innerHTML = '';
@@ -241,24 +278,33 @@
                 card.className = `type-card p-4 rounded-xl bg-white ${active ? 'active' : 'border-slate-200'}`;
                 card.onclick = () => { state.type = key; renderTypes(); updateGenerateButton(); };
 
-                // Conteúdo Extra (I-V ou A-E)
+                // LOGICA DE CONTROLES EXTRAS (Agora forçada dentro do HTML)
                 let extraControls = '';
+                
+                // Controle I-V para Complementação Múltipla
                 if (key === 'MULTIPLE') {
                     extraControls = `
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <p class="text-[9px] font-bold text-slate-400 uppercase mb-2">Quantidade de Itens</p>
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <p class="text-[10px] font-bold text-brand-700 uppercase mb-2">Quantidade de Itens (I, II...)</p>
                             <div class="flex gap-2">
-                                ${[3,4,5].map(n => `<button onclick="event.stopPropagation(); state.multiRange=${n}; renderTypes();" class="px-3 py-1 text-[10px] border rounded ${state.multiRange===n ? 'bg-brand-600 text-white border-brand-600' : 'bg-white text-slate-500 hover:bg-slate-50'}">I a ${n===3?'III':n===4?'IV':'V'}</button>`).join('')}
+                                ${[3,4,5].map(n => `<button onclick="event.stopPropagation(); state.multiRange=${n}; renderTypes();" class="px-3 py-1.5 text-[10px] font-bold border rounded ${state.multiRange===n ? 'bg-brand-600 text-white border-brand-600 shadow-sm' : 'bg-white text-slate-500 hover:bg-slate-50'}">I a ${n===3?'III':n===4?'IV':'V'}</button>`).join('')}
                             </div>
                         </div>`;
                 }
+                
+                // Controle A-E para Asserção e Razão (FIEL À IMAGEM)
                 if (key === 'ASSERTION') {
                     extraControls = `
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <p class="text-[9px] font-bold text-slate-400 uppercase mb-2">Definir Gabarito (Engenharia Reversa)</p>
-                            <div class="flex gap-1">
-                                ${['A','B','C','D','E'].map(l => `<button onclick="event.stopPropagation(); state.assertionKey='${l}'; renderTypes();" class="w-8 h-8 flex items-center justify-center text-[10px] font-bold border rounded ${state.assertionKey===l ? 'bg-brand-600 text-white border-brand-600' : 'bg-white text-slate-500 hover:bg-slate-50'}">${l}</button>`).join('')}
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">DEFINIR GABARITO (ENGENHARIA REVERSA)</p>
+                            <div class="flex gap-2">
+                                ${['A','B','C','D','E'].map(l => `<button onclick="event.stopPropagation(); state.assertionKey='${l}'; renderTypes();" class="w-8 h-8 flex items-center justify-center text-[11px] font-bold border rounded ${state.assertionKey===l ? 'bg-brand-600 text-white border-brand-600 shadow-sm' : 'bg-white text-slate-500 hover:bg-slate-50'}">${l}</button>`).join('')}
                             </div>
+                            <p class="text-[9px] text-slate-400 mt-2 italic leading-tight">
+                                ${state.assertionKey === 'A' ? 'As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.' : 
+                                  state.assertionKey === 'B' ? 'As asserções I e II são verdadeiras, mas a II NÃO é justificativa.' :
+                                  'Gabarito forçado na letra ' + state.assertionKey}
+                            </p>
                         </div>`;
                 }
 
@@ -272,11 +318,11 @@
                     </div>
                     <div class="card-content">
                         <p class="text-[10px] text-slate-500 leading-relaxed mb-3">${info.desc}</p>
-                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 text-[10px] text-slate-500 font-mono whitespace-pre-wrap flex gap-2">
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 text-[10px] text-slate-600 font-mono whitespace-pre-wrap flex gap-2">
                             <i data-lucide="sparkles" class="w-3 h-3 text-brand-400 shrink-0 mt-0.5"></i>
-                            <span>${info.example}</span>
+                            <div class="leading-relaxed">${info.example}</div>
                         </div>
-                        ${extraControls}
+                        ${active ? extraControls : ''}
                     </div>
                 `;
                 container.appendChild(card);
@@ -284,7 +330,6 @@
             lucide.createIcons();
         }
 
-        // --- UPDATE FUNCTIONS ---
         function setMode(mode) {
             state.mode = mode;
             const isGen = mode === 'generator';
@@ -295,19 +340,79 @@
         }
 
         function setDiff(val) {
-            document.querySelectorAll('.diff-btn').forEach(b => {
-                b.className = 'diff-btn py-2.5 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500 hover:bg-slate-50';
+            ['Fácil', 'Médio', 'Difícil'].forEach(level => {
+                const btn = document.getElementById(`diff-${level}`);
+                const bar = document.getElementById(`bar-${level}`);
+                
+                btn.className = 'diff-card group relative w-full h-full rounded-xl border border-slate-200 bg-white hover:border-slate-300 flex flex-col justify-end items-center p-2';
+                btn.querySelector('span').className = 'text-[10px] font-bold text-slate-400 group-hover:text-slate-500';
+                
+                if (level === 'Fácil') bar.className = 'diff-bar w-full h-1/3 bg-slate-200 rounded-t-sm mb-2 group-hover:bg-slate-300';
+                if (level === 'Médio') bar.className = 'diff-bar w-full h-2/3 bg-slate-200 rounded-t-sm mb-2 group-hover:bg-slate-300';
+                if (level === 'Difícil') bar.className = 'diff-bar w-full h-full bg-slate-200 rounded-t-sm mb-2 group-hover:bg-slate-300';
             });
-            event.target.className = 'diff-btn active py-2.5 rounded-lg border border-brand-600 bg-brand-50 text-brand-700 text-[10px] font-bold';
+
+            const btn = document.getElementById(`diff-${val}`);
+            const bar = document.getElementById(`bar-${val}`);
+            
+            if (val === 'Fácil') {
+                btn.className = 'diff-card group relative w-full h-full rounded-xl border border-sky-300 bg-sky-50 flex flex-col justify-end items-center p-2';
+                bar.className = 'diff-bar w-full h-1/3 bg-sky-400 rounded-t-sm mb-2 shadow-sm';
+                btn.querySelector('span').className = 'text-[10px] font-bold text-sky-700';
+            }
+            if (val === 'Médio') {
+                btn.className = 'diff-card group relative w-full h-full rounded-xl border border-brand-300 bg-brand-50 flex flex-col justify-end items-center p-2';
+                bar.className = 'diff-bar w-full h-2/3 bg-brand-500 rounded-t-sm mb-2 shadow-sm';
+                btn.querySelector('span').className = 'text-[10px] font-bold text-brand-700';
+            }
+            if (val === 'Difícil') {
+                btn.className = 'diff-card group relative w-full h-full rounded-xl border border-indigo-300 bg-indigo-50 flex flex-col justify-end items-center p-2';
+                bar.className = 'diff-bar w-full h-full bg-indigo-600 rounded-t-sm mb-2 shadow-sm';
+                btn.querySelector('span').className = 'text-[10px] font-bold text-indigo-700';
+            }
             state.difficulty = val;
         }
 
+        // LÓGICA DE CORES DE BLOOM (2 em 2)
         function setBloom(val) {
-            document.querySelectorAll('.bloom-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${val}`).classList.add('active');
+            const info = BLOOM_INFO[val];
+            const colorKey = info.color; 
+
+            document.querySelectorAll('.bloom-btn').forEach(b => {
+                b.className = 'bloom-btn w-full py-1.5 rounded text-[10px] text-slate-500 hover:text-slate-700 bg-white';
+            });
+
+            const activeBtn = document.getElementById(`btn-${val}`);
+            if (colorKey === 'bloomSky') {
+                activeBtn.className = 'bloom-btn active w-full py-1.5 rounded text-[10px] bg-sky-100 text-sky-800 border-sky-300 font-bold';
+            } else if (colorKey === 'bloomBlue') {
+                activeBtn.className = 'bloom-btn active w-full py-1.5 rounded text-[10px] bg-blue-100 text-blue-800 border-blue-300 font-bold';
+            } else { 
+                activeBtn.className = 'bloom-btn active w-full py-1.5 rounded text-[10px] bg-indigo-100 text-indigo-800 border-indigo-300 font-bold';
+            }
+            
             state.bloom = val;
-            document.getElementById('bloom-badge').innerText = val.toUpperCase();
-            document.getElementById('bloom-desc').innerHTML = `<strong>${val}:</strong> ${BLOOM_INFO[val].desc} <br><span class="text-indigo-400 text-[9px] uppercase tracking-wide mt-1 block">Verbos: ${BLOOM_INFO[val].verbs}</span>`;
+            const badge = document.getElementById('bloom-badge');
+            const container = document.getElementById('bloom-container');
+            const desc = document.getElementById('bloom-desc');
+            
+            badge.innerText = val.toUpperCase();
+            
+            if (colorKey === 'bloomSky') {
+                container.className = 'p-4 border border-sky-200 bg-sky-50/50 rounded-xl transition-colors';
+                badge.className = 'text-[9px] font-bold bg-white text-sky-600 px-2 py-0.5 rounded border border-sky-200';
+                desc.className = 'mt-3 text-[10px] text-sky-800 italic leading-relaxed bg-white p-2 rounded border border-sky-200';
+            } else if (colorKey === 'bloomBlue') {
+                container.className = 'p-4 border border-blue-200 bg-blue-50/50 rounded-xl transition-colors';
+                badge.className = 'text-[9px] font-bold bg-white text-blue-600 px-2 py-0.5 rounded border border-blue-200';
+                desc.className = 'mt-3 text-[10px] text-blue-800 italic leading-relaxed bg-white p-2 rounded border border-blue-200';
+            } else {
+                container.className = 'p-4 border border-indigo-200 bg-indigo-50/50 rounded-xl transition-colors';
+                badge.className = 'text-[9px] font-bold bg-white text-indigo-600 px-2 py-0.5 rounded border border-indigo-200';
+                desc.className = 'mt-3 text-[10px] text-indigo-800 italic leading-relaxed bg-white p-2 rounded border border-indigo-200';
+            }
+
+            desc.innerHTML = `<strong>${val}:</strong> ${info.desc} <br><span class="opacity-70 text-[9px] uppercase tracking-wide mt-1 block">Verbos: ${info.verbs}</span>`;
         }
 
         function updateQty(amount) {
@@ -323,7 +428,6 @@
             btn.className = "w-full bg-brand-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-200 hover:bg-brand-700 active:scale-[0.98]";
         }
 
-        // --- API CALLS (VERCEL) ---
         async function fetchAI(prompt, btnId) {
             const btn = document.getElementById(btnId);
             const originalHTML = btn.innerHTML;
@@ -346,7 +450,7 @@
                 
                 placeholder.classList.add('hidden');
                 resultArea.classList.remove('border-dashed', 'items-center', 'justify-center', 'text-center');
-                resultArea.classList.add('bg-white', 'p-16', 'shadow-sm'); // Visual Limpo
+                resultArea.classList.add('bg-white', 'p-16', 'shadow-sm');
                 
                 output.innerHTML = marked.parse(data.text);
                 output.classList.remove('hidden');
@@ -367,7 +471,7 @@
             const objetivo = document.getElementById('objetivo').value;
             
             if (!curso || !conteudo) return alert("Preencha Curso e Objeto de Conhecimento.");
-            updateGenerateButton(); // Ativa visual azul
+            updateGenerateButton();
 
             let extras = "";
             if (state.type === 'MULTIPLE') extras = `ITENS ROMANOS OBRIGATÓRIOS: I a ${state.multiRange===3?'III':state.multiRange===4?'IV':'V'}.`;
@@ -400,7 +504,6 @@
             fetchAI(`AUDITORIA ENADE:\nAnalise psicometria e taxonomia:\n${txt}`, 'btn-aud');
         }
 
-        // --- EXPORT ---
         async function exportWord() {
             const { Document, Packer, Paragraph, TextRun } = docx;
             const text = document.getElementById('ai-output').innerText;
@@ -414,13 +517,10 @@
             html2pdf().set({ margin: 1, filename: 'Academicus.pdf' }).from(el).save();
         }
 
-        // Init
         renderTypes();
-        setBloom('Criar');
+        setBloom('Criar'); 
+        setDiff('Médio');
         lucide.createIcons();
-    </script>
-</body>
-</html>
     </script>
 </body>
 </html>
