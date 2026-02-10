@@ -224,7 +224,7 @@
             "Lembrar": { verbs: "Citar, Definir, Listar, Identificar, Recordar", desc: "Recuperar conhecimento relevante da memória.", color: "bloomSky" }
         };
 
-        // TEXTOS COMPLETOS SEM RESUMO
+        // TEXTOS COMPLETOS E CORRIGIDOS (C, D, E em Asserção e Razão)
         const TYPES = {
             "SINGLE": { 
                 title: "Resposta Única", 
@@ -248,7 +248,8 @@
                 title: "Asserção e Razão", 
                 icon: "git-compare", 
                 desc: "Duas afirmações conectadas pela palavra PORQUE. O aluno deve julgar a veracidade de cada uma e a relação de causalidade entre elas.", 
-                example: "Asserção I: O céu é azul durante o dia.\n\nPORQUE\n\nAsserção II: A atmosfera dispersa preferencialmente a luz solar de menor comprimento de onda.\n\na) As asserções I e II são verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas." 
+                // AQUI ESTAVA O ERRO - CORRIGIDO PARA O PADRÃO INEP
+                example: "Asserção I: O céu é azul durante o dia.\n\nPORQUE\n\nAsserção II: A atmosfera dispersa preferencialmente a luz solar de menor comprimento de onda.\n\na) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas." 
             },
             "DISCURSIVE": { 
                 title: "Discursiva", 
@@ -336,8 +337,10 @@
                             </div>
                             <p class="text-[9px] text-slate-400 mt-2 italic leading-tight">
                                 ${state.assertionKey === 'A' ? 'As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.' : 
-                                  state.assertionKey === 'B' ? 'As asserções I e II são verdadeiras, mas a II NÃO é justificativa.' :
-                                  'Gabarito forçado na letra ' + state.assertionKey}
+                                  state.assertionKey === 'B' ? 'As asserções I e II são proposições verdadeiras, mas a II NÃO é uma justificativa correta da I.' :
+                                  state.assertionKey === 'C' ? 'A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.' :
+                                  state.assertionKey === 'D' ? 'A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.' :
+                                  'As asserções I e II são proposições falsas.'}
                             </p>
                         </div>`;
                 }
@@ -519,7 +522,17 @@
             }
             
             if (state.type === 'ASSERTION') {
+                // AQUI ESTÁ A CORREÇÃO DE "CHUMBAR" AS ALTERNATIVAS CORRETAS NO PROMPT
                 extras = `GABARITO OBRIGATÓRIO: Letra ${state.assertionKey} (Engenharia Reversa).`;
+                specificConstraint = `
+                REGRA DE OURO (ALTERNATIVAS FIXAS):
+                Você DEVE usar EXATAMENTE este texto para as alternativas A, B, C, D e E. Copie e cole, não altere:
+                a) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.
+                b) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.
+                c) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.
+                d) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.
+                e) As asserções I e II são proposições falsas.
+                `;
             }
 
             const prompt = `
