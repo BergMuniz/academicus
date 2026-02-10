@@ -93,20 +93,8 @@
             border-bottom: 1px solid #bbf7d0;
             padding-bottom: 0.5rem;
         }
+        .gabarito-content p { margin-bottom: 0.5rem; color: #14532d; font-size: 0.95rem; }
         
-        /* CAIXA DE AUDITORIA (VERMELHA/AMARELA) */
-        .audit-box {
-            background-color: #fff1f2;
-            border: 1px solid #fecdd3;
-            border-left: 5px solid #e11d48;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .audit-ok { color: #16a34a; font-weight: bold; }
-        .audit-warn { color: #ca8a04; font-weight: bold; }
-        .audit-fail { color: #dc2626; font-weight: bold; }
-
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
@@ -128,17 +116,7 @@
     <main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 w-full">
         
         <aside class="lg:col-span-4 xl:col-span-3 space-y-6 no-print">
-            
-            <div class="bg-slate-200/50 p-1 rounded-xl flex gap-1 font-bold">
-                <button onclick="setMode('generator')" id="tab-gen" class="flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm transition-all">
-                    <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i> Design
-                </button>
-                <button onclick="setMode('auditor')" id="tab-aud" class="flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all">
-                    <i data-lucide="clipboard-check" class="w-3.5 h-3.5"></i> Auditoria
-                </button>
-            </div>
-
-            <div id="panel-generator" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-6">
                 <div>
                     <h3 class="flex items-center gap-2 text-sm font-bold text-slate-800 mb-4">
                         <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-600"></i> Parâmetros
@@ -192,21 +170,6 @@
                     <i data-lucide="zap" class="w-4 h-4"></i>
                 </button>
             </div>
-
-            <div id="panel-auditor" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
-                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex gap-3">
-                    <i data-lucide="microscope" class="w-5 h-5 text-emerald-600 shrink-0"></i>
-                    <div>
-                        <h4 class="text-xs font-bold text-emerald-800">Auditoria Técnica INEP</h4>
-                        <p class="text-[10px] text-emerald-700 mt-1">Cole uma questão para análise psicométrica e técnica.</p>
-                    </div>
-                </div>
-                <textarea id="audit-input" rows="15" class="w-full px-4 py-3 rounded-xl border border-emerald-100 bg-emerald-50/20 text-xs font-mono outline-none focus:border-emerald-500 text-slate-700" placeholder="Cole a questão completa aqui (Enunciado + Alternativas)..."></textarea>
-                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2">
-                    <span>Executar Auditoria</span>
-                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-                </button>
-            </div>
         </aside>
 
         <div class="lg:col-span-8 xl:col-span-9 flex flex-col h-full">
@@ -223,8 +186,8 @@
 
                 <div id="placeholder" class="flex-1 flex flex-col items-center justify-center text-center p-12">
                     <div class="bg-slate-50 p-6 rounded-full mb-6 ring-1 ring-slate-100"><i data-lucide="pen-tool" class="w-10 h-10 text-slate-300"></i></div>
-                    <h3 class="text-lg font-bold text-slate-400">Área de Criação & Análise</h3>
-                    <p class="text-slate-400 text-sm mt-2">Use as abas à esquerda para alternar entre<br>Criar Questões e Auditar Questões.</p>
+                    <h3 class="text-lg font-bold text-slate-400">Área de Criação</h3>
+                    <p class="text-slate-400 text-sm mt-2">Configure os parâmetros ao lado para iniciar.</p>
                 </div>
                 
                 <div id="ai-output" class="hidden text-left w-full max-w-4xl mx-auto p-12 prose prose-slate"></div>
@@ -242,7 +205,6 @@
         };
 
         let state = {
-            mode: 'generator',
             type: 'SINGLE',
             bloom: 'Criar',
             difficulty: 'Médio',
@@ -250,18 +212,7 @@
             assertionKey: 'A'
         };
 
-        // --- UI UTILS ---
-        function setMode(mode) {
-            state.mode = mode;
-            const isGen = mode === 'generator';
-            document.getElementById('panel-generator').classList.toggle('hidden', !isGen);
-            document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
-            
-            // Estilo das abas
-            document.getElementById('tab-gen').className = isGen ? 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm transition-all font-bold' : 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all';
-            document.getElementById('tab-aud').className = !isGen ? 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 bg-white text-emerald-700 shadow-sm transition-all font-bold' : 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all';
-        }
-
+        // --- RENDERIZAÇÃO DA UI ---
         function renderTypes() {
             const container = document.getElementById('types-container');
             container.innerHTML = '';
@@ -322,7 +273,7 @@
             state.bloom = val;
         }
 
-        // --- FUNÇÃO GERAR (PROMPT BLINDADO PARA FORMATAÇÃO) ---
+        // --- GERAÇÃO (PROMPT BLINDADO PARA FORMATAÇÃO) ---
         async function gerar() {
             const curso = document.getElementById('curso').value;
             const conteudo = document.getElementById('conteudo').value;
@@ -344,12 +295,13 @@
             }
             
             // CORREÇÃO CRÍTICA PARA ASSERÇÃO E RAZÃO
+            // Aqui eu forço a IA a usar as alternativas padrão do INEP
             if (state.type === 'ASSERTION') {
                 extras = `
                 REGRA CRÍTICA PARA ASSERÇÃO E RAZÃO:
                 1. Você deve gerar a 'Asserção I' e a 'Asserção II' ligadas pela palavra PORQUE.
                 2. O Gabarito deve ser a Letra ${state.assertionKey}.
-                3. AS ALTERNATIVAS SÃO FIXAS. COPIE EXATAMENTE ESTE TEXTO PARA AS ALTERNATIVAS:
+                3. AS ALTERNATIVAS SÃO FIXAS. COPIE EXATAMENTE ESTE TEXTO PARA AS ALTERNATIVAS, NÃO MUDE UMA VÍRGULA:
                    A) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.
                    B) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.
                    C) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.
@@ -391,56 +343,8 @@
             </div>
             `;
 
-            executeAI(prompt, btn, originalHTML);
-        }
-
-        // --- FUNÇÃO AUDITAR (NOVO PROMPT REVISADO) ---
-        async function auditar() {
-            const input = document.getElementById('audit-input').value;
-            if (!input) return alert("Cole a questão para auditar.");
-
-            const btn = document.getElementById('btn-aud');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Auditando...`;
-            btn.disabled = true;
-
-            const prompt = `
-            ATUE COMO AUDITOR SÊNIOR DO INEP/ENADE.
-            Analise rigorosamente a questão abaixo procurando falhas técnicas, viés ou erros de construção.
-            
-            QUESTÃO PARA ANÁLISE:
-            ${input}
-
-            ---
-
-            FORMATO DE SAÍDA OBRIGATÓRIO (MARKDOWN + HTML):
-            
-            ### Relatório de Auditoria Técnica
-
-            <div class="audit-box">
-            <h4>1. Análise do Enunciado</h4>
-            <ul style="list-style:none; padding:0;">
-                <li>(Use emoji ✅ ou ⚠️) <strong>Contextualização:</strong> (Avalie se o texto base é pertinente)</li>
-                <li>(Use emoji ✅ ou ⚠️) <strong>Clareza do Comando:</strong> (Avalie se o comando é direto e sem ambiguidade)</li>
-            </ul>
-
-            <h4>2. Análise das Alternativas</h4>
-            <ul style="list-style:none; padding:0;">
-                <li>(Use emoji ✅ ou ⚠️) <strong>Plausibilidade dos Distratores:</strong> (Os erros são inteligentes ou óbvios demais?)</li>
-                <li>(Use emoji ✅ ou ⚠️) <strong>Paralelismo:</strong> (As alternativas têm tamanho e estrutura gramatical similar?)</li>
-                <li>(Use emoji ✅ ou ⚠️) <strong>Pegadinhas:</strong> (Existe alguma casca de banana desleal?)</li>
-            </ul>
-
-            <h4>3. Veredito Final</h4>
-            <p>(Dê um parecer conclusivo: A questão está APROVADA, REQUER AJUSTES ou REJEITADA, e explique o porquê em 2 linhas).</p>
-            </div>
-            `;
-
-            executeAI(prompt, btn, originalHTML);
-        }
-
-        async function executeAI(prompt, btn, originalHTML) {
             try {
+                // Chamada ao Backend (que agora usa Auto-Descoberta)
                 const response = await fetch('/api/gemini', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -451,11 +355,14 @@
                 
                 if (data.error) throw new Error(data.error);
 
+                // Exibição
                 document.getElementById('placeholder').classList.add('hidden');
                 document.getElementById('export-tools').classList.remove('hidden');
                 const output = document.getElementById('ai-output');
                 output.classList.remove('hidden');
                 output.innerHTML = marked.parse(data.text); 
+                
+                // Re-renderiza ícones dentro do HTML gerado
                 lucide.createIcons();
 
             } catch (error) {
@@ -471,7 +378,7 @@
         async function exportWord() {
             const { Document, Packer, Paragraph, TextRun } = docx;
             const text = document.getElementById('ai-output').innerText; 
-            const doc = new Document({ sections: [{ children: [new Paragraph({ children: [new TextRun({text: "Academicus AI - Relatório", bold: true, size: 32}), new TextRun({text: "\n\n"+text, size: 24})]})]}]});
+            const doc = new Document({ sections: [{ children: [new Paragraph({ children: [new TextRun({text: "Academicus AI - Questão Gerada", bold: true, size: 32}), new TextRun({text: "\n\n"+text, size: 24})]})]}]});
             const blob = await Packer.toBlob(doc);
             saveAs(blob, "Questao_Academicus.docx");
         }
