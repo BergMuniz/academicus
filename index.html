@@ -10,53 +10,67 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
+        .prose h1, .prose h2, .prose h3 { color: #1e40af; font-weight: 700; }
+        .prose { color: #334155; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-20 px-6 py-4 flex items-center justify-between">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-20 px-6 py-4 flex items-center justify-between shadow-sm">
         <div class="flex items-center gap-3">
-            <div class="bg-blue-600 p-2 rounded-lg text-white"><i data-lucide="graduation-cap"></i></div>
+            <div class="bg-blue-600 p-2 rounded-lg text-white shadow-md"><i data-lucide="graduation-cap"></i></div>
             <div>
-                <h1 class="text-xl font-bold text-slate-800 uppercase tracking-tight">Academicus AI</h1>
-                <p class="text-xs text-slate-500 font-medium">Inteligência Avaliativa para Ensino Superior</p>
+                <h1 class="text-xl font-bold text-slate-800 uppercase tracking-tight leading-none">Academicus AI</h1>
+                <p class="text-[10px] text-slate-500 font-bold mt-1 uppercase tracking-widest">Núcleo de Apoio Pedagógico</p>
             </div>
         </div>
-        <div class="text-[10px] bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full font-bold border border-blue-100 flex items-center gap-2">
+        <div class="hidden sm:flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full border border-blue-100 font-bold text-xs shadow-sm">
             <i data-lucide="sparkles" class="w-3 h-3"></i> Powered by Gemini 3 Flash
         </div>
     </header>
 
-    <main class="max-w-[1400px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="max-w-[1440px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
         <aside class="lg:col-span-4 space-y-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                <h2 class="flex items-center gap-2 text-slate-800 font-bold mb-6 border-b pb-4">
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
+                <h2 class="flex items-center gap-3 text-slate-800 font-bold mb-8 text-lg border-b pb-4">
                     <i data-lucide="settings-2" class="text-blue-600 w-5 h-5"></i> Parâmetros da Questão
                 </h2>
                 
-                <div class="space-y-4">
+                <div class="space-y-6">
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Curso / Área</label>
-                        <input type="text" id="curso" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-4 focus:ring-blue-500/10 outline-none" placeholder="Ex: Psicologia, Direito...">
+                        <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Curso / Área de Conhecimento</label>
+                        <input type="text" id="curso" class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none bg-slate-50" placeholder="Ex: Medicina, Psicologia...">
                     </div>
+
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Objeto de Conhecimento</label>
-                        <textarea id="tema" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-4 focus:ring-blue-500/10 outline-none" placeholder="Descreva o tema..."></textarea>
+                        <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Objeto de Conhecimento</label>
+                        <textarea id="tema" rows="4" class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none bg-slate-50" placeholder="Descreva o tema específico, competência ou habilidade..."></textarea>
                     </div>
-                    <button onclick="gerarQuestao()" id="btnGerar" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
-                        Gerar Questão <i data-lucide="zap" class="w-4 h-4"></i>
+
+                    <button onclick="gerarQuestao()" id="btnGerar" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-2xl shadow-xl shadow-blue-200 transition-all active:scale-[0.98] flex items-center justify-center gap-3 text-lg">
+                        Gerar Questão <i data-lucide="zap" class="w-5 h-5"></i>
                     </button>
                 </div>
+            </div>
+            
+            <div class="bg-blue-900 text-white rounded-3xl p-6 shadow-xl shadow-blue-100 flex items-start gap-4">
+                <i data-lucide="info" class="w-6 h-6 text-blue-300 flex-shrink-0"></i>
+                <p class="text-xs leading-relaxed opacity-90">As questões são geradas com base na <strong>Taxonomia de Bloom</strong> e parâmetros do <strong>INEP/ENADE</strong> para garantir excelência avaliativa na Unichristus.</p>
             </div>
         </aside>
 
         <section class="lg:col-span-8">
-            <div id="display-resultado" class="bg-white min-h-[600px] rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center p-12">
+            <div id="display-resultado" class="bg-white min-h-[700px] rounded-[2.5rem] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center p-12 transition-all relative">
+                
                 <div id="placeholder-content">
-                    <div class="bg-slate-50 p-6 rounded-full mb-6 inline-block"><i data-lucide="sparkles" class="w-10 h-10 text-slate-300"></i></div>
-                    <h3 class="text-xl font-bold text-slate-400">Aguardando Input</h3>
-                    <p class="text-slate-400 max-w-sm mx-auto mt-2">Preencha os parâmetros à esquerda para gerar sua questão inédita.</p>
+                    <div class="bg-slate-50 p-10 rounded-full mb-8 inline-block shadow-inner"><i data-lucide="sparkles" class="w-16 h-16 text-slate-300"></i></div>
+                    <h3 class="text-2xl font-bold text-slate-400">Aguardando Parâmetros</h3>
+                    <p class="text-slate-400 max-w-sm mx-auto mt-4 leading-relaxed font-medium">Configure as opções à esquerda para que a inteligência artificial gere sua questão acadêmica inédita.</p>
                 </div>
-                <div id="ai-content" class="hidden text-left w-full prose max-w-none"></div>
+
+                <div id="ai-content" class="hidden text-left w-full prose prose-blue max-w-none p-4">
+                    </div>
             </div>
         </section>
     </main>
@@ -72,33 +86,43 @@
             const placeholder = document.getElementById('placeholder-content');
             const btn = document.getElementById('btnGerar');
 
-            if(!curso || !tema) return alert("Por favor, preencha o curso e o tema.");
+            if(!curso || !tema) {
+                alert("Por favor, preencha o curso e o tema para prosseguirmos.");
+                return;
+            }
 
+            // Inicia estado de carregamento
             btn.disabled = true;
-            btn.innerHTML = "Processando... <i data-lucide='loader' class='animate-spin'></i>";
+            btn.innerHTML = "Processando IA... <i data-lucide='loader' class='animate-spin w-5 h-5'></i>";
             lucide.createIcons();
 
             try {
-                // PONTE COM A FUNÇÃO DO NETLIFY
-                const response = await fetch('/.netlify/functions/gemini', {
+                // AJUSTE PARA VERCEL: Chamando o endpoint /api/gemini
+                const response = await fetch('/api/gemini', {
                     method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        prompt: `Gere uma questão de múltipla escolha padrão ENADE/INEP para o curso de ${curso}. Tema: ${tema}. Inclua gabarito e justificativa.` 
+                        prompt: `Atue como um especialista em avaliação acadêmica da Unichristus. Gere uma questão de múltipla escolha inédita seguindo o padrão ENADE/INEP para o curso de ${curso}. Tema: ${tema}. Inclua o enunciado contextualizado, as alternativas de A a E, o gabarito comentado e a justificativa baseada na Taxonomia de Bloom.` 
                     })
                 });
                 
                 const data = await response.json();
                 
+                if (data.error) throw new Error(data.error);
+
+                // Exibe o resultado com formatação Markdown
                 placeholder.classList.add('hidden');
-                display.classList.remove('border-dashed');
+                display.classList.remove('border-dashed', 'items-center', 'justify-center', 'text-center');
+                display.classList.add('p-16');
                 aiContent.innerHTML = marked.parse(data.text);
                 aiContent.classList.remove('hidden');
                 
             } catch (err) {
-                alert("Erro na conexão. Verifique sua chave API no painel do Netlify.");
+                console.error(err);
+                alert("Ocorreu um erro na comunicação com a IA. Verifique se a chave GEMINI_API_KEY está configurada no Vercel.");
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = "Gerar Questão <i data-lucide='zap' class='w-4 h-4'></i>";
+                btn.innerHTML = "Gerar Questão <i data-lucide='zap' class='w-5 h-5'></i>";
                 lucide.createIcons();
             }
         }
