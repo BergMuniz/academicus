@@ -41,59 +41,35 @@
         .diff-card { transition: all 0.2s; cursor: pointer; }
         .diff-bar { transition: all 0.3s ease; }
 
-        /* --- ESTILO DA PROVA (O SEGREDO DA FORMATAÇÃO) --- */
-        .prose { color: #334155; max-width: none; }
-        .prose h3 { 
-            color: #1e3a8a; 
-            font-size: 1.1rem; 
-            border-bottom: 2px solid #e2e8f0; 
-            padding-bottom: 0.5rem; 
-            margin-top: 2rem; 
-            margin-bottom: 1rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: 0.05em;
-        }
+        /* --- ESTILO DA PROVA (SAÍDA DA IA) --- */
+        .prose h3 { color: #1e3a8a; font-size: 1.1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 800; text-transform: uppercase; }
         .prose strong { color: #0f172a; font-weight: 700; }
-        .prose p { margin-bottom: 1rem; line-height: 1.7; text-align: justify; }
-        
-        /* Lista de Alternativas Limpa */
+        .prose p { margin-bottom: 1rem; line-height: 1.7; text-align: justify; color: #334155; font-size: 0.95rem; }
         .prose ul { list-style: none; padding-left: 0; }
-        .prose li { 
-            margin-bottom: 0.8rem; 
-            padding: 0.8rem; 
-            border: 1px solid #f1f5f9;
-            border-radius: 8px;
-            background-color: #fff;
-            transition: background 0.2s;
-        }
-        .prose li:hover { background-color: #f8fafc; }
+        .prose li { margin-bottom: 0.8rem; padding: 0.5rem 0.5rem 0.5rem 0; border-bottom: 1px dashed #f1f5f9; }
         
         /* CAIXA DE GABARITO PROFISSIONAL */
         .gabarito-box {
             background-color: #f0fdf4;
             border: 1px solid #86efac;
-            border-left: 5px solid #16a34a;
-            border-radius: 8px;
+            border-left: 4px solid #16a34a;
+            border-radius: 6px;
             padding: 1.5rem;
             margin-top: 3rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             page-break-inside: avoid;
         }
         .gabarito-title {
             color: #166534;
             font-weight: 800;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            border-bottom: 1px solid #bbf7d0;
-            padding-bottom: 0.5rem;
         }
-        .gabarito-content p { margin-bottom: 0.5rem; color: #14532d; font-size: 0.95rem; }
+        .gabarito-content { font-size: 0.9rem; color: #14532d; }
         
         @media print { .no-print { display: none !important; } }
     </style>
@@ -273,7 +249,7 @@
             state.bloom = val;
         }
 
-        // --- GERAÇÃO (PROMPT BLINDADO PARA FORMATAÇÃO) ---
+        // --- GERAÇÃO (PROMPT ENGENHARIA REVERSA) ---
         async function gerar() {
             const curso = document.getElementById('curso').value;
             const conteudo = document.getElementById('conteudo').value;
@@ -283,62 +259,51 @@
 
             const btn = document.getElementById('btn-main');
             const originalHTML = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Processando...`;
+            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Criando...`;
             btn.disabled = true;
 
-            // CONFIGURAÇÃO TÉCNICA DO PROMPT
+            // Configuração do Prompt
             let extras = "";
             let specificConstraint = "";
-            
             if (state.type === 'MULTIPLE') {
                 extras = `ITENS ROMANOS OBRIGATÓRIOS: I a ${state.multiRange===3?'III':state.multiRange===4?'IV':'V'}.`;
             }
-            
-            // CORREÇÃO CRÍTICA PARA ASSERÇÃO E RAZÃO
-            // Aqui eu forço a IA a usar as alternativas padrão do INEP
             if (state.type === 'ASSERTION') {
-                extras = `
-                REGRA CRÍTICA PARA ASSERÇÃO E RAZÃO:
-                1. Você deve gerar a 'Asserção I' e a 'Asserção II' ligadas pela palavra PORQUE.
-                2. O Gabarito deve ser a Letra ${state.assertionKey}.
-                3. AS ALTERNATIVAS SÃO FIXAS. COPIE EXATAMENTE ESTE TEXTO PARA AS ALTERNATIVAS, NÃO MUDE UMA VÍRGULA:
-                   A) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.
-                   B) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.
-                   C) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.
-                   D) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.
-                   E) As asserções I e II são proposições falsas.
-                `;
+                extras = `GABARITO OBRIGATÓRIO: Letra ${state.assertionKey}.`;
             }
 
-            // O PROMPT "VISUAL"
+            // O PROMPT "MILITAR" PARA FORMATAÇÃO PERFEITA
             const prompt = `
             ATUE COMO ESPECIALISTA DO INEP/ENADE.
-            Crie uma questão inédita seguindo estritamente este comando.
+            Crie uma questão técnica, rigorosa e inédita, seguindo estritamente a taxonomia de Bloom indicada.
             
-            DADOS:
+            DADOS DA QUESTÃO:
             - Tipo: ${TYPES[state.type].title}
             - Curso: ${curso}
             - Tópico: ${conteudo}
+            - Objetivo: ${objetivo}
             - Bloom: ${state.bloom}
             - Dificuldade: ${state.difficulty}
             ${extras}
             
-            ---
-            
-            FORMATO DE SAÍDA OBRIGATÓRIO (MARKDOWN + HTML):
-            Não escreva introduções. Siga este template visual EXATAMENTE:
+            REGRA DE OURO DE FORMATAÇÃO (MARKDOWN + HTML):
+            Não use introduções ("Claro", "Aqui está"). Siga EXATAMENTE este template visual:
 
             ### Enunciado
-            (Texto base rico e contextualizado, seguido do comando da questão em negrito).
+            (Escreva aqui um texto base contextualizador rico, seguido do comando da questão em negrito).
 
             ### Alternativas
-            (Liste as alternativas aqui. Se for Asserção e Razão, use as fixas que eu mandei acima).
+            A) ...
+            B) ...
+            C) ...
+            D) ...
+            E) ...
 
             <div class="gabarito-box">
-            <div class="gabarito-title"><i data-lucide="check-circle-2"></i> GABARITO E ANÁLISE</div>
+            <div class="gabarito-title">🔍 GABARITO E ANÁLISE</div>
             <div class="gabarito-content">
             <p><strong>✅ Resposta Correta:</strong> (Letra)</p>
-            <p><strong>💡 Justificativa Pedagógica:</strong> (Explicação técnica detalhada sobre a resposta).</p>
+            <p><strong>💡 Justificativa Pedagógica:</strong> (Explique detalhadamente o porquê da resposta correta e refute as erradas).</p>
             </div>
             </div>
             `;
@@ -360,10 +325,7 @@
                 document.getElementById('export-tools').classList.remove('hidden');
                 const output = document.getElementById('ai-output');
                 output.classList.remove('hidden');
-                output.innerHTML = marked.parse(data.text); 
-                
-                // Re-renderiza ícones dentro do HTML gerado
-                lucide.createIcons();
+                output.innerHTML = marked.parse(data.text); // Renderiza o Markdown + HTML da IA
 
             } catch (error) {
                 alert("Erro: " + error.message);
@@ -377,7 +339,7 @@
         // --- EXPORTAÇÃO ---
         async function exportWord() {
             const { Document, Packer, Paragraph, TextRun } = docx;
-            const text = document.getElementById('ai-output').innerText; 
+            const text = document.getElementById('ai-output').innerText; // Pega texto limpo
             const doc = new Document({ sections: [{ children: [new Paragraph({ children: [new TextRun({text: "Academicus AI - Questão Gerada", bold: true, size: 32}), new TextRun({text: "\n\n"+text, size: 24})]})]}]});
             const blob = await Packer.toBlob(doc);
             saveAs(blob, "Questao_Academicus.docx");
