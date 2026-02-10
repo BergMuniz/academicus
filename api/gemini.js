@@ -19,10 +19,10 @@ module.exports = async (req, res) => {
     const cleanKey = apiKey.trim();
     const { prompt } = req.body;
 
-    // --- A CORREÇÃO PARA 2026 ---
-    // Substituímos o antigo 'gemini-pro' ou '1.5-flash' pelo 'gemini-2.0-flash'
-    // Se este falhar futuramente, tente 'gemini-2.0-flash-lite'
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${cleanKey}`;
+    // --- O PULO DO GATO ---
+    // Usamos 'v1beta' (Canal de testes/gratuito) com o modelo 'gemini-1.5-flash' (Padrão)
+    // Essa combinação é a que tem cota gratuita liberada.
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${cleanKey}`;
     
     const googleResponse = await fetch(url, {
       method: 'POST',
@@ -36,9 +36,9 @@ module.exports = async (req, res) => {
 
     if (!googleResponse.ok) {
       console.error("Erro Google:", JSON.stringify(data));
-      // Tratamento específico para erro de modelo
-      if (data.error?.code === 404) {
-         throw new Error("Modelo descontinuado. Tente atualizar para gemini-2.5-flash no código.");
+      // Se der erro 429 de novo, o script avisa para esperar
+      if (data.error?.code === 429) {
+         throw new Error("Limite de uso gratuito atingido. Espere 1 minuto e tente novamente.");
       }
       throw new Error(data.error?.message || "Erro na resposta da IA");
     }
