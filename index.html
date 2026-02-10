@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academicus AI | Studio</title>
+    <title>Academicus AI | Studio Pro</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -53,11 +53,12 @@
         /* Caixa de Exemplo */
         .example-box {
             background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
-            padding: 12px; margin-top: 12px; font-size: 0.85rem; color: #475569;
+            padding: 12px; margin-top: 12px; font-size: 0.8rem; color: #475569;
+            line-height: 1.5;
         }
         .example-header {
             display: flex; align-items: center; gap: 6px; font-size: 0.7rem; 
-            font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px;
+            font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;
         }
 
         /* Botões de Controle */
@@ -182,31 +183,32 @@
     </main>
 
     <script>
-        // --- DADOS ATUALIZADOS COM AFIRMAÇÃO INCOMPLETA ---
+        // --- DADOS COM EXEMPLOS REAIS E COMPLETOS ---
         const TYPES = {
             "SINGLE": {
                 label: "Resposta Única", icon: "check-circle",
                 desc: "Clássica com uma alternativa correta.",
-                example: "Enunciado fechado terminando com ? ou :.\na) Alternativa A\nb) Alternativa B..."
+                example: "No contexto da biologia celular, qual organela é a principal responsável pela produção de ATP através da respiração aeróbica?\na) Ribossomo.\nb) Lisossomo.\nc) Mitocôndria.\nd) Complexo de Golgi.\ne) Retículo Endoplasmático."
             },
             "INCOMPLETE": {
                 label: "Afirmação Incompleta", icon: "pen-tool",
                 desc: "O enunciado é uma frase inacabada (sem ponto) completada pelas alternativas.",
-                example: "No contexto celular, a mitocôndria é responsável por\na) realizar a fotossíntese.\nb) produzir energia (ATP)."
+                example: "No que tange aos princípios da administração pública, a impessoalidade exige que os atos administrativos sejam praticados visando\na) a promoção pessoal do agente público.\nb) o interesse exclusivamente privado.\nc) a finalidade pública, sem favoritismos.\nd) o cumprimento de ordens ilegais.\ne) a vontade arbitrária do gestor."
             },
             "MULTIPLE": {
                 label: "Complementação Múltipla", icon: "layers",
                 desc: "Análise de itens romanos (I, II, III).",
+                // Exemplo dinâmico será gerado na função
             },
             "ASSERTION": {
                 label: "Asserção e Razão", icon: "git-compare",
                 desc: "Duas afirmações conectadas por PORQUE.",
-                example: "Asserção I PORQUE Asserção II."
+                example: "Asserção I: O céu é azul durante o dia.\n\nPORQUE\n\nAsserção II: A atmosfera dispersa a luz solar azul com mais intensidade.\n\na) As asserções I e II são verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas."
             },
             "DISCURSIVE": {
                 label: "Discursiva", icon: "file-text",
                 desc: "Questão aberta com grade de correção.",
-                example: "Redija um texto sobre..."
+                example: "Comando: Redija um texto dissertativo sobre os impactos da Inteligência Artificial na educação, abordando:\na) Benefícios na personalização do ensino.\nb) Riscos éticos e plágio.\nc) O papel do professor."
             }
         };
 
@@ -251,11 +253,24 @@
                     html += `<div class="mt-3 pl-8 text-xs text-slate-500 animate-fade-in">
                         <p class="mb-2">${info.desc}</p>`;
 
-                    // EXEMPLO DINÂMICO
+                    // EXEMPLO DINÂMICO E COMPLETO
                     let exText = info.example;
                     if (key === 'MULTIPLE') {
-                        const items = ["I. Item um...", "II. Item dois...", "III. Item três...", "IV. Item quatro...", "V. Item cinco..."];
-                        exText = items.slice(0, STATE.multiRange).join('\n') + `\n\nÉ correto o que se afirma em:\n${STATE.multiRange===3 ? 'I, apenas.' : 'I e II.'}`;
+                        // Itens Genéricos mas Estruturados
+                        const items = [
+                            "I. Afirmação sobre o conceito X.",
+                            "II. Afirmação sobre o conceito Y.",
+                            "III. Afirmação sobre o conceito Z.",
+                            "IV. Afirmação sobre o conceito W.",
+                            "V. Afirmação sobre o conceito K."
+                        ];
+                        // Lógica de Alternativas Balanceada
+                        let alts = "";
+                        if (STATE.multiRange === 3) alts = "a) I, apenas.\nb) II, apenas.\nc) I e II, apenas.\nd) II e III, apenas.\ne) I, II e III.";
+                        else if (STATE.multiRange === 4) alts = "a) I e II.\nb) I e IV.\nc) II e III.\nd) I, III e IV.\ne) II, III e IV.";
+                        else alts = "a) I, II e III.\nb) I, IV e V.\nc) II, III e IV.\nd) I, III e V.\ne) II, IV e V.";
+
+                        exText = items.slice(0, STATE.multiRange).join('\n') + `\n\nÉ correto o que se afirma em:\n${alts}`;
                     }
                     
                     html += `
@@ -265,7 +280,7 @@
                         </div>
                     `;
 
-                    // CONTROLES ESPECÍFICOS
+                    // CONTROLES
                     if (key === 'MULTIPLE') {
                         html += `
                             <div class="mt-3 pt-3 border-t border-slate-100">
@@ -347,7 +362,7 @@
                 typePrompt += `\nREGRA DE OURO: O enunciado NÃO deve ter pontuação final (ponto, interrogação). Ele deve ser uma frase que é completada gramaticalmente pelas alternativas (começando com minúscula).`;
             }
             else if (STATE.type === 'ASSERTION') {
-                promptExtras = `GABARITO OBRIGATÓRIO: ${STATE.assertionKey}. Use alternativas PADRÃO INEP (A,B,C,D,E) sem mudar texto.`;
+                promptExtras = `GABARITO OBRIGATÓRIO: ${STATE.assertionKey}. Use as alternativas PADRÃO INEP (A,B,C,D,E) sem mudar texto.`;
             }
             else if (STATE.type === 'MULTIPLE') {
                 promptExtras = `Itens I a ${STATE.multiRange===3?'III':STATE.multiRange===4?'IV':'V'}.`;
