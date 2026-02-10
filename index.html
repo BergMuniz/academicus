@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academicus AI | Núcleo de Apoio Pedagógico</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,26 +26,23 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         
-        /* UI Elements & Inputs */
-        /* No mobile, fonte 16px previne zoom automático do iOS */
-        .input-field { transition: all 0.2s; font-size: 16px; } 
-        @media (min-width: 768px) { .input-field { font-size: 0.875rem; } }
-
+        /* UI Elements */
+        .input-field { transition: all 0.2s; }
         .input-field:focus { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); border-color: #2563eb; }
-        
-        /* Cards Interativos */
-        .type-card { transition: all 0.2s ease; border: 1px solid #e2e8f0; cursor: pointer; position: relative; overflow: hidden; }
-        .type-card:active { transform: scale(0.98); }
-        .type-card.active { border-color: #2563eb; background-color: white; box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.15); ring: 1px ring-color: #2563eb; }
-        
-        .card-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease; }
-        .type-card.active .card-content { max-height: 500px; opacity: 1; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f1f5f9; }
+        .bloom-btn { transition: all 0.2s; border: 1px solid #e2e8f0; }
+        .bloom-btn:hover { transform: scale(1.01); }
+        .type-card { transition: all 0.3s ease; border: 1px solid #e2e8f0; cursor: pointer; }
+        .type-card:hover { border-color: #93c5fd; }
+        .type-card.active { border-color: #2563eb; background-color: white; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.15); ring: 1px ring-color: #2563eb; }
+        .card-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.4s ease; }
+        .type-card.active .card-content { max-height: 1500px; opacity: 1; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
+        .diff-card { transition: all 0.2s; cursor: pointer; }
+        .diff-bar { transition: all 0.3s ease; }
 
-        /* --- ESTILO DA PROVA (Formatada para Mobile e PC) --- */
-        .prose { color: #334155; max-width: none; font-size: 0.95rem; }
-        
+        /* --- ESTILO DA PROVA (O SEGREDO DA FORMATAÇÃO) --- */
+        .prose { color: #334155; max-width: none; }
         .prose h3 { 
             color: #1e3a8a; 
             font-size: 1.1rem; 
@@ -57,38 +54,39 @@
             text-transform: uppercase; 
             letter-spacing: 0.05em;
         }
-        
         .prose strong { color: #0f172a; font-weight: 700; }
-        .prose p { margin-bottom: 1rem; line-height: 1.6; text-align: justify; }
+        .prose p { margin-bottom: 1rem; line-height: 1.7; text-align: justify; }
         
-        /* Lista de Alternativas */
+        /* Lista de Alternativas Limpa */
         .prose ul { list-style: none; padding-left: 0; }
         .prose li { 
-            margin-bottom: 0.75rem; 
-            padding: 1rem; 
-            border: 1px solid #e2e8f0;
+            margin-bottom: 0.8rem; 
+            padding: 0.8rem; 
+            border: 1px solid #f1f5f9;
             border-radius: 8px;
             background-color: #fff;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: background 0.2s;
         }
+        .prose li:hover { background-color: #f8fafc; }
         
-        /* CAIXA DE GABARITO (Mobile Friendly) */
+        /* CAIXA DE GABARITO PROFISSIONAL */
         .gabarito-box {
             background-color: #f0fdf4;
             border: 1px solid #86efac;
             border-left: 5px solid #16a34a;
             border-radius: 8px;
-            padding: 1.25rem;
-            margin-top: 2.5rem;
+            padding: 1.5rem;
+            margin-top: 3rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            page-break-inside: avoid;
         }
         .gabarito-title {
             color: #166534;
             font-weight: 800;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -96,68 +94,76 @@
             padding-bottom: 0.5rem;
         }
         
-        /* CAIXA DE AUDITORIA */
+        /* CAIXA DE AUDITORIA (VERMELHA/AMARELA) */
         .audit-box {
             background-color: #fff1f2;
             border: 1px solid #fecdd3;
             border-left: 5px solid #e11d48;
             border-radius: 8px;
-            padding: 1.25rem;
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
+        .audit-ok { color: #16a34a; font-weight: bold; }
+        .audit-warn { color: #ca8a04; font-weight: bold; }
+        .audit-fail { color: #dc2626; font-weight: bold; }
 
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
-<body class="min-h-screen flex flex-col text-slate-900 pb-10 lg:pb-0">
+<body class="min-h-screen flex flex-col text-slate-900">
 
-    <header class="bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-50 flex items-center justify-between shadow-sm no-print">
-        <div class="flex items-center gap-2.5">
-            <div class="bg-brand-600 p-1.5 rounded-lg text-white shadow-md"><i data-lucide="graduation-cap" class="w-5 h-5"></i></div>
+    <header class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50 flex items-center justify-between shadow-sm no-print">
+        <div class="flex items-center gap-3">
+            <div class="bg-brand-600 p-2 rounded-lg text-white shadow-md"><i data-lucide="graduation-cap"></i></div>
             <div>
-                <h1 class="text-lg font-bold text-slate-900 leading-none tracking-tight">Academicus AI</h1>
-                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">Núcleo de Apoio Pedagógico</p>
+                <h1 class="text-xl font-bold text-slate-900 leading-none">Academicus AI</h1>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Núcleo de Apoio Pedagógico</p>
             </div>
         </div>
-        <div class="hidden xs:flex bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full border border-blue-100 font-bold text-[10px] items-center gap-1.5">
-            <i data-lucide="sparkles" class="w-3 h-3"></i> <span class="hidden sm:inline">Powered by</span> Gemini 2.0
+        <div class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-100 font-bold text-[10px] flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-3 h-3"></i> Powered by Gemini 2.0
         </div>
     </header>
 
-    <main class="w-full max-w-[1600px] mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 flex-1">
+    <main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 w-full">
         
-        <aside class="lg:col-span-4 xl:col-span-3 space-y-4 lg:space-y-6 no-print">
+        <aside class="lg:col-span-4 xl:col-span-3 space-y-6 no-print">
             
-            <div class="bg-slate-200 p-1 rounded-xl flex gap-1 font-bold shadow-inner">
-                <button onclick="setMode('generator')" id="tab-gen" class="flex-1 py-3 text-xs rounded-lg flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm transition-all">
-                    <i data-lucide="pen-tool" class="w-4 h-4"></i> Criar
+            <div class="bg-slate-200/50 p-1 rounded-xl flex gap-1 font-bold">
+                <button onclick="setMode('generator')" id="tab-gen" class="flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm transition-all">
+                    <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i> Design
                 </button>
-                <button onclick="setMode('auditor')" id="tab-aud" class="flex-1 py-3 text-xs rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all">
-                    <i data-lucide="clipboard-check" class="w-4 h-4"></i> Auditar
+                <button onclick="setMode('auditor')" id="tab-aud" class="flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all">
+                    <i data-lucide="clipboard-check" class="w-3.5 h-3.5"></i> Auditoria
                 </button>
             </div>
 
-            <div id="panel-generator" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 lg:p-5 space-y-5">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Curso</label>
-                        <input type="text" id="curso" class="input-field w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 outline-none placeholder:text-slate-400" placeholder="Ex: Psicologia...">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Objeto de Conhecimento</label>
-                        <textarea id="conteudo" rows="3" class="input-field w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 outline-none placeholder:text-slate-400" placeholder="Ex: Terapia Cognitivo-Comportamental..."></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase flex items-center gap-1">
-                            <i data-lucide="target" class="w-3 h-3"></i> Objetivo (Opcional)
-                        </label>
-                        <input type="text" id="objetivo" class="input-field w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm outline-none placeholder:text-slate-300" placeholder="Ex: Analisar criticamente...">
+            <div id="panel-generator" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-6">
+                <div>
+                    <h3 class="flex items-center gap-2 text-sm font-bold text-slate-800 mb-4">
+                        <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-600"></i> Parâmetros
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Curso</label>
+                            <input type="text" id="curso" class="input-field w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none placeholder:text-slate-400" placeholder="Ex: Psicologia, Direito...">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase">Objeto de Conhecimento</label>
+                            <textarea id="conteudo" rows="3" class="input-field w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none placeholder:text-slate-400" placeholder="Ex: Terapia Cognitivo-Comportamental..."></textarea>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <label class="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase flex items-center gap-1">
+                                <i data-lucide="target" class="w-3 h-3"></i> Objetivo (Opcional)
+                            </label>
+                            <input type="text" id="objetivo" class="w-full bg-transparent text-xs outline-none text-slate-700 placeholder:text-slate-300" placeholder="Ex: Analisar criticamente...">
+                        </div>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase">Dificuldade</label>
-                    <div class="grid grid-cols-3 gap-2 h-12">
+                    <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase">Nível de Dificuldade</label>
+                    <div class="grid grid-cols-3 gap-3 h-16">
                         <button onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card w-full h-full rounded-lg border border-slate-200 bg-white flex flex-col justify-center items-center"><span class="text-xs font-bold text-slate-400">Fácil</span></button>
                         <button onclick="setDiff('Médio')" id="diff-Médio" class="diff-card w-full h-full rounded-lg border border-brand-300 bg-brand-50 flex flex-col justify-center items-center"><span class="text-xs font-bold text-brand-600">Médio</span></button>
                         <button onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card w-full h-full rounded-lg border border-slate-200 bg-white flex flex-col justify-center items-center"><span class="text-xs font-bold text-slate-400">Difícil</span></button>
@@ -165,8 +171,8 @@
                 </div>
 
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase">Taxonomia de Bloom</label>
-                    <div class="grid grid-cols-3 lg:grid-cols-2 gap-2">
+                    <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase">Nível Cognitivo (Bloom)</label>
+                    <div class="grid grid-cols-2 gap-2">
                         <button onclick="setBloom('Lembrar')" id="btn-Lembrar" class="bloom-btn py-2 rounded text-[10px] text-slate-600 bg-white">Lembrar</button>
                         <button onclick="setBloom('Entender')" id="btn-Entender" class="bloom-btn py-2 rounded text-[10px] text-slate-600 bg-white">Entender</button>
                         <button onclick="setBloom('Aplicar')" id="btn-Aplicar" class="bloom-btn py-2 rounded text-[10px] text-slate-600 bg-white">Aplicar</button>
@@ -181,47 +187,47 @@
                     <div id="types-container" class="space-y-3"></div>
                 </div>
 
-                <button onclick="gerar()" id="btn-main" class="w-full bg-brand-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-brand-700 shadow-lg shadow-brand-200/50 mt-2 active:scale-95">
+                <button onclick="gerar()" id="btn-main" class="w-full bg-brand-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-brand-700 shadow-lg shadow-brand-200/50 mt-4">
                     <span>Gerar Questão</span>
                     <i data-lucide="zap" class="w-4 h-4"></i>
                 </button>
             </div>
 
-            <div id="panel-auditor" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+            <div id="panel-auditor" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
                 <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex gap-3">
                     <i data-lucide="microscope" class="w-5 h-5 text-emerald-600 shrink-0"></i>
                     <div>
-                        <h4 class="text-xs font-bold text-emerald-800">Auditoria INEP</h4>
-                        <p class="text-[10px] text-emerald-700 mt-0.5">Cole a questão para análise técnica.</p>
+                        <h4 class="text-xs font-bold text-emerald-800">Auditoria Técnica INEP</h4>
+                        <p class="text-[10px] text-emerald-700 mt-1">Cole uma questão para análise psicométrica e técnica.</p>
                     </div>
                 </div>
-                <textarea id="audit-input" rows="12" class="input-field w-full px-4 py-3 rounded-xl border border-emerald-100 bg-emerald-50/30 font-mono outline-none focus:border-emerald-500 text-slate-700 text-xs" placeholder="Cole o texto da questão aqui..."></textarea>
-                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                <textarea id="audit-input" rows="15" class="w-full px-4 py-3 rounded-xl border border-emerald-100 bg-emerald-50/20 text-xs font-mono outline-none focus:border-emerald-500 text-slate-700" placeholder="Cole a questão completa aqui (Enunciado + Alternativas)..."></textarea>
+                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2">
                     <span>Executar Auditoria</span>
                     <i data-lucide="check-circle-2" class="w-4 h-4"></i>
                 </button>
             </div>
         </aside>
 
-        <div class="lg:col-span-8 xl:col-span-9 flex flex-col h-full scroll-mt-6" id="result-anchor">
-            <div id="result-area" class="bg-white min-h-[500px] lg:min-h-[850px] rounded-2xl lg:rounded-[2rem] border border-slate-200 shadow-sm flex flex-col relative overflow-hidden transition-all">
+        <div class="lg:col-span-8 xl:col-span-9 flex flex-col h-full">
+            <div id="result-area" class="bg-white min-h-[850px] rounded-[2rem] border border-slate-200 shadow-sm flex flex-col relative overflow-hidden transition-all">
                 
-                <div id="export-tools" class="hidden flex-wrap p-4 lg:p-0 gap-2 border-b lg:border-none border-slate-100 lg:absolute lg:top-6 lg:right-6 lg:z-20 no-print">
-                    <button onclick="exportWord()" class="flex-1 lg:flex-none justify-center bg-white border border-slate-200 text-blue-700 px-4 py-2.5 rounded-lg hover:bg-blue-50 text-xs font-bold shadow-sm flex items-center gap-2 active:bg-blue-100">
-                        <i data-lucide="file-text" class="w-4 h-4"></i> <span class="lg:hidden">Baixar</span> Word
+                <div id="export-tools" class="hidden absolute top-6 right-6 flex gap-2 z-20 no-print">
+                    <button onclick="exportWord()" class="bg-white border border-slate-200 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-50 text-xs font-bold shadow-sm flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-4 h-4"></i> Word
                     </button>
-                    <button onclick="exportPDF()" class="flex-1 lg:flex-none justify-center bg-white border border-slate-200 text-red-700 px-4 py-2.5 rounded-lg hover:bg-red-50 text-xs font-bold shadow-sm flex items-center gap-2 active:bg-red-100">
-                        <i data-lucide="file-type-2" class="w-4 h-4"></i> <span class="lg:hidden">Baixar</span> PDF
+                    <button onclick="exportPDF()" class="bg-white border border-slate-200 text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 text-xs font-bold shadow-sm flex items-center gap-2">
+                        <i data-lucide="file-type-2" class="w-4 h-4"></i> PDF
                     </button>
                 </div>
 
-                <div id="placeholder" class="flex-1 flex flex-col items-center justify-center text-center p-8 lg:p-12">
-                    <div class="bg-slate-50 p-5 rounded-full mb-4 ring-1 ring-slate-100"><i data-lucide="pen-tool" class="w-8 h-8 lg:w-10 lg:h-10 text-slate-300"></i></div>
-                    <h3 class="text-base lg:text-lg font-bold text-slate-400">Área de Criação</h3>
-                    <p class="text-slate-400 text-xs lg:text-sm mt-1 max-w-xs">Seus resultados aparecerão aqui após a geração.</p>
+                <div id="placeholder" class="flex-1 flex flex-col items-center justify-center text-center p-12">
+                    <div class="bg-slate-50 p-6 rounded-full mb-6 ring-1 ring-slate-100"><i data-lucide="pen-tool" class="w-10 h-10 text-slate-300"></i></div>
+                    <h3 class="text-lg font-bold text-slate-400">Área de Criação & Análise</h3>
+                    <p class="text-slate-400 text-sm mt-2">Use as abas à esquerda para alternar entre<br>Criar Questões e Auditar Questões.</p>
                 </div>
                 
-                <div id="ai-output" class="hidden text-left w-full max-w-4xl mx-auto p-6 lg:p-12 prose prose-slate"></div>
+                <div id="ai-output" class="hidden text-left w-full max-w-4xl mx-auto p-12 prose prose-slate"></div>
             </div>
         </div>
     </main>
@@ -229,10 +235,10 @@
     <script>
         // --- DADOS E TIPOS ---
         const TYPES = {
-            "SINGLE": { title: "Resposta Única", icon: "check-circle", desc: "Múltipla escolha (A-E)." },
-            "MULTIPLE": { title: "Compl. Múltipla", icon: "layers", desc: "Itens Romanos (I, II, III)." },
-            "ASSERTION": { title: "Asserção/Razão", icon: "git-compare", desc: "Duas afirmações ligadas." },
-            "DISCURSIVE": { title: "Discursiva", icon: "align-left", desc: "Questão aberta." }
+            "SINGLE": { title: "Resposta Única", icon: "check-circle", desc: "Clássica múltipla escolha (A-E)." },
+            "MULTIPLE": { title: "Complementação Múltipla", icon: "layers", desc: "Itens Romanos (I, II, III) com somatória." },
+            "ASSERTION": { title: "Asserção e Razão", icon: "git-compare", desc: "Duas afirmações conectadas por PORQUE." },
+            "DISCURSIVE": { title: "Discursiva", icon: "align-left", desc: "Questão aberta com padrão de resposta." }
         };
 
         let state = {
@@ -252,8 +258,8 @@
             document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
             
             // Estilo das abas
-            document.getElementById('tab-gen').className = isGen ? 'flex-1 py-2.5 text-xs rounded-lg flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm transition-all font-bold' : 'flex-1 py-2.5 text-xs rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all';
-            document.getElementById('tab-aud').className = !isGen ? 'flex-1 py-2.5 text-xs rounded-lg flex items-center justify-center gap-2 bg-white text-emerald-700 shadow-sm transition-all font-bold' : 'flex-1 py-2.5 text-xs rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all';
+            document.getElementById('tab-gen').className = isGen ? 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 bg-white text-brand-700 shadow-sm transition-all font-bold' : 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all';
+            document.getElementById('tab-aud').className = !isGen ? 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 bg-white text-emerald-700 shadow-sm transition-all font-bold' : 'flex-1 py-2.5 text-[11px] rounded-lg flex items-center justify-center gap-2 text-slate-500 hover:text-slate-700 transition-all';
         }
 
         function renderTypes() {
@@ -263,10 +269,10 @@
             Object.entries(TYPES).forEach(([key, info]) => {
                 const active = state.type === key;
                 const card = document.createElement('div');
-                card.className = `type-card p-3 rounded-xl bg-white ${active ? 'active' : 'border-slate-200'}`;
+                card.className = `type-card p-4 rounded-xl bg-white ${active ? 'active' : 'border-slate-200'}`;
                 card.onclick = () => { state.type = key; renderTypes(); };
 
-                // Controles extras
+                // Controles extras para tipos complexos
                 let extraControls = '';
                 if (key === 'MULTIPLE' && active) {
                     extraControls = `
@@ -276,8 +282,8 @@
                 }
                 if (key === 'ASSERTION' && active) {
                     extraControls = `
-                        <div class="mt-3 pt-3 border-t border-slate-100 flex gap-2 overflow-x-auto pb-1">
-                            ${['A','B','C','D','E'].map(l => `<button onclick="event.stopPropagation(); state.assertionKey='${l}'; renderTypes();" class="w-6 h-6 flex-shrink-0 flex items-center justify-center text-[10px] font-bold border rounded ${state.assertionKey===l ? 'bg-brand-600 text-white' : 'bg-white text-slate-500'}">${l}</button>`).join('')}
+                        <div class="mt-3 pt-3 border-t border-slate-100 flex gap-2">
+                            ${['A','B','C','D','E'].map(l => `<button onclick="event.stopPropagation(); state.assertionKey='${l}'; renderTypes();" class="w-6 h-6 flex items-center justify-center text-[10px] font-bold border rounded ${state.assertionKey===l ? 'bg-brand-600 text-white' : 'bg-white text-slate-500'}">${l}</button>`).join('')}
                         </div>`;
                 }
 
@@ -316,27 +322,34 @@
             state.bloom = val;
         }
 
-        // --- GERAR ---
+        // --- FUNÇÃO GERAR (PROMPT BLINDADO PARA FORMATAÇÃO) ---
         async function gerar() {
             const curso = document.getElementById('curso').value;
             const conteudo = document.getElementById('conteudo').value;
+            const objetivo = document.getElementById('objetivo').value;
             
             if (!curso || !conteudo) return alert("Preencha Curso e Objeto de Conhecimento.");
 
             const btn = document.getElementById('btn-main');
             const originalHTML = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Criando...`;
+            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Processando...`;
             btn.disabled = true;
 
-            // Lógica do Prompt (Manteve-se a mesma poderosa da versão anterior)
+            // CONFIGURAÇÃO TÉCNICA DO PROMPT
             let extras = "";
-            if (state.type === 'MULTIPLE') extras = `ITENS ROMANOS OBRIGATÓRIOS: I a ${state.multiRange===3?'III':state.multiRange===4?'IV':'V'}.`;
+            let specificConstraint = "";
+            
+            if (state.type === 'MULTIPLE') {
+                extras = `ITENS ROMANOS OBRIGATÓRIOS: I a ${state.multiRange===3?'III':state.multiRange===4?'IV':'V'}.`;
+            }
+            
+            // CORREÇÃO CRÍTICA PARA ASSERÇÃO E RAZÃO
             if (state.type === 'ASSERTION') {
                 extras = `
                 REGRA CRÍTICA PARA ASSERÇÃO E RAZÃO:
                 1. Você deve gerar a 'Asserção I' e a 'Asserção II' ligadas pela palavra PORQUE.
                 2. O Gabarito deve ser a Letra ${state.assertionKey}.
-                3. AS ALTERNATIVAS SÃO FIXAS (NÃO MUDE):
+                3. AS ALTERNATIVAS SÃO FIXAS. COPIE EXATAMENTE ESTE TEXTO PARA AS ALTERNATIVAS:
                    A) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.
                    B) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.
                    C) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.
@@ -345,6 +358,7 @@
                 `;
             }
 
+            // O PROMPT "VISUAL"
             const prompt = `
             ATUE COMO ESPECIALISTA DO INEP/ENADE.
             Crie uma questão inédita seguindo estritamente este comando.
@@ -357,20 +371,22 @@
             - Dificuldade: ${state.difficulty}
             ${extras}
             
+            ---
+            
             FORMATO DE SAÍDA OBRIGATÓRIO (MARKDOWN + HTML):
-            Siga este template visual EXATAMENTE:
+            Não escreva introduções. Siga este template visual EXATAMENTE:
 
             ### Enunciado
             (Texto base rico e contextualizado, seguido do comando da questão em negrito).
 
             ### Alternativas
-            (Liste as alternativas aqui. Se for Asserção e Razão, use as fixas).
+            (Liste as alternativas aqui. Se for Asserção e Razão, use as fixas que eu mandei acima).
 
             <div class="gabarito-box">
             <div class="gabarito-title"><i data-lucide="check-circle-2"></i> GABARITO E ANÁLISE</div>
             <div class="gabarito-content">
             <p><strong>✅ Resposta Correta:</strong> (Letra)</p>
-            <p><strong>💡 Justificativa Pedagógica:</strong> (Explicação técnica detalhada).</p>
+            <p><strong>💡 Justificativa Pedagógica:</strong> (Explicação técnica detalhada sobre a resposta).</p>
             </div>
             </div>
             `;
@@ -378,7 +394,7 @@
             executeAI(prompt, btn, originalHTML);
         }
 
-        // --- AUDITAR ---
+        // --- FUNÇÃO AUDITAR (NOVO PROMPT REVISADO) ---
         async function auditar() {
             const input = document.getElementById('audit-input').value;
             if (!input) return alert("Cole a questão para auditar.");
@@ -389,33 +405,40 @@
             btn.disabled = true;
 
             const prompt = `
-            ATUE COMO AUDITOR DO INEP.
-            Analise a questão abaixo procurando falhas.
+            ATUE COMO AUDITOR SÊNIOR DO INEP/ENADE.
+            Analise rigorosamente a questão abaixo procurando falhas técnicas, viés ou erros de construção.
             
-            QUESTÃO: ${input}
+            QUESTÃO PARA ANÁLISE:
+            ${input}
 
-            FORMATO:
-            ### Relatório de Auditoria
+            ---
+
+            FORMATO DE SAÍDA OBRIGATÓRIO (MARKDOWN + HTML):
+            
+            ### Relatório de Auditoria Técnica
+
             <div class="audit-box">
-            <h4>1. Enunciado</h4>
+            <h4>1. Análise do Enunciado</h4>
             <ul style="list-style:none; padding:0;">
-                <li>(✅ ou ⚠️) <strong>Contexto:</strong> Análise...</li>
-                <li>(✅ ou ⚠️) <strong>Comando:</strong> Análise...</li>
+                <li>(Use emoji ✅ ou ⚠️) <strong>Contextualização:</strong> (Avalie se o texto base é pertinente)</li>
+                <li>(Use emoji ✅ ou ⚠️) <strong>Clareza do Comando:</strong> (Avalie se o comando é direto e sem ambiguidade)</li>
             </ul>
-            <h4>2. Alternativas</h4>
+
+            <h4>2. Análise das Alternativas</h4>
             <ul style="list-style:none; padding:0;">
-                <li>(✅ ou ⚠️) <strong>Plausibilidade:</strong> Análise...</li>
-                <li>(✅ ou ⚠️) <strong>Pegadinhas:</strong> Análise...</li>
+                <li>(Use emoji ✅ ou ⚠️) <strong>Plausibilidade dos Distratores:</strong> (Os erros são inteligentes ou óbvios demais?)</li>
+                <li>(Use emoji ✅ ou ⚠️) <strong>Paralelismo:</strong> (As alternativas têm tamanho e estrutura gramatical similar?)</li>
+                <li>(Use emoji ✅ ou ⚠️) <strong>Pegadinhas:</strong> (Existe alguma casca de banana desleal?)</li>
             </ul>
-            <h4>3. Veredito</h4>
-            <p>APROVADA / REQUER AJUSTES / REJEITADA</p>
+
+            <h4>3. Veredito Final</h4>
+            <p>(Dê um parecer conclusivo: A questão está APROVADA, REQUER AJUSTES ou REJEITADA, e explique o porquê em 2 linhas).</p>
             </div>
             `;
 
             executeAI(prompt, btn, originalHTML);
         }
 
-        // --- EXECUÇÃO E AUTO-SCROLL ---
         async function executeAI(prompt, btn, originalHTML) {
             try {
                 const response = await fetch('/api/gemini', {
@@ -425,23 +448,15 @@
                 });
                 
                 const data = await response.json();
+                
                 if (data.error) throw new Error(data.error);
 
                 document.getElementById('placeholder').classList.add('hidden');
                 document.getElementById('export-tools').classList.remove('hidden');
-                document.getElementById('export-tools').classList.add('flex'); // Garante display flex
-                
                 const output = document.getElementById('ai-output');
                 output.classList.remove('hidden');
                 output.innerHTML = marked.parse(data.text); 
                 lucide.createIcons();
-
-                // AUTO-SCROLL PARA MOBILE (A MÁGICA)
-                if (window.innerWidth < 1024) {
-                    setTimeout(() => {
-                        document.getElementById('result-anchor').scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                }
 
             } catch (error) {
                 alert("Erro: " + error.message);
@@ -456,9 +471,9 @@
         async function exportWord() {
             const { Document, Packer, Paragraph, TextRun } = docx;
             const text = document.getElementById('ai-output').innerText; 
-            const doc = new Document({ sections: [{ children: [new Paragraph({ children: [new TextRun({text: "Academicus AI - Documento", bold: true, size: 32}), new TextRun({text: "\n\n"+text, size: 24})]})]}]});
+            const doc = new Document({ sections: [{ children: [new Paragraph({ children: [new TextRun({text: "Academicus AI - Relatório", bold: true, size: 32}), new TextRun({text: "\n\n"+text, size: 24})]})]}]});
             const blob = await Packer.toBlob(doc);
-            saveAs(blob, "Academicus.docx");
+            saveAs(blob, "Questao_Academicus.docx");
         }
 
         function exportPDF() {
