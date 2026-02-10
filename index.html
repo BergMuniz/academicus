@@ -5,45 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academicus AI | NAP Unichristus</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
-    <main class="max-w-4xl mx-auto p-8">
-        <h1 class="text-3xl font-bold text-blue-800 mb-6">Academicus AI</h1>
-        <textarea id="prompt-input" rows="4" class="w-full p-4 border rounded-xl mb-4" placeholder="Descreva a questão que deseja gerar..."></textarea>
-        <button onclick="gerar()" id="btn" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold">Gerar Questão</button>
-        <div id="resultado" class="mt-8 p-6 bg-white rounded-xl shadow-sm border border-slate-200 hidden"></div>
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-20 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 p-2 rounded-lg text-white"><i data-lucide="graduation-cap"></i></div>
+            <div>
+                <h1 class="text-xl font-bold text-slate-800 uppercase tracking-tight">Academicus AI</h1>
+                <p class="text-xs text-slate-500 font-medium">Inteligência Avaliativa para Ensino Superior</p>
+            </div>
+        </div>
+        <div class="text-[10px] bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full font-bold border border-blue-100 flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-3 h-3"></i> Powered by Gemini 3 Flash
+        </div>
+    </header>
+
+    <main class="max-w-[1400px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <aside class="lg:col-span-4 space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h2 class="flex items-center gap-2 text-slate-800 font-bold mb-6 border-b pb-4">
+                    <i data-lucide="settings-2" class="text-blue-600 w-5 h-5"></i> Parâmetros da Questão
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Curso / Área</label>
+                        <input type="text" id="curso" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-4 focus:ring-blue-500/10 outline-none" placeholder="Ex: Psicologia, Direito...">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Objeto de Conhecimento</label>
+                        <textarea id="tema" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-4 focus:ring-blue-500/10 outline-none" placeholder="Descreva o tema..."></textarea>
+                    </div>
+                    <button onclick="gerarQuestao()" id="btnGerar" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+                        Gerar Questão <i data-lucide="zap" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <section class="lg:col-span-8">
+            <div id="display-resultado" class="bg-white min-h-[600px] rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center p-12">
+                <div id="placeholder-content">
+                    <div class="bg-slate-50 p-6 rounded-full mb-6 inline-block"><i data-lucide="sparkles" class="w-10 h-10 text-slate-300"></i></div>
+                    <h3 class="text-xl font-bold text-slate-400">Aguardando Input</h3>
+                    <p class="text-slate-400 max-w-sm mx-auto mt-2">Preencha os parâmetros à esquerda para gerar sua questão inédita.</p>
+                </div>
+                <div id="ai-content" class="hidden text-left w-full prose max-w-none"></div>
+            </div>
+        </section>
     </main>
 
     <script>
-        async function gerar() {
-            const input = document.getElementById('prompt-input').value;
-            const resDiv = document.getElementById('resultado');
-            const btn = document.getElementById('btn');
-            
-            if(!input) return alert("Digite um tema!");
+        lucide.createIcons();
+
+        async function gerarQuestao() {
+            const curso = document.getElementById('curso').value;
+            const tema = document.getElementById('tema').value;
+            const display = document.getElementById('display-resultado');
+            const aiContent = document.getElementById('ai-content');
+            const placeholder = document.getElementById('placeholder-content');
+            const btn = document.getElementById('btnGerar');
+
+            if(!curso || !tema) return alert("Por favor, preencha o curso e o tema.");
 
             btn.disabled = true;
-            btn.innerText = "Processando...";
+            btn.innerHTML = "Processando... <i data-lucide='loader' class='animate-spin'></i>";
+            lucide.createIcons();
 
             try {
-                // Chama a ponte de segurança do Netlify
+                // PONTE COM A FUNÇÃO DO NETLIFY
                 const response = await fetch('/.netlify/functions/gemini', {
                     method: 'POST',
-                    body: JSON.stringify({ prompt: input })
+                    body: JSON.stringify({ 
+                        prompt: `Gere uma questão de múltipla escolha padrão ENADE/INEP para o curso de ${curso}. Tema: ${tema}. Inclua gabarito e justificativa.` 
+                    })
                 });
+                
                 const data = await response.json();
-                resDiv.innerHTML = marked.parse(data.text);
-                resDiv.classList.remove('hidden');
+                
+                placeholder.classList.add('hidden');
+                display.classList.remove('border-dashed');
+                aiContent.innerHTML = marked.parse(data.text);
+                aiContent.classList.remove('hidden');
+                
             } catch (err) {
-                alert("Erro ao conectar com a IA. Verifique a chave no Netlify.");
+                alert("Erro na conexão. Verifique sua chave API no painel do Netlify.");
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Gerar Questão";
+                btn.innerHTML = "Gerar Questão <i data-lucide='zap' class='w-4 h-4'></i>";
+                lucide.createIcons();
             }
         }
-        lucide.createIcons();
     </script>
 </body>
 </html>
