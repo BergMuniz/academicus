@@ -1,0 +1,9 @@
+{
+  "name": "academicus-ai",
+  "version": "1.0.0",
+  "description": "Gerador de questoes Academicus AI",
+  "main": "index.html",
+  "dependencies": {
+    "@google/genai": "^1.0.0"
+  }
+}
