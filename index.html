@@ -41,9 +41,8 @@
         .type-card:hover { border-color: #93c5fd; }
         .type-card.active { border-color: #2563eb; background-color: white; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.15); ring: 1px ring-color: #2563eb; }
         
-        /* Aumentei o max-height para garantir que os textos longos e botões caibam */
         .card-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.4s ease; }
-        .type-card.active .card-content { max-height: 800px; opacity: 1; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
+        .type-card.active .card-content { max-height: 1500px; opacity: 1; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
 
         .qty-btn { transition: all 0.2s; }
         .qty-btn:active { transform: scale(0.95); }
@@ -168,7 +167,7 @@
                         </div>
                     </div>
 
-                    <button onclick="gerar()" id="btn-main" class="w-full bg-slate-100 text-slate-400 font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-brand-600 hover:text-white hover:shadow-lg hover:shadow-brand-200 group">
+                    <button onclick="gerar()" id="btn-main" class="w-full bg-brand-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-brand-700 hover:shadow-lg hover:shadow-brand-200 group">
                         <span>Gerar Questão Avaliativa</span>
                         <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </button>
@@ -215,7 +214,7 @@
     </main>
 
     <script>
-        // DADOS EXATOS DAS IMAGENS (NADA SIMPLIFICADO)
+        // DADOS EXATOS (CONSTANTS.TS)
         const BLOOM_INFO = {
             "Criar": { verbs: "Gerar, Planejar, Produzir, Desenvolver, Combinar", desc: "Colocar elementos juntos para formar um todo coerente ou funcional.", color: "bloomIndigo" },
             "Avaliar": { verbs: "Julgar, Criticar, Julgar, Hipotetizar, Concluir", desc: "Fazer julgamentos baseados em critérios e padrões.", color: "bloomIndigo" },
@@ -225,36 +224,37 @@
             "Lembrar": { verbs: "Citar, Definir, Listar, Identificar, Recordar", desc: "Recuperar conhecimento relevante da memória.", color: "bloomSky" }
         };
 
+        // TEXTOS COMPLETOS SEM RESUMO
         const TYPES = {
             "SINGLE": { 
                 title: "Resposta Única", 
                 icon: "check-circle", 
                 desc: "Formato clássico com enunciado fechado. Exige que o aluno identifique a única alternativa correta entre distractores plausíveis.", 
-                example: "Enunciado: Qual estrutura celular é responsável pela respiração aeróbica?\na) Ribossomo.\nb) Mitocôndria.\nc) Complexo de Golgi.\nd) Retículo Endoplasmático." 
+                example: "Enunciado: Qual estrutura celular é responsável pela respiração aeróbica?\n\na) Ribossomo.\nb) Lisossomo.\nc) Mitocôndria.\nd) Complexo de Golgi.\ne) Retículo Endoplasmático." 
             },
             "INCOMPLETE": { 
                 title: "Afirmação Incompleta", 
                 icon: "pen-tool", 
                 desc: "O enunciado é uma frase que termina abruptamente sem pontuação final. As alternativas completam a frase gramatical e semanticamente.", 
-                example: "No contexto da física newtoniana, a inércia pode ser definida como a tendência de um corpo em\na) aumentar sua velocidade...\nb) permanecer em seu estado de repouso..." 
+                example: "Enunciado: No contexto da física newtoniana, a inércia pode ser definida como a tendência de um corpo em\n\na) aumentar sua velocidade constantemente.\nb) permanecer em seu estado de repouso ou movimento retilíneo uniforme.\nc) alterar sua massa independentemente da força.\nd) desacelerar na ausência de atrito.\ne) reagir instantaneamente a forças internas." 
             },
             "MULTIPLE": { 
                 title: "Complementação Múltipla", 
                 icon: "layers", 
                 desc: "Apresenta uma lista de asserções (I, II, III...) seguida de alternativas que agrupam as corretas. Exige análise combinatória de conhecimentos.", 
-                example: "I. A água ferve a 100ºC ao nível do mar.\nII. O gelo é menos denso que a água líquida.\nIII. A molécula de água é apolar.\n\nÉ correto o que se afirma em\na) I, apenas.\nb) II, apenas.\nc) I e II, apenas." 
+                example: "" // Preenchido dinamicamente
             },
             "ASSERTION": { 
                 title: "Asserção e Razão", 
                 icon: "git-compare", 
                 desc: "Duas afirmações conectadas pela palavra PORQUE. O aluno deve julgar a veracidade de cada uma e a relação de causalidade entre elas.", 
-                example: "Asserção I: O céu é azul durante o dia.\n\nPORQUE\n\nAsserção II: A atmosfera dispersa preferencialmente a luz solar de menor comprimento de onda." 
+                example: "Asserção I: O céu é azul durante o dia.\n\nPORQUE\n\nAsserção II: A atmosfera dispersa preferencialmente a luz solar de menor comprimento de onda.\n\na) As asserções I e II são verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas." 
             },
             "DISCURSIVE": { 
                 title: "Discursiva", 
                 icon: "file-text", 
                 desc: "Questão aberta que exige a produção de um texto. Inclui comando base e tópicos obrigatórios (scaffolding) para guiar a resposta.", 
-                example: "Comando: Redija um texto dissertativo sobre os impactos da Inteligência Artificial na educação superior." 
+                example: "Comando: Redija um texto dissertativo sobre os impactos da Inteligência Artificial na educação superior, abordando necessariamente:\n\na) Os benefícios para a personalização do ensino.\nb) Os riscos éticos relacionados ao plágio.\nc) O novo papel do docente como mediador." 
             }
         };
 
@@ -268,6 +268,37 @@
             assertionKey: 'A'
         };
 
+        // --- LÓGICA DE EXEMPLO DINÂMICO E BALANCEADO ---
+        function getMultipleExample(range) {
+            const items = [
+                "I. A água ferve a 100ºC ao nível do mar.",
+                "II. O gelo é menos denso que a água líquida.",
+                "III. A molécula de água é apolar.",
+                "IV. A tensão superficial da água é alta.",
+                "V. O calor específico da água é elevado."
+            ];
+            
+            const currentItems = items.slice(0, range).join("\n");
+            let alternatives = "";
+            let commandPhrase = "";
+
+            if (range === 3) {
+                // I a III: "apenas" nas alternativas
+                commandPhrase = "É correto o que se afirma em";
+                alternatives = "a) I, apenas.\nb) II, apenas.\nc) I e II, apenas.\nd) II e III, apenas.\ne) I, II e III.";
+            } else if (range === 4) {
+                // I a IV: "apenas" no comando (BALANCEADO: 3X CADA)
+                commandPhrase = "É correto apenas o que se afirma em";
+                alternatives = "a) I e II.\nb) I e IV.\nc) II e III.\nd) I, III e IV.\ne) II, III e IV.";
+            } else {
+                // I a V: "apenas" no comando (BALANCEADO: 3X CADA)
+                commandPhrase = "É correto apenas o que se afirma em";
+                alternatives = "a) I, II e III.\nb) I, IV e V.\nc) II, III e IV.\nd) I, III e V.\ne) II, IV e V.";
+            }
+
+            return `${currentItems}\n\n${commandPhrase}\n\n${alternatives}`;
+        }
+
         function renderTypes() {
             const container = document.getElementById('types-container');
             container.innerHTML = '';
@@ -278,10 +309,14 @@
                 card.className = `type-card p-4 rounded-xl bg-white ${active ? 'active' : 'border-slate-200'}`;
                 card.onclick = () => { state.type = key; renderTypes(); updateGenerateButton(); };
 
-                // LOGICA DE CONTROLES EXTRAS (Agora forçada dentro do HTML)
+                // Define exemplo correto
+                let displayExample = info.example;
+                if (key === 'MULTIPLE') {
+                    displayExample = getMultipleExample(state.multiRange);
+                }
+
                 let extraControls = '';
                 
-                // Controle I-V para Complementação Múltipla
                 if (key === 'MULTIPLE') {
                     extraControls = `
                         <div class="mt-4 pt-4 border-t border-slate-100">
@@ -292,7 +327,6 @@
                         </div>`;
                 }
                 
-                // Controle A-E para Asserção e Razão (FIEL À IMAGEM)
                 if (key === 'ASSERTION') {
                     extraControls = `
                         <div class="mt-4 pt-4 border-t border-slate-100">
@@ -320,7 +354,7 @@
                         <p class="text-[10px] text-slate-500 leading-relaxed mb-3">${info.desc}</p>
                         <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 text-[10px] text-slate-600 font-mono whitespace-pre-wrap flex gap-2">
                             <i data-lucide="sparkles" class="w-3 h-3 text-brand-400 shrink-0 mt-0.5"></i>
-                            <div class="leading-relaxed">${info.example}</div>
+                            <div class="leading-relaxed">${displayExample}</div>
                         </div>
                         ${active ? extraControls : ''}
                     </div>
@@ -330,6 +364,7 @@
             lucide.createIcons();
         }
 
+        // --- FUNÇÕES UI ---
         function setMode(mode) {
             state.mode = mode;
             const isGen = mode === 'generator';
@@ -373,7 +408,6 @@
             state.difficulty = val;
         }
 
-        // LÓGICA DE CORES DE BLOOM (2 em 2)
         function setBloom(val) {
             const info = BLOOM_INFO[val];
             const colorKey = info.color; 
@@ -473,9 +507,20 @@
             if (!curso || !conteudo) return alert("Preencha Curso e Objeto de Conhecimento.");
             updateGenerateButton();
 
+            // CONSTRUÇÃO DO PROMPT COM INSTRUÇÕES DE DISTRIBUIÇÃO BALANCEADA
             let extras = "";
-            if (state.type === 'MULTIPLE') extras = `ITENS ROMANOS OBRIGATÓRIOS: I a ${state.multiRange===3?'III':state.multiRange===4?'IV':'V'}.`;
-            if (state.type === 'ASSERTION') extras = `GABARITO OBRIGATÓRIO: Letra ${state.assertionKey} (Engenharia Reversa).`;
+            let specificConstraint = "";
+
+            if (state.type === 'MULTIPLE') {
+                // Captura o template correto e balanceado para o prompt
+                const distributionTemplate = getMultipleExample(state.multiRange).split("\n\n")[2];
+                extras = `ITENS ROMANOS OBRIGATÓRIOS: I a ${state.multiRange===3?'III':state.multiRange===4?'IV':'V'}.`;
+                specificConstraint = `\nREGRAS DE DISTRIBUIÇÃO (ANTI-CHUTE):\nUtilize EXATAMENTE este gabarito de distribuição das alternativas para garantir balanceamento psicométrico:\n${distributionTemplate}\n`;
+            }
+            
+            if (state.type === 'ASSERTION') {
+                extras = `GABARITO OBRIGATÓRIO: Letra ${state.assertionKey} (Engenharia Reversa).`;
+            }
 
             const prompt = `
             ESPECIALISTA INEP/ENADE.
@@ -488,6 +533,7 @@
             - Dificuldade: ${state.difficulty}
             - Bloom: ${state.bloom}
             ${extras}
+            ${specificConstraint}
             
             SAÍDA:
             - Enunciado claro.
