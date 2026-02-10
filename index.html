@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Academicus AI | Design de Avaliação</title>
+    <title>Academicus AI | Inteligência Avaliativa</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -17,444 +17,522 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+                        inep: {
+                            50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc',
+                            400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1',
+                            800: '#075985', 900: '#0c4a6e',
+                        },
+                        emerald: { 50: '#ecfdf5', 600: '#059669', 700: '#047857' }
                     },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    screens: {
-                        'xs': '475px', // Breakpoint extra para celulares pequenos
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
             }
         }
     </script>
-
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         body { background-color: #f8fafc; color: #334155; -webkit-font-smoothing: antialiased; }
 
-        /* INPUTS E FORMULÁRIOS */
-        .input-base {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-            outline: none;
+        /* --- COMPONENTES VISUAIS (Baseado nas imagens) --- */
+        
+        /* Inputs Estilizados */
+        .input-inep {
+            width: 100%; padding: 12px 16px; border-radius: 12px;
+            border: 1px solid #e2e8f0; background: white; color: #0f172a;
+            font-size: 0.95rem; transition: all 0.2s; outline: none;
         }
-        .input-base:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
+        .input-inep:focus { border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1); }
+        .input-inep::placeholder { color: #94a3b8; }
 
-        /* CARD DE OPÇÃO (TIPO DE QUESTÃO) */
-        .option-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 16px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.2s;
+        /* Card de Dificuldade (Barras Coloridas) */
+        .diff-card {
+            position: relative; border-radius: 12px; border: 1px solid #e2e8f0;
+            background: white; padding: 10px; display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end; height: 100px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .diff-card:hover { border-color: #bae6fd; background: #f8fafc; }
+        .diff-bar { width: 100%; border-radius: 6px 6px 0 0; transition: all 0.3s; margin-bottom: 8px; }
+        
+        /* Estados Ativos de Dificuldade */
+        .diff-card[data-active="true"][data-level="Fácil"] { background: #f0f9ff; border-color: #7dd3fc; ring: 2px solid #e0f2fe; }
+        .diff-card[data-active="true"][data-level="Fácil"] .diff-bar { background: #38bdf8; height: 35%; }
+        .diff-card[data-active="true"][data-level="Médio"] { background: #eff6ff; border-color: #60a5fa; ring: 2px solid #dbeafe; }
+        .diff-card[data-active="true"][data-level="Médio"] .diff-bar { background: #3b82f6; height: 65%; }
+        .diff-card[data-active="true"][data-level="Difícil"] { background: #eef2ff; border-color: #818cf8; ring: 2px solid #e0e7ff; }
+        .diff-card[data-active="true"][data-level="Difícil"] .diff-bar { background: #6366f1; height: 100%; }
+        
+        /* Estados Inativos */
+        .diff-card[data-active="false"] .diff-bar { background: #e2e8f0; }
+        .diff-card[data-active="false"][data-level="Fácil"] .diff-bar { height: 35%; }
+        .diff-card[data-active="false"][data-level="Médio"] .diff-bar { height: 65%; }
+        .diff-card[data-active="false"][data-level="Difícil"] .diff-bar { height: 100%; }
+
+        /* Pirâmide de Bloom (Invertida) */
+        .bloom-btn {
+            border: 1px solid #e2e8f0; background: white; color: #64748b;
+            font-size: 0.85rem; font-weight: 600; padding: 10px;
+            border-radius: 10px; transition: all 0.2s; text-align: center;
             position: relative;
         }
-        .option-card:active { transform: scale(0.98); } /* Feedback de toque no mobile */
-        
-        .option-card.active {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
-            box-shadow: 0 4px 12px -2px rgba(59, 130, 246, 0.15);
-        }
-        
-        /* Círculo de Seleção (Radio) */
-        .radio-indicator {
-            width: 20px; height: 20px;
-            border-radius: 50%;
-            border: 2px solid #cbd5e1;
-            flex-shrink: 0;
-            transition: all 0.2s;
-        }
-        .active .radio-indicator {
-            border-color: #2563eb;
-            border-width: 6px;
-        }
-
-        /* PIRÂMIDE DE BLOOM (Botões Empilhados) */
-        .bloom-stack { display: flex; flex-direction: column; gap: 6px; align-items: center; width: 100%; }
-        .bloom-btn {
-            padding: 10px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #64748b;
-            transition: all 0.2s;
-            text-align: center;
-        }
+        .bloom-btn:hover { border-color: #cbd5e1; color: #334155; }
         .bloom-btn.active {
-            background-color: #dbeafe; /* Azul bem claro */
-            color: #1d4ed8;
-            border-color: #3b82f6;
-            box-shadow: 0 2px 4px rgba(37,99,235,0.1);
-            font-weight: 700;
+            background: #e0f2fe; border-color: #38bdf8; color: #0369a1;
+            box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.15);
+            font-weight: 700; transform: scale(1.02); z-index: 10;
         }
 
-        /* BOTÕES DE GABARITO (Engenharia Reversa) */
-        .key-btn {
-            width: 44px; height: 44px; /* Maior para toque no mobile */
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-            font-weight: 700;
-            color: #64748b;
-            background: white;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s;
+        /* Card de Tipo de Questão */
+        .type-card {
+            border: 1px solid #e2e8f0; border-radius: 12px; background: white;
+            padding: 16px; cursor: pointer; transition: all 0.2s;
+            overflow: hidden; /* Para a animação de expandir */
         }
-        .key-btn.active {
-            background-color: #2563eb;
-            color: white;
-            border-color: #2563eb;
-            box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3);
+        .type-card:hover { border-color: #bae6fd; background: #f8fafc; }
+        .type-card.active {
+            border-color: #0ea5e9; background: white;
+            box-shadow: 0 4px 12px -2px rgba(14, 165, 233, 0.15);
+            ring: 1px solid #0ea5e9;
         }
+        .type-icon { transition: all 0.2s; }
+        .type-card.active .type-icon { color: #0284c7; transform: scale(1.1); }
+        .radio-dot {
+            width: 18px; height: 18px; border-radius: 50%; border: 2px solid #cbd5e1;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        }
+        .type-card.active .radio-dot { border-color: #0284c7; }
+        .radio-dot::after {
+            content: ''; width: 8px; height: 8px; background: #0284c7;
+            border-radius: 50%; opacity: 0; transform: scale(0); transition: all 0.2s;
+        }
+        .type-card.active .radio-dot::after { opacity: 1; transform: scale(1); }
 
-        /* RESULTADO DA IA */
-        .prose h3 { color: #1e3a8a; font-size: 1.1rem; border-bottom: 2px solid #bfdbfe; margin-top: 1.5rem; margin-bottom: 0.75rem; font-weight: 700; }
-        .prose p { margin-bottom: 1rem; line-height: 1.6; text-align: justify; }
+        /* RESULTADO (Markdown Styles) */
+        .prose h3 { color: #0c4a6e; font-size: 1.15rem; font-weight: 800; border-bottom: 2px solid #e0f2fe; margin-top: 1.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; }
+        .prose strong { color: #0f172a; font-weight: 700; }
+        .prose p { margin-bottom: 1rem; line-height: 1.6; text-align: justify; color: #334155; }
+        .prose ul { padding-left: 0; list-style: none; }
         .prose li { margin-bottom: 0.5rem; }
         
-        .gabarito-box { 
-            background: #f0fdf4; 
-            border: 1px solid #86efac; 
-            border-left: 5px solid #16a34a; 
-            padding: 1.25rem; 
-            margin-top: 2rem; 
-            border-radius: 8px; 
-        }
-
-        /* AJUSTES MOBILE ESPECÍFICOS */
-        @media (max-width: 768px) {
-            .bloom-btn { width: 100% !important; } /* No celular, a pirâmide fica reta para facilitar o toque */
-            .key-btn { flex: 1; } /* Botões A-E ocupam largura total */
+        .gabarito-box {
+            background: #f0fdf4; border: 1px solid #86efac; border-left: 5px solid #16a34a;
+            padding: 1.5rem; border-radius: 12px; margin-top: 2rem;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="flex flex-col min-h-screen">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm h-16">
+        <div class="max-w-7xl mx-auto px-4 lg:px-6 h-full flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="bg-brand-600 p-1.5 rounded-lg text-white shadow-md"><i data-lucide="graduation-cap" class="w-6 h-6"></i></div>
+                <div class="bg-inep-600 p-2 rounded-lg text-white shadow-md shadow-inep-200">
+                    <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                </div>
                 <div>
-                    <h1 class="text-lg lg:text-xl font-bold text-slate-900 leading-none">Academicus AI</h1>
-                    <p class="text-[10px] lg:text-xs text-slate-500 font-medium hidden xs:block">Design de Avaliação Ensino Superior</p>
+                    <h1 class="text-xl font-bold text-slate-900 leading-none tracking-tight">Academicus AI</h1>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5">Inteligência Avaliativa para Ensino Superior</p>
                 </div>
             </div>
             
-            <div class="flex bg-slate-100 p-1 rounded-lg">
-                <button onclick="setMode('generator')" id="tab-gen" class="flex items-center gap-2 px-3 py-1.5 rounded-md bg-white text-brand-600 shadow-sm font-bold text-xs lg:text-sm transition-all">
-                    <i data-lucide="pen-tool" class="w-4 h-4"></i> <span class="hidden xs:inline">Design</span>
+            <div class="flex bg-slate-100 p-1 rounded-xl">
+                <button onclick="setMode('generator')" id="tab-gen" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-inep-700 shadow-sm font-bold text-sm transition-all">
+                    <i data-lucide="pen-tool" class="w-4 h-4"></i> <span class="hidden sm:inline">Design de Avaliação</span>
                 </button>
-                <button onclick="setMode('auditor')" id="tab-aud" class="flex items-center gap-2 px-3 py-1.5 rounded-md text-slate-500 hover:text-slate-800 font-medium text-xs lg:text-sm transition-all">
-                    <i data-lucide="search" class="w-4 h-4"></i> <span class="hidden xs:inline">Auditoria</span>
+                <button onclick="setMode('auditor')" id="tab-aud" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-500 hover:text-slate-700 font-medium text-sm transition-all">
+                    <i data-lucide="clipboard-check" class="w-4 h-4"></i> <span class="hidden sm:inline">Auditoria Técnica</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 w-full flex-1">
+    <main class="max-w-7xl mx-auto w-full p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1">
         
         <aside class="lg:col-span-5 space-y-6">
             
-            <div id="panel-generator" class="space-y-6 bg-white lg:bg-transparent rounded-2xl lg:rounded-none p-4 lg:p-0 shadow-sm lg:shadow-none border border-slate-100 lg:border-none">
-                
-                <div class="flex items-center gap-2 text-slate-800 font-bold text-lg border-b border-slate-100 pb-2 lg:border-none">
-                    <i data-lucide="sliders-horizontal" class="w-5 h-5 text-brand-600"></i>
-                    <h2>Parâmetros</h2>
+            <div id="panel-generator" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
+                    <h2 className="font-bold text-slate-800 text-lg flex items-center gap-2">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-inep-600"></i> Parâmetros da Questão
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Configure abaixo para gerar uma questão inédita alinhada à Taxonomia de Bloom.</p>
                 </div>
 
-                <div class="space-y-4">
+                <div class="p-6 space-y-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Curso / Área</label>
+                            <input id="curso" class="input-inep" placeholder="Ex: Medicina, Direito Civil, Engenharia...">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Objeto de Conhecimento</label>
+                            <textarea id="conteudo" rows="3" class="input-inep resize-none" placeholder="Descreva o tema específico, competência ou habilidade..."></textarea>
+                            <input id="objetivo" class="mt-2 w-full bg-transparent text-xs text-slate-500 placeholder:text-slate-400 outline-none border-b border-dashed border-slate-300 focus:border-inep-400" placeholder="🎯 Objetivo de Aprendizagem (Opcional)...">
+                        </div>
+                    </div>
+
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5 ml-1">Curso / Área</label>
-                        <input id="curso" class="input-base" placeholder="Ex: Direito, Enfermagem...">
+                        <label class="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                            <i data-lucide="bar-chart-3" class="w-4 h-4 text-slate-400"></i> Nível de Dificuldade
+                        </label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card" data-active="false" data-level="Fácil">
+                                <div class="diff-bar"></div>
+                                <span class="text-xs font-bold text-slate-600">Fácil</span>
+                            </div>
+                            <div onclick="setDiff('Médio')" id="diff-Médio" class="diff-card" data-active="true" data-level="Médio">
+                                <div class="diff-bar"></div>
+                                <span class="text-xs font-bold text-inep-700">Médio</span>
+                            </div>
+                            <div onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card" data-active="false" data-level="Difícil">
+                                <div class="diff-bar"></div>
+                                <span class="text-xs font-bold text-slate-600">Difícil</span>
+                            </div>
+                        </div>
                     </div>
+
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5 ml-1">Objeto de Conhecimento</label>
-                        <textarea id="conteudo" rows="3" class="input-base resize-none" placeholder="Tema específico ou habilidade..."></textarea>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1 flex items-center gap-2">
-                        <i data-lucide="bar-chart-3" class="w-3 h-3"></i> Dificuldade
-                    </label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setDiff('Fácil')" id="diff-Fácil" class="p-3 rounded-xl border border-slate-200 bg-white flex flex-col items-center gap-1 transition active:scale-95">
-                            <div class="w-full h-1.5 bg-blue-200 rounded-full"></div>
-                            <span class="text-xs font-bold text-slate-600">Fácil</span>
-                        </button>
-                        <button onclick="setDiff('Médio')" id="diff-Médio" class="p-3 rounded-xl border-2 border-brand-500 bg-brand-50 flex flex-col items-center gap-1 transition shadow-sm active:scale-95">
-                            <div class="w-full h-1.5 bg-brand-500 rounded-full"></div>
-                            <span class="text-xs font-bold text-brand-700">Médio</span>
-                        </button>
-                        <button onclick="setDiff('Difícil')" id="diff-Difícil" class="p-3 rounded-xl border border-slate-200 bg-white flex flex-col items-center gap-1 transition active:scale-95">
-                            <div class="w-full h-1.5 bg-slate-300 rounded-full"></div>
-                            <span class="text-xs font-bold text-slate-600">Difícil</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1 flex items-center gap-2">
-                        <i data-lucide="brain-circuit" class="w-3 h-3"></i> Nível Cognitivo (Bloom)
-                    </label>
-                    <div class="bloom-stack p-2 bg-slate-50 rounded-xl border border-slate-100">
-                        <button onclick="setBloom('Criar')" id="bloom-Criar" class="bloom-btn" style="width: 40%">Criar</button>
-                        <button onclick="setBloom('Avaliar')" id="bloom-Avaliar" class="bloom-btn" style="width: 50%">Avaliar</button>
-                        <button onclick="setBloom('Analisar')" id="bloom-Analisar" class="bloom-btn" style="width: 60%">Analisar</button>
-                        <button onclick="setBloom('Aplicar')" id="bloom-Aplicar" class="bloom-btn" style="width: 70%">Aplicar</button>
-                        <button onclick="setBloom('Entender')" id="bloom-Entender" class="bloom-btn" style="width: 80%">Entender</button>
-                        <button onclick="setBloom('Lembrar')" id="bloom-Lembrar" class="bloom-btn active" style="width: 90%">Lembrar</button>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Modelo da Questão</label>
-                    <div class="space-y-3">
+                        <div class="flex items-center justify-between mb-3">
+                            <label class="block text-sm font-bold text-slate-700 flex items-center gap-2">
+                                <i data-lucide="brain-circuit" class="w-4 h-4 text-indigo-500"></i> Taxonomia de Bloom
+                            </label>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Nível Cognitivo</span>
+                        </div>
                         
-                        <div onclick="setType('SINGLE')" id="type-SINGLE" class="option-card flex items-center gap-3">
-                            <div class="radio-indicator"></div>
-                            <span class="font-bold text-sm text-slate-700">Resposta Única</span>
+                        <div class="flex flex-col items-center gap-1.5 w-full mb-4">
+                            <button onclick="setBloom('Criar')" id="bloom-Criar" class="bloom-btn" style="width: 45%">Criar</button>
+                            <button onclick="setBloom('Avaliar')" id="bloom-Avaliar" class="bloom-btn" style="width: 56%">Avaliar</button>
+                            <button onclick="setBloom('Analisar')" id="bloom-Analisar" class="bloom-btn" style="width: 67%">Analisar</button>
+                            <button onclick="setBloom('Aplicar')" id="bloom-Aplicar" class="bloom-btn" style="width: 78%">Aplicar</button>
+                            <button onclick="setBloom('Entender')" id="bloom-Entender" class="bloom-btn" style="width: 89%">Entender</button>
+                            <button onclick="setBloom('Lembrar')" id="bloom-Lembrar" class="bloom-btn" style="width: 100%">Lembrar</button>
                         </div>
 
-                        <div onclick="setType('ASSERTION')" id="type-ASSERTION" class="option-card active flex flex-col gap-0">
-                            <div class="flex items-center gap-3 w-full mb-2">
-                                <div class="radio-indicator mt-0.5"></div>
-                                <span class="font-bold text-sm text-brand-700 flex items-center gap-2">
-                                    <i data-lucide="git-compare" class="w-4 h-4"></i> Asserção e Razão
-                                </span>
+                        <div id="bloom-info" class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm transition-colors">
+                            <p id="bloom-verb" class="font-bold text-slate-800 mb-1">Lembrar:</p>
+                            <p id="bloom-desc" class="text-slate-600 italic mb-2">Recuperar conhecimento relevante da memória.</p>
+                            <p id="bloom-list" class="text-[10px] uppercase font-bold text-slate-400">VERBOS: CITAR, DEFINIR, LISTAR</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-3">Modelo da Questão</label>
+                        <div class="space-y-3">
+                            
+                            <div onclick="setType('SINGLE')" id="type-SINGLE" class="type-card active">
+                                <div class="flex items-center gap-3">
+                                    <div class="type-icon text-inep-600"><i data-lucide="check-circle-2" class="w-5 h-5"></i></div>
+                                    <div class="flex-1 font-bold text-sm text-slate-800">Resposta Única</div>
+                                    <div class="radio-dot"></div>
+                                </div>
+                                <div class="expandable-content pl-8 mt-2 text-xs text-slate-500 hidden">
+                                    Questão clássica com enunciado fechado e uma única alternativa correta.
+                                </div>
+                            </div>
+
+                            <div onclick="setType('ASSERTION')" id="type-ASSERTION" class="type-card">
+                                <div class="flex items-center gap-3">
+                                    <div class="type-icon text-slate-400"><i data-lucide="git-compare" class="w-5 h-5"></i></div>
+                                    <div class="flex-1 font-bold text-sm text-slate-800">Asserção e Razão</div>
+                                    <div class="radio-dot"></div>
+                                </div>
+                                <div id="assertion-options" class="hidden pl-8 mt-3 pt-3 border-t border-slate-100 animate-fade-in">
+                                    <p class="text-[10px] font-bold text-inep-600 uppercase mb-2">Definir Gabarito (Engenharia Reversa):</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="event.stopPropagation(); setAssertionKey('A')" class="w-8 h-8 rounded border border-slate-200 text-xs font-bold hover:bg-slate-50">A</button>
+                                        <button onclick="event.stopPropagation(); setAssertionKey('B')" class="w-8 h-8 rounded border border-slate-200 text-xs font-bold hover:bg-slate-50">B</button>
+                                        <button onclick="event.stopPropagation(); setAssertionKey('C')" class="w-8 h-8 rounded border border-slate-200 text-xs font-bold hover:bg-slate-50">C</button>
+                                        <button onclick="event.stopPropagation(); setAssertionKey('D')" class="w-8 h-8 rounded border border-inep-600 bg-inep-600 text-white text-xs font-bold shadow-md">D</button>
+                                        <button onclick="event.stopPropagation(); setAssertionKey('E')" class="w-8 h-8 rounded border border-slate-200 text-xs font-bold hover:bg-slate-50">E</button>
+                                    </div>
+                                    <p id="assertion-text" class="text-[10px] text-slate-500 mt-2 italic bg-slate-50 p-2 rounded">A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.</p>
+                                </div>
                             </div>
                             
-                            <div id="assertion-controls" class="mt-2 pt-3 border-t border-brand-100 w-full animate-in fade-in slide-in-from-top-1">
-                                <p class="text-[10px] font-bold text-brand-500 uppercase mb-2">Gabarito Obrigatório:</p>
-                                <div class="flex gap-2">
-                                    <button onclick="event.stopPropagation(); setAssertionKey('A')" class="key-btn">A</button>
-                                    <button onclick="event.stopPropagation(); setAssertionKey('B')" class="key-btn">B</button>
-                                    <button onclick="event.stopPropagation(); setAssertionKey('C')" class="key-btn">C</button>
-                                    <button onclick="event.stopPropagation(); setAssertionKey('D')" class="key-btn active">D</button>
-                                    <button onclick="event.stopPropagation(); setAssertionKey('E')" class="key-btn">E</button>
+                            <div onclick="setType('DISCURSIVE')" id="type-DISCURSIVE" class="type-card">
+                                <div class="flex items-center gap-3">
+                                    <div class="type-icon text-slate-400"><i data-lucide="file-text" class="w-5 h-5"></i></div>
+                                    <div class="flex-1 font-bold text-sm text-slate-800">Discursiva</div>
+                                    <div class="radio-dot"></div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div onclick="setType('DISCURSIVE')" id="type-DISCURSIVE" class="option-card flex items-center gap-3">
-                            <div class="radio-indicator"></div>
-                            <span class="font-bold text-sm text-slate-700">Discursiva</span>
-                        </div>
+                    <button onclick="gerar()" id="btn-main" class="w-full bg-inep-600 hover:bg-inep-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-inep-600/20 flex items-center justify-center gap-2 transition-all active:scale-95 text-lg">
+                        <span>Gerar Questão</span>
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="panel-auditor" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex gap-3">
+                    <i data-lucide="microscope" class="w-5 h-5 text-emerald-600 shrink-0"></i>
+                    <div>
+                        <h4 class="text-sm font-bold text-emerald-800">Auditor Pedagógico</h4>
+                        <p class="text-xs text-emerald-700 mt-1">Cole a questão completa (enunciado + alternativas) para análise técnica.</p>
                     </div>
                 </div>
-
-                <button onclick="gerar()" id="btn-main" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-500/30 flex items-center justify-center gap-2 transition-transform active:scale-95 text-base lg:text-lg">
-                    <span>Gerar Questão</span>
-                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                <textarea id="audit-input" rows="10" class="w-full p-3 rounded-xl border border-emerald-200 bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none text-sm font-mono" placeholder="Cole aqui..."></textarea>
+                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2">
+                    <span>Auditar Questão</span>
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
                 </button>
-
             </div>
-
-            <div id="panel-auditor" class="hidden space-y-6">
-                <div class="bg-white border border-slate-200 p-6 rounded-2xl text-center shadow-sm">
-                    <div class="bg-slate-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="shield-check" class="w-8 h-8 text-slate-400"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-700 mb-2">Auditoria Técnica</h3>
-                    <p class="text-sm text-slate-500 mb-4">Cole a questão completa para análise de viés e erros.</p>
-                    <textarea id="audit-input" class="w-full p-3 border rounded-xl mb-4 text-sm font-mono h-48 bg-slate-50" placeholder="Cole aqui..."></textarea>
-                    <button onclick="auditar()" id="btn-aud" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl">Executar Auditoria</button>
-                </div>
-            </div>
-
         </aside>
 
-        <div id="result-anchor" class="lg:col-span-7">
-            <div class="bg-white min-h-[500px] lg:min-h-[800px] border border-slate-200 rounded-2xl shadow-sm p-6 lg:p-12 relative transition-all">
+        <div class="lg:col-span-7 flex flex-col h-full">
+            <div class="bg-white min-h-[800px] border border-slate-200 rounded-2xl shadow-sm p-8 lg:p-12 relative flex-1">
                 
-                <div id="tools" class="flex justify-end gap-2 mb-6 opacity-0 transition-opacity">
-                    <button onclick="exportWord()" class="flex items-center gap-1 px-3 py-2 border rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100">
-                        <i data-lucide="file-text" class="w-3 h-3"></i> Word
+                <div id="tools" class="flex justify-end gap-2 mb-8 opacity-0 transition-opacity">
+                    <button onclick="exportWord()" class="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:border-inep-300 transition-all">
+                        <i data-lucide="file-text" class="w-4 h-4 text-blue-600"></i> Word
                     </button>
-                    <button onclick="exportPdf()" class="flex items-center gap-1 px-3 py-2 border rounded-lg text-xs font-bold text-red-700 bg-red-50 hover:bg-red-100">
-                        <i data-lucide="file-down" class="w-3 h-3"></i> PDF
+                    <button onclick="exportPdf()" class="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:border-red-300 transition-all">
+                        <i data-lucide="file" class="w-4 h-4 text-red-600"></i> PDF
                     </button>
                 </div>
 
-                <div id="placeholder" class="h-full flex flex-col items-center justify-center text-center mt-10 lg:mt-32 opacity-60">
-                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-4 animate-pulse">
-                        <i data-lucide="pen-tool" class="w-8 h-8 text-slate-300"></i>
+                <div id="placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                    <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6 border border-slate-100">
+                        <i data-lucide="sparkles" class="w-10 h-10 text-slate-300"></i>
                     </div>
-                    <h2 class="text-xl font-bold text-slate-400">Área de Criação</h2>
-                    <p class="text-sm text-slate-400 mt-2 max-w-[200px] mx-auto">Configure e clique em Gerar.</p>
+                    <h3 class="text-xl font-bold text-slate-400 mb-2">Aguardando Input</h3>
+                    <p class="text-sm text-slate-400 max-w-xs">Preencha os parâmetros à esquerda e clique em "Gerar" para criar uma questão de alta qualidade.</p>
                 </div>
 
-                <div id="output" class="hidden prose prose-slate max-w-none text-sm lg:text-base"></div>
+                <div id="output" class="hidden prose prose-slate max-w-none"></div>
             </div>
         </div>
 
     </main>
 
     <script>
-        // --- ESTADO INICIAL ---
+        // --- CONSTANTES ---
+        const BLOOM_INFO = {
+            'Lembrar': { verb: 'Lembrar', desc: 'Recuperar conhecimento relevante da memória.', list: 'CITAR, DEFINIR, LISTAR', color: 'sky' },
+            'Entender': { verb: 'Entender', desc: 'Construir significado a partir de mensagens.', list: 'RESUMIR, EXPLICAR', color: 'sky' },
+            'Aplicar': { verb: 'Aplicar', desc: 'Usar um procedimento em uma situação.', list: 'EXECUTAR, IMPLEMENTAR', color: 'blue' },
+            'Analisar': { verb: 'Analisar', desc: 'Separar material em partes constituintes.', list: 'DIFERENCIAR, ORGANIZAR', color: 'blue' },
+            'Avaliar': { verb: 'Avaliar', desc: 'Fazer julgamentos baseados em critérios.', list: 'CHECAR, CRITICAR', color: 'indigo' },
+            'Criar': { verb: 'Criar', desc: 'Colocar elementos juntos para formar um todo.', list: 'GERAR, PLANEJAR', color: 'indigo' }
+        };
+
+        const ASSERTION_TEXTS = {
+            'A': 'As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.',
+            'B': 'As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.',
+            'C': 'A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.',
+            'D': 'A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.',
+            'E': 'As asserções I e II são proposições falsas.'
+        };
+
+        // --- ESTADO ---
         let STATE = {
             mode: 'generator',
             diff: 'Médio',
             bloom: 'Lembrar',
-            type: 'ASSERTION',
+            type: 'SINGLE',
             assertionKey: 'D'
         };
 
-        const TYPES = {
-            "SINGLE": { label: "Resposta Única" },
-            "ASSERTION": { label: "Asserção e Razão" },
-            "DISCURSIVE": { label: "Discursiva" }
-        };
-
+        // --- INIT ---
         function init() {
-            setBloom('Lembrar');
-            setDiff('Médio');
-            setType('ASSERTION');
-            setAssertionKey('D');
             lucide.createIcons();
+            setBloom('Lembrar'); // Default
         }
 
-        // --- FUNÇÕES DE UI ---
+        // --- UI FUNCTIONS ---
         function setMode(mode) {
+            STATE.mode = mode;
             const isGen = mode === 'generator';
             document.getElementById('panel-generator').classList.toggle('hidden', !isGen);
             document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
             
-            // Toggle visual das abas
-            document.getElementById('tab-gen').className = isGen 
-                ? "flex items-center gap-2 px-3 py-1.5 rounded-md bg-white text-brand-600 shadow-sm font-bold text-xs lg:text-sm transition-all" 
-                : "flex items-center gap-2 px-3 py-1.5 rounded-md text-slate-500 hover:text-slate-800 font-medium text-xs lg:text-sm transition-all";
+            // Toggle Tab Styles
+            const btnGen = document.getElementById('tab-gen');
+            const btnAud = document.getElementById('tab-aud');
             
-            document.getElementById('tab-aud').className = !isGen 
-                ? "flex items-center gap-2 px-3 py-1.5 rounded-md bg-white text-brand-600 shadow-sm font-bold text-xs lg:text-sm transition-all" 
-                : "flex items-center gap-2 px-3 py-1.5 rounded-md text-slate-500 hover:text-slate-800 font-medium text-xs lg:text-sm transition-all";
+            if(isGen) {
+                btnGen.className = "flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-inep-700 shadow-sm font-bold text-sm transition-all";
+                btnAud.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-slate-500 hover:text-slate-700 font-medium text-sm transition-all";
+            } else {
+                btnGen.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-slate-500 hover:text-slate-700 font-medium text-sm transition-all";
+                btnAud.className = "flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-emerald-700 shadow-sm font-bold text-sm transition-all";
+            }
         }
 
         function setDiff(val) {
             STATE.diff = val;
-            ['Fácil', 'Médio', 'Difícil'].forEach(l => {
-                const el = document.getElementById(`diff-${l}`);
-                if(l===val) {
-                    if(val==='Médio') el.className = "p-3 rounded-xl border-2 border-brand-500 bg-brand-50 flex flex-col items-center gap-1 transition shadow-sm active:scale-95";
-                    else el.className = "p-3 rounded-xl border-2 border-brand-500 bg-white flex flex-col items-center gap-1 transition active:scale-95";
-                    
-                    el.querySelector('div').className = `w-full h-1.5 rounded-full ${val==='Médio'?'bg-brand-500':'bg-brand-200'}`;
-                    el.querySelector('span').className = "text-xs font-bold text-brand-700";
+            document.querySelectorAll('.diff-card').forEach(el => {
+                const isActive = el.getAttribute('data-level') === val;
+                el.setAttribute('data-active', isActive);
+                // Atualiza cor do texto
+                const span = el.querySelector('span');
+                if(isActive) {
+                    if(val === 'Médio') span.className = "text-xs font-bold text-inep-700";
+                    else if(val === 'Fácil') span.className = "text-xs font-bold text-sky-700";
+                    else span.className = "text-xs font-bold text-indigo-700";
                 } else {
-                    el.className = "p-3 rounded-xl border border-slate-200 bg-white flex flex-col items-center gap-1 transition active:scale-95";
-                    el.querySelector('div').className = "w-full h-1.5 bg-slate-200 rounded-full";
-                    el.querySelector('span').className = "text-xs font-bold text-slate-500";
+                    span.className = "text-xs font-bold text-slate-600";
                 }
             });
         }
 
         function setBloom(val) {
             STATE.bloom = val;
-            const levels = ['Criar','Avaliar','Analisar','Aplicar','Entender','Lembrar'];
-            levels.forEach(l => {
-                const btn = document.getElementById(`bloom-${l}`);
-                if(l === val) btn.classList.add('active');
+            // Update Buttons
+            document.querySelectorAll('.bloom-btn').forEach(btn => {
+                if(btn.id === `bloom-${val}`) btn.classList.add('active');
                 else btn.classList.remove('active');
             });
+            // Update Info Box
+            const info = BLOOM_INFO[val];
+            const box = document.getElementById('bloom-info');
+            box.className = `bg-${info.color}-50 border border-${info.color}-200 rounded-xl p-4 text-sm transition-colors`;
+            document.getElementById('bloom-verb').innerText = `${val}:`;
+            document.getElementById('bloom-verb').className = `font-bold text-${info.color}-900 mb-1`;
+            document.getElementById('bloom-desc').innerText = info.desc;
+            document.getElementById('bloom-desc').className = `text-${info.color}-700 italic mb-2`;
+            document.getElementById('bloom-list').innerText = `VERBOS: ${info.list}`;
+            document.getElementById('bloom-list').className = `text-[10px] uppercase font-bold text-${info.color}-400`;
         }
 
         function setType(val) {
             STATE.type = val;
             ['SINGLE', 'ASSERTION', 'DISCURSIVE'].forEach(t => {
-                const card = document.getElementById(`type-${t}`);
+                const el = document.getElementById(`type-${t}`);
                 if(t === val) {
-                    card.classList.add('active');
-                    if(t === 'ASSERTION') document.getElementById('assertion-controls').classList.remove('hidden');
+                    el.classList.add('active');
+                    el.querySelector('.type-icon').className = "type-icon text-inep-600";
+                    if(t === 'SINGLE') el.querySelector('.expandable-content').classList.remove('hidden');
+                    if(t === 'ASSERTION') document.getElementById('assertion-options').classList.remove('hidden');
                 } else {
-                    card.classList.remove('active');
-                    if(t === 'ASSERTION') document.getElementById('assertion-controls').classList.add('hidden');
+                    el.classList.remove('active');
+                    el.querySelector('.type-icon').className = "type-icon text-slate-400";
+                    if(t === 'SINGLE') el.querySelector('.expandable-content').classList.add('hidden');
+                    if(t === 'ASSERTION') document.getElementById('assertion-options').classList.add('hidden');
                 }
             });
         }
 
         function setAssertionKey(key) {
             STATE.assertionKey = key;
-            document.querySelectorAll('.key-btn').forEach(b => {
-                if(b.innerText === key) b.classList.add('active');
-                else b.classList.remove('active');
+            // Update Buttons UI
+            const btns = document.getElementById('assertion-options').querySelectorAll('button');
+            btns.forEach(b => {
+                if(b.innerText === key) {
+                    b.className = "w-8 h-8 rounded border border-inep-600 bg-inep-600 text-white text-xs font-bold shadow-md transform scale-105";
+                } else {
+                    b.className = "w-8 h-8 rounded border border-slate-200 text-xs font-bold hover:bg-slate-50 text-slate-500";
+                }
             });
+            // Update Text
+            document.getElementById('assertion-text').innerText = ASSERTION_TEXTS[key];
         }
 
-        // --- API & BACKEND (Vercel) ---
+        // --- BACKEND CONNECTION (API Vercel) ---
         async function gerar() {
-            const curso = document.getElementById('curso').value;
-            const conteudo = document.getElementById('conteudo').value;
+            const course = document.getElementById('curso').value;
+            const content = document.getElementById('conteudo').value;
+            const objective = document.getElementById('objetivo').value;
 
-            if(!curso || !conteudo) return alert("Preencha Curso e Objeto de Conhecimento.");
+            if(!course || !content) return alert("Preencha Curso e Objeto de Conhecimento.");
 
             const btn = document.getElementById('btn-main');
-            const original = btn.innerHTML;
+            const originalBtn = btn.innerHTML;
             btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-5 h-5"></i> Processando...`;
             btn.disabled = true;
 
-            // Prompt
+            // Prompt Construction (Baseado no seu constants.ts)
             let promptExtras = "";
-            if(STATE.type === 'ASSERTION') {
+            if (STATE.type === 'ASSERTION') {
                 promptExtras = `
-                REGRA DE OURO (ASSERÇÃO):
-                1. Gere duas frases (Asserção I e II) ligadas por PORQUE.
-                2. O Gabarito TEM QUE SER a letra ${STATE.assertionKey}.
-                3. USE AS ALTERNATIVAS PADRÃO DO INEP (A, B, C, D, E) SEM ALTERAR O TEXTO.
+                Configuração do Gabarito (Engenharia Reversa):
+                • Gabarito OBRIGATÓRIO: Alternativa ${STATE.assertionKey}
+                
+                Estrutura Rígida:
+                1. Texto de Suporte (min 10 linhas) com citação real.
+                2. Asserção I.
+                3. PORQUE (centralizado).
+                4. Asserção II.
+                5. Alternativas Padrão INEP (A=I e II verdadeiras...).
                 `;
             }
 
             const prompt = `
-            ATUE COMO ESPECIALISTA DO INEP. Crie questão técnica e inédita.
-            DADOS: Curso: ${curso}, Tema: ${conteudo}, Bloom: ${STATE.bloom}, Dificuldade: ${STATE.diff}, Tipo: ${STATE.type}.
+            Atue como especialista do INEP. Crie uma questão universitária.
+            Contexto: Curso de ${course}, sobre "${content}".
+            ${objective ? `Objetivo: ${objective}` : ''}
+            
+            Parâmetros:
+            - Dificuldade: ${STATE.diff}
+            - Bloom: ${STATE.bloom} (${BLOOM_INFO[STATE.bloom].list})
+            - Tipo: ${STATE.type}
             ${promptExtras}
 
             FORMATO DE SAÍDA (MARKDOWN):
-            ### Enunciado
-            (Texto contextualizado + comando).
-            ### Alternativas
-            (Lista).
-            <div class="gabarito-box">
-            <h4 class="font-bold text-green-800 mb-2 uppercase text-xs">Gabarito e Análise</h4>
-            <p><strong>✅ Resposta:</strong> (Letra)</p>
-            <p><strong>💡 Justificativa:</strong> (Explicação técnica).</p>
-            </div>`;
+            1. Texto de Suporte (Não escreva "Texto-Base"). Finalize com referência bibliográfica real.
+            2. Enunciado/Comando.
+            3. Alternativas (Lista vertical a,b,c,d,e).
+            4. --- (Linha Horizontal)
+            5. Relatório Técnico (Feedback):
+               - Gabarito: [Letra]
+               - Justificativa técnica.
+               - Análise dos distratores.
+            `;
 
             try {
-                const res = await fetch('/api/gemini', {
+                const response = await fetch('/api/gemini', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt })
                 });
-                const data = await res.json();
-                
+
+                const data = await response.json();
                 if(data.error) throw new Error(data.error);
 
-                // Exibir
+                // Show Result
+                document.getElementById('placeholder').classList.add('hidden');
+                document.getElementById('output').classList.remove('hidden');
+                document.getElementById('tools').classList.remove('opacity-0');
+                
+                document.getElementById('output').innerHTML = marked.parse(data.text);
+
+            } catch (err) {
+                alert("Erro: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalBtn;
+                lucide.createIcons();
+            }
+        }
+
+        async function auditar() {
+            const input = document.getElementById('audit-input').value;
+            if(!input) return alert("Cole a questão.");
+            
+            const btn = document.getElementById('btn-aud');
+            const original = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-5 h-5"></i> Analisando...`;
+            btn.disabled = true;
+
+            const prompt = `AUDITORIA PEDAGÓGICA INEP. Analise a questão: \n${input}\n\nSaída: Relatório de conformidade, viés e falhas técnicas.`;
+            
+            try {
+                const response = await fetch('/api/gemini', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+                const data = await response.json();
+                
                 document.getElementById('placeholder').classList.add('hidden');
                 document.getElementById('output').classList.remove('hidden');
                 document.getElementById('tools').classList.remove('opacity-0');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
-
-                // Auto-scroll no mobile para o resultado
-                if(window.innerWidth < 1024) {
-                    setTimeout(() => {
-                        document.getElementById('result-anchor').scrollIntoView({behavior: 'smooth'});
-                    }, 100);
-                }
-
             } catch(e) {
-                alert("Erro: " + e.message);
+                alert(e.message);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = original;
@@ -462,15 +540,15 @@
             }
         }
 
-        // Exports
+        // Export Functions
         function exportWord() {
             const text = document.getElementById('output').innerText;
             const doc = new docx.Document({ sections: [{ children: [new docx.Paragraph({ children: [new docx.TextRun(text)] })] }] });
-            docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao.docx"));
+            docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao_Academicus.docx"));
         }
         function exportPdf() {
             const el = document.getElementById('output');
-            html2pdf().set({ margin: 10, filename: 'Questao.pdf' }).from(el).save();
+            html2pdf().set({ margin: 10, filename: 'Questao_Academicus.pdf' }).from(el).save();
         }
 
         init();
