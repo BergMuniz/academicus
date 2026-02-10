@@ -1,5 +1,5 @@
 module.exports = async (req, res) => {
-  // 1. Permissões (CORS)
+  // 1. Permissões de Acesso (CORS)
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -19,9 +19,10 @@ module.exports = async (req, res) => {
     const cleanKey = apiKey.trim();
     const { prompt } = req.body;
 
-    // --- A SOLUÇÃO FINAL ---
-    // Trocamos para o modelo 'gemini-pro' (O mais estável e compatível de todos)
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${cleanKey}`;
+    // --- A CORREÇÃO PARA 2026 ---
+    // Substituímos o antigo 'gemini-pro' ou '1.5-flash' pelo 'gemini-2.0-flash'
+    // Se este falhar futuramente, tente 'gemini-2.0-flash-lite'
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${cleanKey}`;
     
     const googleResponse = await fetch(url, {
       method: 'POST',
@@ -35,7 +36,11 @@ module.exports = async (req, res) => {
 
     if (!googleResponse.ok) {
       console.error("Erro Google:", JSON.stringify(data));
-      throw new Error(data.error?.message || "Erro na IA");
+      // Tratamento específico para erro de modelo
+      if (data.error?.code === 404) {
+         throw new Error("Modelo descontinuado. Tente atualizar para gemini-2.5-flash no código.");
+      }
+      throw new Error(data.error?.message || "Erro na resposta da IA");
     }
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -44,7 +49,7 @@ module.exports = async (req, res) => {
     res.status(200).json({ text });
 
   } catch (error) {
-    console.error("Erro Backend:", error);
+    console.error("Erro Fatal no Backend:", error);
     res.status(500).json({ error: error.message });
   }
 };
