@@ -10,140 +10,136 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-        
-        /* Estilos da Pirâmide de Bloom */
-        .bloom-step { transition: all 0.2s; cursor: pointer; border: 1px solid #e2e8f0; position: relative; }
-        .bloom-step:hover { transform: scale(1.02); z-index: 10; }
-        .bloom-step.active { border-color: #2563eb; background-color: #dbeafe; color: #1e40af; font-weight: 700; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-        
-        /* Estilo dos Botões de Dificuldade */
+        .active-tab { background-color: white; color: #1e40af; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .bloom-step { transition: all 0.2s; border: 1px solid #e2e8f0; }
+        .bloom-step.active { border-color: #2563eb; background-color: #dbeafe; color: #1e40af; font-weight: 700; }
         .diff-btn.active { border: 2px solid #2563eb; background-color: #eff6ff; color: #1e40af; }
-        
-        /* Estilo dos Modelos de Questão */
-        .type-card.active { border-color: #2563eb; ring: 2px; ring-color: #2563eb; }
-
-        /* Renderização Markdown */
-        #ai-content h1 { font-size: 1.5rem; font-weight: 800; color: #1e40af; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
-        #ai-content p { margin-bottom: 1rem; line-height: 1.6; text-align: justify; }
-        #ai-content strong { color: #0f172a; }
+        .type-card { transition: all 0.2s; cursor: pointer; }
+        .type-card.active { border-color: #2563eb; background-color: #f8faff; }
+        .prose h1, .prose h2, .prose h3 { color: #1e40af; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+        .prose p { margin-bottom: 1rem; line-height: 1.6; }
     </style>
 </head>
-<body class="bg-[#f8fafc] min-h-screen">
+<body class="bg-slate-50 min-h-screen">
 
-    <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-50 shadow-sm">
+    <header class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50 shadow-sm flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <div class="bg-blue-600 p-2 rounded-lg text-white shadow-lg"><i data-lucide="graduation-cap" class="w-6 h-6"></i></div>
+            <div class="bg-blue-600 p-2 rounded-lg text-white"><i data-lucide="graduation-cap"></i></div>
             <div>
-                <h1 class="text-xl font-extrabold text-slate-800 tracking-tighter leading-none">Academicus AI</h1>
-                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Inteligência Avaliativa para Ensino Superior</p>
+                <h1 class="text-xl font-bold text-slate-900 leading-none">Academicus AI</h1>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Núcleo de Apoio Pedagógico</p>
             </div>
         </div>
-        <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-full border border-blue-100 font-bold text-xs flex items-center gap-2">
+        <div class="hidden md:flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-100 font-bold text-[10px]">
             <i data-lucide="sparkles" class="w-3 h-3"></i> Powered by Gemini 3 Flash
         </div>
     </header>
 
     <main class="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <aside class="lg:col-span-4 xl:col-span-3 space-y-6">
+        <div class="lg:col-span-4 xl:col-span-3 space-y-6">
             
-            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-                <div class="flex gap-4 border-b border-slate-100 mb-6">
-                    <button class="pb-3 border-b-2 border-blue-600 text-blue-600 font-bold text-xs flex items-center gap-2">
-                        <i data-lucide="layout-template" class="w-4 h-4"></i> Design de Avaliação
-                    </button>
-                    <button class="pb-3 text-slate-400 font-bold text-xs flex items-center gap-2 hover:text-slate-600">
-                        <i data-lucide="clipboard-check" class="w-4 h-4"></i> Auditoria Técnica
-                    </button>
-                </div>
-
-                <h2 class="text-slate-800 font-bold mb-6 flex items-center gap-2 text-sm">
-                    <i data-lucide="settings-2" class="text-blue-600 w-4 h-4"></i> Parâmetros da Questão
-                </h2>
-
-                <div class="space-y-4 mb-6">
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-wide">Curso / Área de Conhecimento</label>
-                        <input type="text" id="curso" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all" placeholder="Ex: Medicina, Psicologia...">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-wide">Objeto de Conhecimento</label>
-                        <textarea id="tema" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all" placeholder="Descreva o tema, competência ou habilidade..."></textarea>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <label class="block text-[11px] font-bold text-slate-500 mb-3 uppercase flex items-center gap-2">
-                        <i data-lucide="bar-chart-3" class="w-3 h-3"></i> Nível de Dificuldade
-                    </label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setDiff('Fácil')" class="diff-btn py-3 rounded-xl border border-slate-200 text-[10px] font-bold text-slate-400 hover:bg-slate-50">Fácil</button>
-                        <button onclick="setDiff('Médio')" class="diff-btn active py-3 rounded-xl border border-slate-200 text-[10px] font-bold text-slate-400 hover:bg-slate-50">Médio</button>
-                        <button onclick="setDiff('Difícil')" class="diff-btn py-3 rounded-xl border border-slate-200 text-[10px] font-bold text-slate-400 hover:bg-slate-50">Difícil</button>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <div class="flex items-center justify-between mb-4">
-                        <label class="text-[11px] font-bold text-slate-500 uppercase flex items-center gap-2">
-                            <i data-lucide="brain" class="w-4 h-4 text-blue-600"></i> Taxonomia de Bloom
-                        </label>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Nível Cognitivo</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-1">
-                        <button onclick="setBloom('Criar')"   class="bloom-step active w-[50%] py-2 rounded-lg text-[10px]">Criar</button>
-                        <button onclick="setBloom('Avaliar')"  class="bloom-step w-[60%] py-2 rounded-lg text-[10px]">Avaliar</button>
-                        <button onclick="setBloom('Analisar')" class="bloom-step w-[70%] py-2 rounded-lg text-[10px]">Analisar</button>
-                        <button onclick="setBloom('Aplicar')"  class="bloom-step w-[80%] py-2 rounded-lg text-[10px]">Aplicar</button>
-                        <button onclick="setBloom('Entender')" class="bloom-step w-[90%] py-2 rounded-lg text-[10px]">Entender</button>
-                        <button onclick="setBloom('Lembrar')"  class="bloom-step w-full py-2 rounded-lg text-[10px]">Lembrar</button>
-                    </div>
-                </div>
-
-                <button onclick="gerarQuestao()" id="btnGerar" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-2xl shadow-xl shadow-blue-200 transition-all flex items-center justify-center gap-3 active:scale-95">
-                    Gerar Questão <i data-lucide="zap" class="w-5 h-5"></i>
+            <div class="bg-slate-200/50 p-1 rounded-xl flex gap-1">
+                <button onclick="switchMode('generator')" id="tab-generator" class="active-tab flex-1 py-2.5 text-[11px] font-bold rounded-lg flex items-center justify-center gap-2 transition-all">
+                    <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i> Design de Avaliação
+                </button>
+                <button onclick="switchMode('auditor')" id="tab-auditor" class="flex-1 py-2.5 text-[11px] font-bold rounded-lg flex items-center justify-center gap-2 transition-all text-slate-500">
+                    <i data-lucide="clipboard-check" class="w-3.5 h-3.5"></i> Auditoria Técnica
                 </button>
             </div>
-            
-            <div class="space-y-3">
-                <p class="text-[11px] font-bold text-slate-500 uppercase ml-2">Modelo da Questão</p>
-                <div class="bg-white p-4 rounded-2xl border-2 border-blue-600 flex items-start gap-4 shadow-sm relative overflow-hidden">
-                    <div class="bg-blue-50 p-2 rounded-lg text-blue-600"><i data-lucide="check-circle-2" class="w-5 h-5"></i></div>
+
+            <div id="panel-generator" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-6 space-y-6">
                     <div>
-                        <h4 class="text-xs font-bold text-slate-800">Resposta Única</h4>
-                        <p class="text-[10px] text-slate-500 mt-1 leading-tight">Formato clássico com enunciado fechado e distratores plausíveis.</p>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-2 uppercase tracking-wide">Curso / Área</label>
+                        <input type="text" id="curso" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-blue-500" placeholder="Ex: Psicologia, Direito...">
                     </div>
-                    <i data-lucide="check" class="absolute top-2 right-2 w-4 h-4 text-blue-600"></i>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-2 uppercase tracking-wide">Objeto de Conhecimento</label>
+                        <textarea id="tema" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-blue-500" placeholder="Tema ou competência..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-2 uppercase">Dificuldade</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="setDiff('Fácil')" class="diff-btn py-2.5 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500">Fácil</button>
+                            <button onclick="setDiff('Médio')" class="diff-btn active py-2.5 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500">Médio</button>
+                            <button onclick="setDiff('Difícil')" class="diff-btn py-2.5 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-500">Difícil</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-3 uppercase">Taxonomia de Bloom</label>
+                        <div class="flex flex-col items-center gap-1">
+                            <button onclick="setBloom('Criar')" class="bloom-step active w-[55%] py-1.5 rounded-md text-[10px]">Criar</button>
+                            <button onclick="setBloom('Avaliar')" class="bloom-step w-[65%] py-1.5 rounded-md text-[10px]">Avaliar</button>
+                            <button onclick="setBloom('Analisar')" class="bloom-step w-[75%] py-1.5 rounded-md text-[10px]">Analisar</button>
+                            <button onclick="setBloom('Aplicar')" class="bloom-step w-[85%] py-1.5 rounded-md text-[10px]">Aplicar</button>
+                            <button onclick="setBloom('Entender')" class="bloom-step w-[95%] py-1.5 rounded-md text-[10px]">Entender</button>
+                            <button onclick="setBloom('Lembrar')" class="bloom-step w-full py-1.5 rounded-md text-[10px]">Lembrar</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-4 border-t border-slate-100">
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase">Modelo da Questão</label>
+                        <div id="question-types-container" class="space-y-2">
+                            </div>
+                    </div>
+
+                    <button onclick="gerar()" id="btnAction" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95">
+                        Gerar Questão <i data-lucide="zap" class="w-4 h-4"></i>
+                    </button>
                 </div>
             </div>
 
-        </aside>
-
-        <section class="lg:col-span-8 xl:col-span-9">
-            <div id="display-resultado" class="bg-white min-h-[850px] rounded-[2.5rem] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center p-12 transition-all">
-                <div id="placeholder-content">
-                    <div class="bg-slate-50 p-10 rounded-full mb-8 inline-block shadow-inner">
-                        <i data-lucide="sparkles" class="w-16 h-16 text-slate-300"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-slate-400 uppercase tracking-tight">Aguardando Parâmetros</h3>
-                    <p class="text-slate-400 max-w-sm mx-auto mt-4 text-sm font-medium leading-relaxed">
-                        Preencha o curso e o tema à esquerda para que a inteligência artificial gere sua questão acadêmica baseada em evidências.
-                    </p>
+            <div id="panel-auditor" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+                <div>
+                    <label class="block text-sm font-bold text-emerald-900 mb-2">Questões para Auditoria</label>
+                    <textarea id="audit-input" rows="15" class="w-full px-4 py-3 rounded-xl border border-emerald-100 bg-emerald-50/30 text-xs font-mono outline-none focus:border-emerald-500" placeholder="Cole aqui o texto da questão completa..."></textarea>
                 </div>
-                <div id="ai-content" class="hidden text-left w-full max-w-none"></div>
+                <button onclick="auditar()" id="btnAudit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2">
+                    Auditar Questão <i data-lucide="microscope" class="w-4 h-4"></i>
+                </button>
             </div>
-        </section>
+        </div>
 
+        <div class="lg:col-span-8 xl:col-span-9">
+            <div id="display-resultado" class="bg-white min-h-[800px] rounded-[2.5rem] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-center p-12 relative overflow-hidden">
+                <div id="placeholder">
+                    <div class="bg-slate-50 p-10 rounded-full mb-6 inline-block"><i data-lucide="sparkles" class="w-12 h-12 text-slate-300"></i></div>
+                    <h3 class="text-xl font-bold text-slate-400 uppercase">Aguardando Parâmetros</h3>
+                    <p class="text-slate-400 max-w-sm mx-auto mt-2 text-sm font-medium">Selecione o modo e preencha as informações para começar.</p>
+                </div>
+                <div id="ai-content" class="hidden text-left w-full prose prose-slate max-w-none"></div>
+            </div>
+        </div>
     </main>
 
     <script>
-        // Inicializa Ícones
-        lucide.createIcons();
+        // Dados Estruturados (Fiel ao constants.ts)
+        const QUESTION_TYPES = {
+            "SINGLE_ANSWER": { title: "Resposta Única", icon: "check-circle", desc: "Enunciado fechado com distractores plausíveis.", example: "Qual estrutura celular é responsável pela respiração aeróbica?\n\na) Ribossomo\nb) Mitocôndria..." },
+            "INCOMPLETE": { title: "Afirmação Incompleta", icon: "pen-tool", desc: "O enunciado é uma frase que termina abruptamente.", example: "A inércia pode ser definida como a tendência de um corpo em\n\na) repouso ou MRU..." },
+            "MULTIPLE": { title: "Complementação Múltipla", icon: "layout", desc: "Lista de asserções (I, II, III...) seguida de combinações.", example: "I. O céu é azul.\nII. A grama é verde.\n\nÉ correto o que se afirma em..." },
+            "ASSERTION": { title: "Asserção e Razão", icon: "git-compare", desc: "Duas afirmações conectadas pela palavra PORQUE.", example: "Asserção I... PORQUE Asserção II..." },
+            "DISCURSIVE": { title: "Discursiva", icon: "file-text", desc: "Questão aberta com tópicos obrigatórios (Scaffolding).", example: "Redija um texto sobre os impactos da IA abordando..." }
+        };
 
-        let selectedDiff = "Médio";
-        let selectedBloom = "Criar";
+        let currentMode = 'generator';
+        let selectedType = 'SINGLE_ANSWER';
+        let selectedDiff = 'Médio';
+        let selectedBloom = 'Criar';
 
-        // Funções de Interface
+        function switchMode(mode) {
+            currentMode = mode;
+            document.getElementById('panel-generator').classList.toggle('hidden', mode === 'auditor');
+            document.getElementById('panel-auditor').classList.toggle('hidden', mode === 'generator');
+            document.getElementById('tab-generator').classList.toggle('active-tab', mode === 'generator');
+            document.getElementById('tab-auditor').classList.toggle('active-tab', mode === 'auditor');
+            document.getElementById('tab-generator').classList.toggle('text-slate-500', mode === 'auditor');
+            document.getElementById('tab-auditor').classList.toggle('text-slate-500', mode === 'generator');
+        }
+
         function setDiff(val) {
             document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
@@ -156,52 +152,74 @@
             selectedBloom = val;
         }
 
-        // Função de Comunicação com a IA (Vercel)
-        async function gerarQuestao() {
-            const curso = document.getElementById('curso').value;
-            const tema = document.getElementById('tema').value;
-            const btn = document.getElementById('btnGerar');
-            const display = document.getElementById('display-resultado');
-            const placeholder = document.getElementById('placeholder-content');
+        function renderTypes() {
+            const container = document.getElementById('question-types-container');
+            container.innerHTML = '';
+            Object.entries(QUESTION_TYPES).forEach(([id, data]) => {
+                const active = selectedType === id;
+                const card = document.createElement('div');
+                card.className = `type-card p-3 rounded-xl border flex items-start gap-3 ${active ? 'active border-blue-600 ring-1 ring-blue-600/10' : 'border-slate-200'}`;
+                card.onclick = () => { selectedType = id; renderTypes(); };
+                card.innerHTML = `
+                    <div class="${active ? 'text-blue-600' : 'text-slate-400'}"><i data-lucide="${data.icon}" class="w-5 h-5"></i></div>
+                    <div class="flex-1">
+                        <h4 class="text-[11px] font-bold text-slate-800">${data.title}</h4>
+                        ${active ? `<p class="text-[9px] text-slate-500 leading-tight mt-1">${data.desc}</p>` : ''}
+                    </div>
+                    ${active ? '<i data-lucide="check" class="w-3 h-3 text-blue-600"></i>' : ''}
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        async function chamarIA(prompt, btnId) {
+            const btn = document.getElementById(btnId);
             const aiContent = document.getElementById('ai-content');
+            const placeholder = document.getElementById('placeholder');
+            const display = document.getElementById('display-resultado');
 
-            if (!curso || !tema) return alert("Preencha o curso e o tema antes de gerar.");
-
-            // Estado de Carregamento
             btn.disabled = true;
-            btn.innerHTML = "Processando IA... <i data-lucide='loader-2' class='animate-spin w-5 h-5'></i>";
+            btn.innerHTML = "Processando... <i data-lucide='loader-2' class='animate-spin w-4 h-4'></i>";
             lucide.createIcons();
 
             try {
-                // Fetch para a API do Vercel
                 const response = await fetch('/api/gemini', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        prompt: `Atue como um especialista em elaboração de questões do INEP. Gere uma questão de Resposta Única para o curso de ${curso} sobre o tema "${tema}". Dificuldade: ${selectedDiff}. Nível Cognitivo de Bloom: ${selectedBloom}. Inclua gabarito comentado e justificativa pedagógica.`
-                    })
+                    body: JSON.stringify({ prompt })
                 });
-
                 const data = await response.json();
-                
-                if(data.error) throw new Error(data.error);
-
-                // Mostra o Resultado
                 placeholder.classList.add('hidden');
                 display.classList.remove('border-dashed', 'items-center', 'justify-center', 'text-center');
-                display.classList.add('p-16', 'shadow-2xl');
                 aiContent.innerHTML = marked.parse(data.text);
                 aiContent.classList.remove('hidden');
-
             } catch (err) {
-                alert("Erro ao conectar com a IA. Verifique se sua chave API está correta no Vercel.");
-                console.error(err);
+                alert("Erro ao conectar com a IA. Verifique sua chave no Vercel.");
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = "Gerar Questão <i data-lucide='zap' class='w-5 h-5'></i>";
+                btn.innerHTML = btnId === 'btnAction' ? "Gerar Questão <i data-lucide='zap' class='w-4 h-4'></i>" : "Auditar Questão <i data-lucide='microscope' class='w-4 h-4'></i>";
                 lucide.createIcons();
             }
         }
+
+        function gerar() {
+            const curso = document.getElementById('curso').value;
+            const tema = document.getElementById('tema').value;
+            if(!curso || !tema) return alert("Preencha curso e tema.");
+            const prompt = `Atue como um especialista do INEP. Gere uma questão do tipo ${QUESTION_TYPES[selectedType].title} para o curso de ${curso} sobre ${tema}. Dificuldade: ${selectedDiff}. Bloom: ${selectedBloom}. Inclua gabarito comentado.`;
+            chamarIA(prompt, 'btnAction');
+        }
+
+        function auditar() {
+            const questao = document.getElementById('audit-input').value;
+            if(!questao) return alert("Cole uma questão para auditar.");
+            const prompt = `Analise a seguinte questão acadêmica sob a ótica da psicometria e padrão ENADE: \n\n ${questao}`;
+            chamarIA(prompt, 'btnAudit');
+        }
+
+        renderTypes();
+        lucide.createIcons();
     </script>
 </body>
 </html>
