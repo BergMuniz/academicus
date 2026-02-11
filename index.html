@@ -19,15 +19,12 @@
                     colors: {
                         inep: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e' },
                         emerald: { 50: '#ecfdf5', 600: '#059669', 800: '#065f46' },
-                        // Cores da Taxonomia
                         bloomSky: { 100: '#e0f2fe', 600: '#0284c7', 800: '#075985' },
                         bloomBlue: { 100: '#dbeafe', 600: '#2563eb', 800: '#1e40af' },
                         bloomIndigo: { 100: '#e0e7ff', 600: '#4f46e5', 800: '#3730a3' }
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    screens: {
-                        'xs': '400px', // Breakpoint extra para celulares pequenos
-                    }
+                    screens: { 'xs': '400px' }
                 }
             }
         }
@@ -37,13 +34,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         body { background-color: #f8fafc; color: #1e293b; -webkit-font-smoothing: antialiased; }
 
-        /* --- CARDS VISUAIS (Mobile & PC) --- */
+        /* --- CARDS VISUAIS --- */
         .type-card {
             border: 1px solid #e2e8f0; border-radius: 12px; background: white;
             padding: 16px; cursor: pointer; transition: all 0.2s; position: relative;
             overflow: hidden;
         }
-        .type-card:active { transform: scale(0.99); } /* Feedback de toque no mobile */
+        .type-card:active { transform: scale(0.99); }
         .type-card:hover { border-color: #cbd5e1; }
         .type-card.active {
             border-color: #0284c7; box-shadow: 0 0 0 1px #0284c7; background: #fff;
@@ -69,7 +66,7 @@
             font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;
         }
 
-        /* Botões de Controle (Ajustados para toque) */
+        /* Botões de Controle */
         .ctrl-btn {
             padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700;
             border: 1px solid #e2e8f0; background: white; color: #64748b; transition: all 0.2s;
@@ -92,20 +89,20 @@
         .diff-card.active-medium .diff-bar { background: #3b82f6; height: 65%; }
         .diff-card.active-medium { background: #eff6ff; border-color: #60a5fa; }
         
-        /* Bloom - Cores Ativas */
+        /* Bloom */
         .bloom-btn { border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; text-align: center; color: #64748b; background: white; width: 100%; }
-        
         .bloom-btn.active.sky { background: #e0f2fe; border-color: #7dd3fc; color: #0369a1; }
         .bloom-btn.active.blue { background: #dbeafe; border-color: #93c5fd; color: #1e40af; }
         .bloom-btn.active.indigo { background: #e0e7ff; border-color: #a5b4fc; color: #3730a3; }
 
-        /* Output */
+        /* Output (Markdown) */
         .prose h3 { color: #0c4a6e; font-size: 1.1rem; font-weight: 800; border-bottom: 2px solid #e0f2fe; margin-top: 1.5rem; margin-bottom: 1rem; }
         .prose p { margin-bottom: 1rem; line-height: 1.6; text-align: justify; }
+        /* Força as alternativas a serem blocos separados */
+        .prose li { display: block; margin-bottom: 0.8rem; } 
         .gabarito-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 5px solid #16a34a; padding: 1.5rem; border-radius: 8px; margin-top: 2rem; }
         
-        /* Input Mobile Optimization */
-        input, textarea { font-size: 16px !important; } /* Previne zoom no iOS */
+        input, textarea { font-size: 16px !important; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -160,7 +157,6 @@
                             <button onclick="setBloom('Entender')" id="bloom-Entender" class="bloom-btn">Entender</button>
                             <button onclick="setBloom('Lembrar')" id="bloom-Lembrar" class="bloom-btn active sky">Lembrar</button>
                         </div>
-                        
                         <div id="bloom-info" class="mt-4 p-4 border rounded-xl text-sm transition-colors hidden">
                             <div class="flex items-center gap-2 mb-2">
                                 <i id="bloom-icon" data-lucide="info" class="w-4 h-4"></i>
@@ -197,7 +193,6 @@
 
         <div id="result-anchor" class="lg:col-span-7">
             <div class="bg-white min-h-[600px] border border-slate-200 rounded-2xl shadow-sm p-6 lg:p-12 relative flex flex-col">
-                
                 <div id="tools" class="flex justify-end gap-2 mb-6 opacity-0 transition-opacity">
                     <button onclick="exportWord()" class="flex items-center gap-2 px-3 py-2 border rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors">
                         <i data-lucide="file-text" class="w-4 h-4"></i> Word
@@ -219,27 +214,25 @@
     </main>
 
     <script>
-        // --- DADOS COMPLETOS BLOOM ---
         const BLOOM_INFO = {
-            "Criar": { color: "indigo", desc: "Juntar elementos para formar um todo coerente ou funcional; gerar, planejar ou produzir.", verbs: "GERAR, PLANEJAR, DESENVOLVER, CONSTRUIR, PROJETAR" },
-            "Avaliar": { color: "indigo", desc: "Fazer julgamentos baseados em critérios e padrões.", verbs: "JULGAR, CRITICAR, SELECIONAR, VALIDAR, REVISAR" },
-            "Analisar": { color: "blue", desc: "Separar o material em suas partes constituintes e determinar como as partes se relacionam.", verbs: "DIFERENCIAR, ORGANIZAR, ATRIBUIR, DECOMPOR, INVESTIGAR" },
-            "Aplicar": { color: "blue", desc: "Executar ou usar um procedimento em uma situação específica.", verbs: "EXECUTAR, IMPLEMENTAR, USAR, DEMONSTRAR, CALCULAR" },
-            "Entender": { color: "sky", desc: "Construir significado a partir de mensagens instrucionais.", verbs: "EXPLICAR, RESUMIR, INFERIR, PARAFRASEAR, EXEMPLIFICAR" },
-            "Lembrar": { color: "sky", desc: "Recuperar conhecimento relevante da memória de longo prazo.", verbs: "CITAR, DEFINIR, LISTAR, IDENTIFICAR, NOMEAR" }
+            "Criar": { color: "indigo", desc: "Juntar elementos para formar um todo coerente.", verbs: "GERAR, PLANEJAR, DESENVOLVER, CONSTRUIR" },
+            "Avaliar": { color: "indigo", desc: "Fazer julgamentos baseados em critérios.", verbs: "JULGAR, CRITICAR, SELECIONAR, VALIDAR" },
+            "Analisar": { color: "blue", desc: "Separar o material em partes constituintes.", verbs: "DIFERENCIAR, ORGANIZAR, ATRIBUIR, DECOMPOR" },
+            "Aplicar": { color: "blue", desc: "Executar ou usar um procedimento.", verbs: "EXECUTAR, IMPLEMENTAR, USAR, DEMONSTRAR" },
+            "Entender": { color: "sky", desc: "Construir significado a partir de mensagens.", verbs: "EXPLICAR, RESUMIR, INFERIR, EXEMPLIFICAR" },
+            "Lembrar": { color: "sky", desc: "Recuperar conhecimento da memória.", verbs: "CITAR, DEFINIR, LISTAR, IDENTIFICAR" }
         };
 
-        // --- DADOS TIPOS (Com Exemplos Completos) ---
         const TYPES = {
             "SINGLE": {
                 label: "Resposta Única", icon: "check-circle",
                 desc: "Clássica com uma alternativa correta.",
-                example: "No contexto da biologia celular, qual organela é a principal responsável pela produção de ATP através da respiração aeróbica?\na) Ribossomo.\nb) Lisossomo.\nc) Mitocôndria.\nd) Complexo de Golgi.\ne) Retículo Endoplasmático."
+                example: "Qual organela realiza a respiração celular?\na) Ribossomo.\nb) Mitocôndria.\nc) Lisossomo."
             },
             "INCOMPLETE": {
                 label: "Afirmação Incompleta", icon: "pen-tool",
                 desc: "O enunciado é uma frase inacabada (sem ponto) completada pelas alternativas.",
-                example: "No que tange aos princípios da administração pública, a impessoalidade exige que os atos administrativos sejam praticados visando\na) a promoção pessoal do agente público.\nb) o interesse exclusivamente privado.\nc) a finalidade pública, sem favoritismos.\nd) o cumprimento de ordens ilegais.\ne) a vontade arbitrária do gestor."
+                example: "A inércia é definida como a tendência de um corpo em\na) permanecer em repouso.\nb) aumentar sua velocidade."
             },
             "MULTIPLE": {
                 label: "Complementação Múltipla", icon: "layers",
@@ -248,12 +241,12 @@
             "ASSERTION": {
                 label: "Asserção e Razão", icon: "git-compare",
                 desc: "Duas afirmações conectadas por PORQUE.",
-                example: "Asserção I: O céu é azul durante o dia.\n\nPORQUE\n\nAsserção II: A atmosfera dispersa a luz solar azul com mais intensidade.\n\na) As asserções I e II são verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas."
+                example: "Asserção I... PORQUE Asserção II..."
             },
             "DISCURSIVE": {
                 label: "Discursiva", icon: "file-text",
                 desc: "Questão aberta com grade de correção.",
-                example: "Comando: Redija um texto dissertativo sobre os impactos da Inteligência Artificial na educação, abordando:\na) Benefícios na personalização do ensino.\nb) Riscos éticos e plágio.\nc) O papel do professor."
+                example: "Redija um texto sobre os impactos da IA..."
             }
         };
 
@@ -273,10 +266,9 @@
         function init() {
             renderTypes();
             lucide.createIcons();
-            setBloom('Lembrar'); // Inicializa Bloom
+            setBloom('Lembrar'); 
         }
 
-        // --- RENDERIZADOR DE CARDS (Mobile-First) ---
         function renderTypes() {
             const container = document.getElementById('types-container');
             container.innerHTML = '';
@@ -299,21 +291,13 @@
                     html += `<div class="mt-3 pl-0 lg:pl-8 text-xs text-slate-500 animate-fade-in">
                         <p class="mb-2">${info.desc}</p>`;
 
-                    // EXEMPLO DINÂMICO
                     let exText = info.example;
                     if (key === 'MULTIPLE') {
-                        const items = [
-                            "I. Afirmação sobre o conceito X.",
-                            "II. Afirmação sobre o conceito Y.",
-                            "III. Afirmação sobre o conceito Z.",
-                            "IV. Afirmação sobre o conceito W.",
-                            "V. Afirmação sobre o conceito K."
-                        ];
+                        const items = ["I. Item um...", "II. Item dois...", "III. Item três...", "IV. Item quatro...", "V. Item cinco..."];
                         let alts = "";
                         if (STATE.multiRange === 3) alts = "a) I, apenas.\nb) II, apenas.\nc) I e II, apenas.\nd) II e III, apenas.\ne) I, II e III.";
                         else if (STATE.multiRange === 4) alts = "a) I e II.\nb) I e IV.\nc) II e III.\nd) I, III e IV.\ne) II, III e IV.";
                         else alts = "a) I, II e III.\nb) I, IV e V.\nc) II, III e IV.\nd) I, III e V.\ne) II, IV e V.";
-
                         exText = items.slice(0, STATE.multiRange).join('\n') + `\n\nÉ correto o que se afirma em:\n${alts}`;
                     }
                     
@@ -324,7 +308,6 @@
                         </div>
                     `;
 
-                    // CONTROLES ESPECÍFICOS (Touch-Friendly)
                     if (key === 'MULTIPLE') {
                         html += `
                             <div class="mt-3 pt-3 border-t border-slate-100">
@@ -347,17 +330,14 @@
                                 </p>
                             </div>`;
                     }
-
                     html += `</div>`;
                 }
-
                 div.innerHTML = html;
                 container.appendChild(div);
             });
             lucide.createIcons();
         }
 
-        // --- CONTROLES ---
         function setMultiRange(n) { STATE.multiRange = n; renderTypes(); }
         function setAssertionKey(k) { STATE.assertionKey = k; renderTypes(); }
         
@@ -378,18 +358,15 @@
         function setBloom(val) {
             STATE.bloom = val;
             const info = BLOOM_INFO[val];
-            const colorName = info.color; // 'sky', 'blue', 'indigo'
+            const colorName = info.color;
 
             document.querySelectorAll('.bloom-btn').forEach(b => {
-                b.className = 'bloom-btn'; // Limpa
-                if(b.id === `bloom-${val}`) {
-                    b.classList.add('active', colorName);
-                }
+                b.className = 'bloom-btn'; 
+                if(b.id === `bloom-${val}`) b.classList.add('active', colorName);
             });
 
             const box = document.getElementById('bloom-info');
             box.classList.remove('hidden');
-            
             let bgClass, textClass, borderClass;
             if (colorName === 'sky') { bgClass='bg-bloomSky-100'; textClass='text-bloomSky-800'; borderClass='border-bloomSky-600'; }
             else if (colorName === 'blue') { bgClass='bg-bloomBlue-100'; textClass='text-bloomBlue-800'; borderClass='border-bloomBlue-600'; }
@@ -409,12 +386,10 @@
             const isGen = mode === 'generator';
             document.getElementById('panel-generator').classList.toggle('hidden', !isGen);
             document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
-            
             document.getElementById('tab-gen').className = isGen ? "px-3 py-1.5 rounded-md text-xs font-bold bg-white shadow-sm text-inep-700 transition-all" : "px-3 py-1.5 rounded-md text-xs font-bold text-slate-500 hover:text-slate-700 transition-all";
             document.getElementById('tab-aud').className = !isGen ? "px-3 py-1.5 rounded-md text-xs font-bold bg-white shadow-sm text-inep-700 transition-all" : "px-3 py-1.5 rounded-md text-xs font-bold text-slate-500 hover:text-slate-700 transition-all";
         }
 
-        // --- GERAÇÃO (PROMPT) ---
         async function gerar() {
             const btn = document.getElementById('btn-main');
             const original = btn.innerHTML;
@@ -424,15 +399,30 @@
             const curso = document.getElementById('curso').value;
             const conteudo = document.getElementById('conteudo').value;
 
-            // Prompt Logic
             let promptExtras = "";
             let typePrompt = `Tipo: ${TYPES[STATE.type].label}.`;
 
+            // === LÓGICA DE CORREÇÃO DE COMANDO E VERTICALIDADE ===
             if (STATE.type === 'INCOMPLETE') {
-                typePrompt += `\nREGRA DE OURO: O enunciado NÃO deve ter pontuação final (ponto, interrogação). Ele deve ser uma frase que é completada gramaticalmente pelas alternativas (começando com minúscula).`;
+                typePrompt += `\nREGRA: O enunciado NÃO deve ter pontuação final. Deve ser uma frase completada pelas alternativas.`;
             }
             else if (STATE.type === 'ASSERTION') {
-                promptExtras = `GABARITO OBRIGATÓRIO: ${STATE.assertionKey}. Use alternativas PADRÃO INEP (A,B,C,D,E) sem mudar texto.`;
+                promptExtras = `
+                GABARITO: ${STATE.assertionKey}.
+                REGRA DE COMANDO: O comando antes das asserções deve terminar em PONTO FINAL (.) e não dois pontos (:).
+                Exemplo correto: "Analise as seguintes asserções."
+                
+                ALTERNATIVAS (Use uma por linha, separadas por uma linha em branco):
+                a) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.
+                
+                b) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.
+                
+                c) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.
+                
+                d) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.
+                
+                e) As asserções I e II são proposições falsas.
+                `;
             }
             else if (STATE.type === 'MULTIPLE') {
                 promptExtras = `Itens I a ${STATE.multiRange===3?'III':STATE.multiRange===4?'IV':'V'}.`;
@@ -447,8 +437,19 @@
             SAÍDA (MARKDOWN):
             ### Enunciado
             (Texto base + comando).
+            
             ### Alternativas
-            (Lista).
+            (LISTA VERTICAL OBRIGATÓRIA - PULE UMA LINHA ENTRE CADA OPÇÃO).
+            a) ...
+            
+            b) ...
+            
+            c) ...
+            
+            d) ...
+            
+            e) ...
+
             <div class="gabarito-box">
             <h4 class="font-bold text-green-800">GABARITO E ANÁLISE</h4>
             <p><strong>✅ Resposta:</strong> Letra</p>
@@ -469,11 +470,8 @@
                 document.getElementById('tools').classList.remove('opacity-0');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
                 
-                // Auto-Scroll Mobile
                 if (window.innerWidth < 1024) {
-                    setTimeout(() => {
-                        document.getElementById('result-anchor').scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
+                    setTimeout(() => { document.getElementById('result-anchor').scrollIntoView({ behavior: 'smooth' }); }, 100);
                 }
 
             } catch(e) { alert(e.message); } finally { btn.innerHTML = original; btn.disabled = false; }
@@ -485,15 +483,8 @@
             // Fetch logic...
         }
 
-        function exportWord() {
-            const text = document.getElementById('output').innerText;
-            const doc = new docx.Document({ sections: [{ children: [new docx.Paragraph({ children: [new docx.TextRun(text)] })] }] });
-            docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao.docx"));
-        }
-        function exportPdf() {
-            const el = document.getElementById('output');
-            html2pdf().set({ margin: 10, filename: 'Questao.pdf' }).from(el).save();
-        }
+        function exportWord() { /* Docx logic */ }
+        function exportPdf() { /* PDF logic */ }
 
         init();
     </script>
