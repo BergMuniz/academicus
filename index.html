@@ -76,6 +76,14 @@
             background: #0284c7; border-color: #0284c7; color: white; box-shadow: 0 2px 4px rgba(2,132,199,0.2);
         }
 
+        /* Botão Quantidade */
+        .qty-btn {
+            width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e2e8f0;
+            background: white; color: #64748b; font-weight: 700; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .qty-btn:active { background: #f1f5f9; transform: scale(0.95); }
+
         .key-btn {
             width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
             border-radius: 8px; font-weight: 700; font-size: 0.9rem; border: 1px solid #e2e8f0;
@@ -95,11 +103,11 @@
         .bloom-btn.active.blue { background: #dbeafe; border-color: #93c5fd; color: #1e40af; }
         .bloom-btn.active.indigo { background: #e0e7ff; border-color: #a5b4fc; color: #3730a3; }
 
-        /* Output (Markdown) */
+        /* Output */
         .prose h3 { color: #0c4a6e; font-size: 1.1rem; font-weight: 800; border-bottom: 2px solid #e0f2fe; margin-top: 1.5rem; margin-bottom: 1rem; }
         .prose p { margin-bottom: 1rem; line-height: 1.6; text-align: justify; }
-        /* Força as alternativas a serem blocos separados */
-        .prose li { display: block; margin-bottom: 0.8rem; } 
+        .prose li { display: block; margin-bottom: 0.8rem; }
+        .prose hr { border-top: 2px dashed #cbd5e1; margin: 3rem 0; } /* Separador de questões */
         .gabarito-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 5px solid #16a34a; padding: 1.5rem; border-radius: 8px; margin-top: 2rem; }
         
         input, textarea { font-size: 16px !important; }
@@ -177,8 +185,20 @@
                         </div>
                 </div>
 
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-slate-700">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                        <span class="text-xs font-bold uppercase">Quantidade de Questões</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-slate-50 p-1 rounded-lg border border-slate-200">
+                        <button onclick="updateQty(-1)" class="qty-btn hover:text-red-500"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                        <span id="qty-val" class="text-sm font-bold text-slate-800 w-6 text-center">1</span>
+                        <button onclick="updateQty(1)" class="qty-btn hover:text-green-500"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+
                 <button onclick="gerar()" id="btn-main" class="w-full bg-inep-600 hover:bg-inep-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-inep-200/50 flex items-center justify-center gap-2 transition-transform active:scale-95 text-lg">
-                    <span>Gerar Questão</span>
+                    <span>Gerar Questão Avaliativa</span>
                     <i data-lucide="chevron-right" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -260,7 +280,7 @@
 
         let STATE = {
             diff: 'Médio', bloom: 'Lembrar', type: 'SINGLE',
-            assertionKey: 'A', multiRange: 4
+            assertionKey: 'A', multiRange: 4, quantity: 1
         };
 
         function init() {
@@ -338,6 +358,14 @@
             lucide.createIcons();
         }
 
+        function updateQty(amount) {
+            let newVal = STATE.quantity + amount;
+            if (newVal >= 1 && newVal <= 10) {
+                STATE.quantity = newVal;
+                document.getElementById('qty-val').innerText = newVal;
+            }
+        }
+
         function setMultiRange(n) { STATE.multiRange = n; renderTypes(); }
         function setAssertionKey(k) { STATE.assertionKey = k; renderTypes(); }
         
@@ -402,7 +430,6 @@
             let promptExtras = "";
             let typePrompt = `Tipo: ${TYPES[STATE.type].label}.`;
 
-            // === LÓGICA DE CORREÇÃO DE COMANDO E VERTICALIDADE ===
             if (STATE.type === 'INCOMPLETE') {
                 typePrompt += `\nREGRA: O enunciado NÃO deve ter pontuação final. Deve ser uma frase completada pelas alternativas.`;
             }
@@ -432,9 +459,12 @@
             Atue como Especialista INEP.
             ${typePrompt}
             Curso: ${curso} | Tema: ${conteudo} | Dificuldade: ${STATE.diff} | Bloom: ${STATE.bloom}
+            Quantidade de Questões: ${STATE.quantity}
             ${promptExtras}
             
             SAÍDA (MARKDOWN):
+             IMPORTANTE: Se a quantidade for maior que 1, repita a estrutura completa (Enunciado, Alternativas, Gabarito) para cada questão, separando-as com "---" (linha horizontal).
+
             ### Enunciado
             (Texto base + comando).
             
@@ -483,8 +513,15 @@
             // Fetch logic...
         }
 
-        function exportWord() { /* Docx logic */ }
-        function exportPdf() { /* PDF logic */ }
+        function exportWord() { 
+            const text = document.getElementById('output').innerText;
+            const doc = new docx.Document({ sections: [{ children: [new docx.Paragraph({ children: [new docx.TextRun(text)] })] }] });
+            docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao.docx"));
+        }
+        function exportPdf() { 
+            const el = document.getElementById('output');
+            html2pdf().set({ margin: 10, filename: 'Questao.pdf' }).from(el).save();
+        }
 
         init();
     </script>
