@@ -59,7 +59,8 @@
         .example-box {
             background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
             padding: 12px; margin-top: 12px; font-size: 0.75rem; color: #475569;
-            line-height: 1.5; font-family: 'Inter', sans-serif; white-space: pre-wrap;
+            line-height: 1.5; font-family: 'Inter', sans-serif;
+            white-space: pre-wrap;
         }
         .example-header {
             display: flex; align-items: center; gap: 6px; font-size: 0.7rem; 
@@ -242,7 +243,7 @@
             "SINGLE": {
                 label: "Resposta Única", icon: "check-circle",
                 desc: "Clássica com uma alternativa correta.",
-                example: "As mitocôndrias são organelas fundamentais para a vida eucariótica.\n\nQual a principal função da mitocôndria na célula animal?\n\na) Realizar a fotossíntese.\nb) Produzir ATP através da respiração celular.\nc) Sintetizar proteínas no citoplasma.\nd) Armazenar material genético.\ne) Realizar a digestão intracelular."
+                example: "As mitocôndrias são organelas fundamentais para a vida eucariótica.\n\nQual a principal função da mitocôndria na célula animal?\n\na) Ribossomo.\nb) Lisossomo.\nc) Mitocôndria.\nd) Complexo de Golgi.\ne) Retículo Endoplasmático."
             },
             "INCOMPLETE": {
                 label: "Afirmação Incompleta", icon: "pen-tool",
@@ -257,8 +258,7 @@
             "ASSERTION": {
                 label: "Asserção e Razão", icon: "git-compare",
                 desc: "Duas afirmações conectadas por PORQUE.",
-                // Exemplo completo conforme pedido
-                example: "O Transtorno do Processamento Auditivo Central (TPAC) afeta a interpretação sonora pelo cérebro.\n\nAnalise as seguintes asserções e a relação proposta entre elas:\n\nI. O diagnóstico diferencial do TPAC é essencial, pois seus sintomas podem ser confundidos com TDAH ou dislexia.\n\nPORQUE\n\nII. O TPAC envolve uma falha específica nas vias auditivas centrais, não sendo um problema de audição periférica.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas."
+                example: "O Transtorno do Processamento Auditivo Central (TPAC) afeta a interpretação sonora pelo cérebro.\n\nAnalise as seguintes asserções e a relação proposta entre elas:\n\nI. O diagnóstico diferencial do TPAC é essencial, pois seus sintomas podem ser confundidos com TDAH ou dislexia.\n\n<div class=\"text-center font-bold py-2\">PORQUE</div>\n\nII. O TPAC envolve uma falha específica nas vias auditivas centrais, não sendo um problema de audição periférica.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas."
             },
             "DISCURSIVE": {
                 label: "Discursiva", icon: "file-text",
@@ -308,8 +308,9 @@
                     html += `<div class="mt-3 pl-0 lg:pl-8 text-xs text-slate-500 animate-fade-in">
                         <p class="mb-2">${info.desc}</p>`;
 
-                    // EXEMPLO DINÂMICO
+                    // EXEMPLO DINÂMICO COMPLETO
                     let exText = info.example;
+                    
                     if (key === 'MULTIPLE') {
                         const items = [
                             "I. A água ferve a 100ºC ao nível do mar.",
@@ -319,11 +320,22 @@
                             "V. O calor específico da água é elevado."
                         ];
                         let alts = "";
-                        if (STATE.multiRange === 3) alts = "a) I, apenas.\nb) II, apenas.\nc) I e II, apenas.\nd) II e III, apenas.\ne) I, II e III.";
-                        else if (STATE.multiRange === 4) alts = "a) I e II.\nb) I e IV.\nc) II e III.\nd) I, III e IV.\ne) II, III e IV.";
-                        else alts = "a) I, II e III.\nb) I, IV e V.\nc) II, III e IV.\nd) I, III e V.\ne) II, IV e V.";
+                        let cmd = "";
                         
-                        exText = `A água é essencial para a vida e possui propriedades únicas.\n\nAvalie as afirmações a seguir:\n\n${items.slice(0, STATE.multiRange).join('\n')}\n\nÉ correto o que se afirma em:\n${alts}`;
+                        if (STATE.multiRange === 3) {
+                            cmd = "É correto o que se afirma em";
+                            alts = "a) I, apenas.\nb) II, apenas.\nc) I e II, apenas.\nd) II e III, apenas.\ne) I, II e III.";
+                        }
+                        else if (STATE.multiRange === 4) {
+                            cmd = "É correto apenas o que se afirma em";
+                            alts = "a) I e II.\nb) I e IV.\nc) II e III.\nd) I, III e IV.\ne) II, III e IV.";
+                        }
+                        else {
+                            cmd = "É correto apenas o que se afirma em";
+                            alts = "a) I, II e III.\nb) I, IV e V.\nc) II, III e IV.\nd) I, III e V.\ne) II, IV e V.";
+                        }
+                        
+                        exText = `A água é essencial para a vida e possui propriedades únicas.\n\nAvalie as afirmações a seguir:\n\n${items.slice(0, STATE.multiRange).join('\n')}\n\n${cmd}:\n\n${alts}`;
                     }
 
                     html += `
@@ -432,163 +444,69 @@
             const curso = document.getElementById('curso').value;
             const conteudo = document.getElementById('conteudo').value;
 
-            if(!curso || !conteudo) {
-                alert("Preencha Curso e Conteúdo.");
-                btn.innerHTML = original;
-                btn.disabled = false;
-                return;
+            if(!curso || !conteudo) { alert("Preencha Curso e Conteúdo."); btn.innerHTML = original; btn.disabled = false; return; }
+
+            let promptExtras = "";
+            let typePrompt = `Tipo: ${TYPES[STATE.type].label}.`;
+
+            if (STATE.type === 'INCOMPLETE') {
+                typePrompt += `\nREGRA: O enunciado NÃO deve ter pontuação final. Deve ser uma frase completada pelas alternativas (iniciando com minúscula).`;
             }
-
-            let promptTemplate = "";
-            let basePrompt = `Atue como Especialista INEP.\nCurso: ${curso}\nTema: ${conteudo}\nDificuldade: ${STATE.diff}\nBloom: ${STATE.bloom}\nQuantidade: ${STATE.quantity}\n\n`;
-
-            if (STATE.quantity > 1) {
-                basePrompt += "IMPORTANTE: Separe cada questão com uma linha horizontal (---).\n\n";
-            }
-
-            if (STATE.type === 'SINGLE') {
-                promptTemplate = `
-                Tipo: Resposta Única.
+            else if (STATE.type === 'ASSERTION') {
+                promptExtras = `
+                GABARITO: ${STATE.assertionKey}.
                 
-                ESTRUTURA DE SAÍDA (MARKDOWN):
-                (Texto base rico e contextualizado).
-                
-                (Enunciado com comando direto).
-                
-                a) ...
-                
-                b) ...
-                
-                c) ...
-                
-                d) ...
-                
-                e) ...
-
-                <div class="gabarito-box">
-                <h4 class="font-bold text-green-800">GABARITO E ANÁLISE</h4>
-                <p><strong>✅ Resposta:</strong> Letra</p>
-                <p><strong>💡 Justificativa:</strong> ...</p>
-                </div>
-                `;
-            }
-            else if (STATE.type === 'INCOMPLETE') {
-                promptTemplate = `
-                Tipo: Afirmação Incompleta.
-                
-                REGRA DE OURO: O enunciado NÃO deve ter pontuação final. Deve ser uma frase completada pelas alternativas (que começam com minúscula).
-                
-                ESTRUTURA DE SAÍDA (MARKDOWN):
-                (Texto base rico e contextualizado).
-                
-                (Enunciado incompleto sem ponto final).
-                
-                a) ...
-                
-                b) ...
-                
-                c) ...
-                
-                d) ...
-                
-                e) ...
-
-                <div class="gabarito-box">
-                <h4 class="font-bold text-green-800">GABARITO E ANÁLISE</h4>
-                <p><strong>✅ Resposta:</strong> Letra</p>
-                <p><strong>💡 Justificativa:</strong> ...</p>
-                </div>
+                ESTRUTURA RÍGIDA DE SAÍDA:
+                1. TEXTO DE SUPORTE.
+                2. COMANDO 1: "Analise as seguintes asserções e a relação proposta entre elas:"
+                3. Asserção I.
+                4. <div style="text-align:center; font-weight:bold; margin:10px 0;">PORQUE</div> (Use HTML).
+                5. Asserção II.
+                6. COMANDO 2: "A respeito dessas asserções, assinale a opção correta."
+                7. ALTERNATIVAS A-E (uma por linha).
                 `;
             }
             else if (STATE.type === 'MULTIPLE') {
                 let rangeText = STATE.multiRange === 3 ? "I, II, III" : STATE.multiRange === 4 ? "I, II, III, IV" : "I a V";
-                promptTemplate = `
-                Tipo: Complementação Múltipla.
-                Itens: ${rangeText}.
+                let cmd = STATE.multiRange === 3 ? "É correto o que se afirma em" : "É correto apenas o que se afirma em";
+                let altsReq = STATE.multiRange === 3 ? "Alternativas com 'apenas' (ex: a) I, apenas.)" : "Alternativas SEM 'apenas' (ex: a) I e II.)";
                 
-                ESTRUTURA DE SAÍDA (MARKDOWN):
-                (Texto base).
-                
-                Avalie as afirmações a seguir:
-                
-                I. ...
-                
-                II. ...
-                
-                (etc).
-                
-                É correto o que se afirma em:
-                
-                a) ...
-                
-                b) ...
-                
-                c) ...
-                
-                d) ...
-                
-                e) ...
+                // INSERÇÃO DA REGRA DE BALANCEAMENTO
+                let balanco = "";
+                if (STATE.multiRange === 4) balanco = "BALANCEAMENTO OBRIGATÓRIO: Garanta que cada numeral romano (I, II, III, IV) apareça EXATAMENTE 3 vezes no total das alternativas (A-E).";
+                if (STATE.multiRange === 5) balanco = "BALANCEAMENTO OBRIGATÓRIO: Garanta que cada numeral romano (I a V) apareça EXATAMENTE 3 vezes no total das alternativas.";
 
-                <div class="gabarito-box">
-                <h4 class="font-bold text-green-800">GABARITO E ANÁLISE</h4>
-                <p><strong>✅ Resposta:</strong> Letra</p>
-                <p><strong>💡 Justificativa:</strong> ...</p>
-                </div>
-                `;
-            }
-            else if (STATE.type === 'ASSERTION') {
-                promptTemplate = `
-                Tipo: Asserção e Razão.
-                Gabarito Obrigatório: ${STATE.assertionKey}.
-                Use Alternativas Padrão INEP.
-                
-                ESTRUTURA DE SAÍDA (MARKDOWN):
-                (Texto base).
-                
-                Analise as seguintes asserções e a relação proposta entre elas:
-                
-                I. ...
-                
-                PORQUE
-                
-                II. ...
-                
-                A respeito dessas asserções, assinale a opção correta.
-                
-                a) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.
-                
-                b) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.
-                
-                c) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.
-                
-                d) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.
-                
-                e) As asserções I e II são proposições falsas.
-
-                <div class="gabarito-box">
-                <h4 class="font-bold text-green-800">GABARITO E ANÁLISE</h4>
-                <p><strong>✅ Resposta:</strong> ${STATE.assertionKey}</p>
-                <p><strong>💡 Justificativa:</strong> ...</p>
-                </div>
-                `;
-            }
-            else if (STATE.type === 'DISCURSIVE') {
-                promptTemplate = `
-                Tipo: Discursiva.
-                
-                ESTRUTURA DE SAÍDA (MARKDOWN):
-                (Texto base rico).
-                
-                (Comando da questão solicitando produção textual).
-                
-                <div class="gabarito-box">
-                <h4 class="font-bold text-green-800">PADRÃO DE RESPOSTA</h4>
-                <p><strong>Expectativa de Resposta:</strong> (Tópicos que o aluno deve abordar).</p>
-                </div>
+                promptExtras = `
+                ITENS: ${rangeText}.
+                COMANDO FINAL OBRIGATÓRIO: "${cmd}".
+                REGRAS DE ALTERNATIVAS: ${altsReq}.
+                ${balanco}
                 `;
             }
 
-            const prompt = basePrompt + promptTemplate;
+            const prompt = `
+            Atue como Especialista INEP.
+            ${typePrompt}
+            Curso: ${curso} | Tema: ${conteudo} | Dificuldade: ${STATE.diff} | Bloom: ${STATE.bloom}
+            Quantidade de Questões: ${STATE.quantity}
+            ${promptExtras}
+            
+            SAÍDA (MARKDOWN):
+            IMPORTANTE: NÃO USE RÓTULOS COMO "TEXTO BASE:", "ENUNCIADO:".
+            Se quantidade > 1, separe com "---".
+
+            (Texto base).
+            
+            (Comando/Enunciado).
+            
+            (Alternativas Verticais - Pule 1 linha entre elas).
+
+            <div class="gabarito-box">
+            <h4 class="font-bold text-green-800">GABARITO E ANÁLISE</h4>
+            <p><strong>✅ Resposta:</strong> Letra</p>
+            <p><strong>💡 Justificativa:</strong> ...</p>
+            </div>
+            `;
 
             try {
                 const res = await fetch('/api/gemini', {
@@ -619,27 +537,8 @@
             btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Auditando...`;
             btn.disabled = true;
 
-            const prompt = `
-            ATUE COMO AUDITOR DO INEP.
-            Analise a seguinte questão quanto à estrutura, viés, taxonomia e clareza.
-            QUESTÃO: ${txt}
+            const prompt = `AUDITORIA PEDAGÓGICA (INEP):\nAnalise a questão abaixo quanto à estrutura, viés, taxonomia e clareza.\nQUESTÃO: ${txt}\n\nSAÍDA:\n### Relatório de Auditoria\n**1. Análise Estrutural**\n* Enunciado: ...\n* Alternativas: ...\n**2. Veredito**\n* Status: ...`;
             
-            SAÍDA (MARKDOWN):
-            ### Relatório de Auditoria
-            
-            **1. Análise Estrutural**
-            * Enunciado: ...
-            * Alternativas: ...
-            
-            **2. Análise Pedagógica**
-            * Taxonomia: ...
-            * Dificuldade Estimada: ...
-            
-            **3. Veredito**
-            * Status: (Aprovada/Requer Ajustes/Reprovada)
-            * Sugestões: ...
-            `;
-
             try {
                 const res = await fetch('/api/gemini', {
                     method: 'POST',
@@ -647,15 +546,10 @@
                     body: JSON.stringify({ prompt })
                 });
                 const data = await res.json();
-                
                 document.getElementById('placeholder').classList.add('hidden');
                 document.getElementById('output').classList.remove('hidden');
                 document.getElementById('tools').classList.remove('opacity-0');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
-                
-                if (window.innerWidth < 1024) {
-                    setTimeout(() => { document.getElementById('result-anchor').scrollIntoView({ behavior: 'smooth' }); }, 100);
-                }
             } catch(e) { alert(e.message); } finally { btn.innerHTML = original; btn.disabled = false; }
         }
 
