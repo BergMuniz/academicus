@@ -55,10 +55,10 @@
         }
         .type-card.active .radio-circle { border-color: #0284c7; border-width: 6px; }
 
-        /* Caixa de Exemplo (Formatada para texto longo) */
+        /* Caixa de Exemplo */
         .example-box {
             background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
-            padding: 12px; margin-top: 12px; font-size: 0.75rem; color: #475569;
+            padding: 12px; margin-top: 12px; font-size: 0.8rem; color: #475569;
             line-height: 1.5; font-family: 'Inter', sans-serif;
             white-space: pre-wrap; /* Quebra de linha automática */
         }
@@ -240,17 +240,16 @@
             "Lembrar": { color: "sky", desc: "Recuperar conhecimento da memória.", verbs: "CITAR, DEFINIR, LISTAR, IDENTIFICAR" }
         };
 
-        // EXEMPLOS COMPLETOS (TEXTO INTEGRAL)
         const TYPES = {
             "SINGLE": {
                 label: "Resposta Única", icon: "check-circle",
                 desc: "Clássica com uma alternativa correta.",
-                example: "TEXTO BASE: As organelas celulares desempenham funções vitais. A respiração celular é um processo aeróbico fundamental.\n\nENUNCIADO: Qual organela é responsável pela produção de ATP através da respiração aeróbica?\n\na) Ribossomo.\nb) Lisossomo.\nc) Mitocôndria.\nd) Complexo de Golgi.\ne) Retículo Endoplasmático."
+                example: "As organelas celulares desempenham funções vitais. A respiração celular é um processo aeróbico fundamental.\n\nQual organela é responsável pela produção de ATP através da respiração aeróbica?\n\na) Ribossomo.\nb) Lisossomo.\nc) Mitocôndria.\nd) Complexo de Golgi.\ne) Retículo Endoplasmático."
             },
             "INCOMPLETE": {
                 label: "Afirmação Incompleta", icon: "pen-tool",
                 desc: "O enunciado é uma frase inacabada (sem ponto) completada pelas alternativas.",
-                example: "TEXTO BASE: A Primeira Lei de Newton trata da inércia dos corpos.\n\nENUNCIADO: A inércia é definida, no contexto da mecânica clássica, como a tendência natural de um corpo em\n\na) aumentar sua velocidade constantemente.\nb) permanecer em seu estado de repouso ou movimento retilíneo uniforme.\nc) alterar sua massa independentemente da força.\nd) desacelerar na ausência de atrito.\ne) reagir instantaneamente a forças internas."
+                example: "A Primeira Lei de Newton trata da inércia dos corpos.\n\nA inércia é definida, no contexto da mecânica clássica, como a tendência natural de um corpo em\n\na) aumentar sua velocidade constantemente.\nb) permanecer em seu estado de repouso ou movimento retilíneo uniforme.\nc) alterar sua massa independentemente da força.\nd) desacelerar na ausência de atrito.\ne) reagir instantaneamente a forças internas."
             },
             "MULTIPLE": {
                 label: "Complementação Múltipla", icon: "layers",
@@ -259,12 +258,12 @@
             "ASSERTION": {
                 label: "Asserção e Razão", icon: "git-compare",
                 desc: "Duas afirmações conectadas por PORQUE.",
-                example: "Considere as seguintes asserções e a relação proposta entre elas:\n\nI. Em uma avaliação neuropsicopedagógica, a identificação do TPAC é crucial, pois suas manifestações podem mimetizar outras dificuldades.\n\nPORQUE\n\nII. O diagnóstico definitivo do TPAC pode ser realizado exclusivamente por psicopedagogos, sem a necessidade de exames audiológicos.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas."
+                example: "Asserção I: O céu é azul durante o dia.\n\nPORQUE\n\nAsserção II: A atmosfera dispersa preferencialmente a luz solar de menor comprimento de onda (azul)."
             },
             "DISCURSIVE": {
                 label: "Discursiva", icon: "file-text",
                 desc: "Questão aberta com grade de correção.",
-                example: "TEXTO BASE: A IA tem transformado a educação superior.\n\nCOMANDO: Redija um texto dissertativo sobre os impactos da Inteligência Artificial na educação, abordando necessariamente:\n\na) Os benefícios para a personalização do ensino.\nb) Os riscos éticos relacionados ao plágio.\nc) O novo papel do docente como mediador."
+                example: "A IA tem transformado a educação superior.\n\nRedija um texto dissertativo sobre os impactos da Inteligência Artificial na educação, abordando necessariamente:\n\na) Os benefícios para a personalização do ensino.\nb) Os riscos éticos relacionados ao plágio.\nc) O novo papel do docente como mediador."
             }
         };
 
@@ -287,7 +286,6 @@
             setBloom('Lembrar'); 
         }
 
-        // --- RENDERIZADOR ---
         function renderTypes() {
             const container = document.getElementById('types-container');
             container.innerHTML = '';
@@ -310,24 +308,16 @@
                     html += `<div class="mt-3 pl-0 lg:pl-8 text-xs text-slate-500 animate-fade-in">
                         <p class="mb-2">${info.desc}</p>`;
 
-                    // EXEMPLO DINÂMICO
                     let exText = info.example;
-                    
                     if (key === 'MULTIPLE') {
-                        const items = [
-                            "I. A água ferve a 100ºC ao nível do mar.",
-                            "II. O gelo é menos denso que a água líquida.",
-                            "III. A molécula de água é apolar.",
-                            "IV. A tensão superficial da água é alta.",
-                            "V. O calor específico da água é elevado."
-                        ];
+                        const items = ["I. A água ferve a 100ºC ao nível do mar.", "II. O gelo é menos denso que a água líquida.", "III. A molécula de água é apolar.", "IV. A tensão superficial da água é alta.", "V. O calor específico da água é elevado."];
                         let alts = "";
                         if (STATE.multiRange === 3) alts = "a) I, apenas.\nb) II, apenas.\nc) I e II, apenas.\nd) II e III, apenas.\ne) I, II e III.";
                         else if (STATE.multiRange === 4) alts = "a) I e II.\nb) I e IV.\nc) II e III.\nd) I, III e IV.\ne) II, III e IV.";
                         else alts = "a) I, II e III.\nb) I, IV e V.\nc) II, III e IV.\nd) I, III e V.\ne) II, IV e V.";
                         exText = items.slice(0, STATE.multiRange).join('\n') + `\n\nÉ correto o que se afirma em:\n${alts}`;
                     }
-
+                    
                     html += `
                         <div class="example-box">
                             <div class="example-header"><i data-lucide="sparkles" class="w-3 h-3"></i> Exemplo</div>
@@ -425,14 +415,73 @@
             document.getElementById('tab-aud').className = !isGen ? "px-3 py-1.5 rounded-md text-xs font-bold bg-white shadow-sm text-inep-700 transition-all" : "px-3 py-1.5 rounded-md text-xs font-bold text-slate-500 hover:text-slate-700 transition-all";
         }
 
-        // --- MOTOR DE IA (API) ---
-        async function fetchAI(prompt, btnId) {
-            const btn = document.getElementById(btnId);
-            const originalHTML = btn.innerHTML;
-            
-            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Processando...`;
+        async function gerar() {
+            const btn = document.getElementById('btn-main');
+            const original = btn.innerHTML;
+            btn.innerHTML = 'Processando...';
             btn.disabled = true;
-            lucide.createIcons();
+
+            const curso = document.getElementById('curso').value;
+            const conteudo = document.getElementById('conteudo').value;
+
+            let promptExtras = "";
+            let typePrompt = `Tipo: ${TYPES[STATE.type].label}.`;
+
+            if (STATE.type === 'INCOMPLETE') {
+                typePrompt += `\nREGRA: O enunciado NÃO deve ter pontuação final. Deve ser uma frase completada pelas alternativas.`;
+            }
+            else if (STATE.type === 'ASSERTION') {
+                promptExtras = `
+                GABARITO: ${STATE.assertionKey}.
+                REGRA DE COMANDO: O comando antes das asserções deve terminar em PONTO FINAL (.) e não dois pontos (:).
+                
+                ALTERNATIVAS (Obrigatório pular uma linha entre elas):
+                a) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.
+                
+                b) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.
+                
+                c) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.
+                
+                d) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.
+                
+                e) As asserções I e II são proposições falsas.
+                `;
+            }
+            else if (STATE.type === 'MULTIPLE') {
+                promptExtras = `Itens I a ${STATE.multiRange===3?'III':STATE.multiRange===4?'IV':'V'}.`;
+            }
+
+            const prompt = `
+            Atue como Especialista INEP.
+            ${typePrompt}
+            Curso: ${curso} | Tema: ${conteudo} | Dificuldade: ${STATE.diff} | Bloom: ${STATE.bloom}
+            Quantidade: ${STATE.quantity}
+            ${promptExtras}
+            
+            SAÍDA (MARKDOWN):
+            IMPORTANTE: Se a quantidade for maior que 1, repita a estrutura completa (Enunciado, Alternativas, Gabarito) para cada questão, separando-as com "---" (linha horizontal).
+
+            ### Enunciado
+            (Texto base + comando).
+            
+            ### Alternativas
+            (LISTA VERTICAL OBRIGATÓRIA - PULE UMA LINHA ENTRE CADA OPÇÃO).
+            a) ...
+            
+            b) ...
+            
+            c) ...
+            
+            d) ...
+            
+            e) ...
+
+            <div class="gabarito-box">
+            <h4 class="font-bold text-green-800">GABARITO E ANÁLISE</h4>
+            <p><strong>✅ Resposta:</strong> Letra</p>
+            <p><strong>💡 Justificativa:</strong> ...</p>
+            </div>
+            `;
 
             try {
                 const res = await fetch('/api/gemini', {
@@ -451,75 +500,56 @@
                     setTimeout(() => { document.getElementById('result-anchor').scrollIntoView({ behavior: 'smooth' }); }, 100);
                 }
 
-            } catch(e) { 
-                alert("Erro ao conectar com a IA: " + e.message); 
-            } finally { 
-                btn.innerHTML = originalHTML; 
-                btn.disabled = false;
-                lucide.createIcons();
-            }
+            } catch(e) { alert(e.message); } finally { btn.innerHTML = original; btn.disabled = false; }
         }
 
-        function gerar() {
-            const curso = document.getElementById('curso').value;
-            const conteudo = document.getElementById('conteudo').value;
-
-            if(!curso || !conteudo) return alert("Preencha Curso e Conteúdo.");
-
-            let promptExtras = "";
-            let typePrompt = `Tipo: ${TYPES[STATE.type].label}.`;
-
-            if (STATE.type === 'INCOMPLETE') {
-                typePrompt += `\nREGRA: O enunciado NÃO deve ter pontuação final. Deve ser uma frase completada pelas alternativas.`;
-            }
-            else if (STATE.type === 'ASSERTION') {
-                promptExtras = `GABARITO OBRIGATÓRIO: ${STATE.assertionKey}. REGRAS: Comando com PONTO FINAL. Alternativas A-E padronizadas.`;
-            }
-            else if (STATE.type === 'MULTIPLE') {
-                promptExtras = `Itens I a ${STATE.multiRange===3?'III':STATE.multiRange===4?'IV':'V'}.`;
-            }
-
-            const prompt = `
-            Atue como Especialista INEP.
-            ${typePrompt}
-            Curso: ${curso} | Tema: ${conteudo} | Dificuldade: ${STATE.diff} | Bloom: ${STATE.bloom}
-            Quantidade: ${STATE.quantity}
-            ${promptExtras}
-            
-            SAÍDA (MARKDOWN):
-            Se quantidade > 1, separe com "---".
-            
-            ### Enunciado
-            (Texto base + comando).
-            
-            ### Alternativas
-            (LISTA VERTICAL COM QUEBRA DE LINHA).
-            a) ...
-            
-            b) ...
-            
-            c) ...
-            
-            d) ...
-            
-            e) ...
-
-            <div class="gabarito-box">
-            <h4 class="font-bold text-green-800">GABARITO</h4>
-            <p><strong>✅ Resposta:</strong> Letra</p>
-            <p><strong>💡 Justificativa:</strong> ...</p>
-            </div>
-            `;
-            fetchAI(prompt, 'btn-main');
-        }
-
-        function auditar() {
+        async function auditar() {
             const txt = document.getElementById('audit-input').value;
             if(!txt) return alert("Cole uma questão.");
             
-            const prompt = `AUDITORIA PEDAGÓGICA (INEP):\nAnalise a questão abaixo quanto à estrutura, viés e taxonomia:\n\n${txt}\n\nSAÍDA:\n- Parecer Técnico.\n- Análise de Enunciado e Alternativas.`;
+            const btn = document.getElementById('btn-aud');
+            const original = btn.innerHTML;
+            btn.innerHTML = 'Auditando...';
+            btn.disabled = true;
+
+            const prompt = `
+            ATUE COMO AUDITOR DO INEP.
+            Analise a seguinte questão quanto à estrutura, viés, taxonomia e clareza.
+            QUESTÃO: ${txt}
             
-            fetchAI(prompt, 'btn-aud');
+            SAÍDA (MARKDOWN):
+            ### Relatório de Auditoria
+            
+            **1. Análise Estrutural**
+            * Enunciado: ...
+            * Alternativas: ...
+            
+            **2. Análise Pedagógica**
+            * Taxonomia: ...
+            * Dificuldade Estimada: ...
+            
+            **3. Veredito**
+            * Status: (Aprovada/Requer Ajustes/Reprovada)
+            * Sugestões: ...
+            `;
+
+            try {
+                const res = await fetch('/api/gemini', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ prompt })
+                });
+                const data = await res.json();
+                
+                document.getElementById('placeholder').classList.add('hidden');
+                document.getElementById('output').classList.remove('hidden');
+                document.getElementById('tools').classList.remove('opacity-0');
+                document.getElementById('output').innerHTML = marked.parse(data.text);
+                
+                if (window.innerWidth < 1024) {
+                    setTimeout(() => { document.getElementById('result-anchor').scrollIntoView({ behavior: 'smooth' }); }, 100);
+                }
+            } catch(e) { alert(e.message); } finally { btn.innerHTML = original; btn.disabled = false; }
         }
 
         function exportWord() { 
