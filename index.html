@@ -33,74 +33,74 @@
         body { background-color: #f8fafc; color: #1e293b; -webkit-font-smoothing: antialiased; }
 
         /* --- UI COMPONENTS --- */
-        .type-card { border: 1px solid #e2e8f0; border-radius: 12px; background: white; padding: 16px; cursor: pointer; transition: all 0.2s; overflow: hidden; }
-        .type-card.active { border-color: #0284c7; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.1); }
+        .type-card { border: 1px solid #e2e8f0; border-radius: 16px; background: white; padding: 16px; cursor: pointer; transition: all 0.2s; overflow: hidden; }
+        .type-card.active { border-color: #0284c7; box-shadow: 0 10px 15px -3px rgba(2, 132, 199, 0.1); }
         .radio-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #cbd5e1; flex-shrink: 0; transition: all 0.2s; }
         .type-card.active .radio-circle { border-color: #0284c7; border-width: 6px; }
 
-        .example-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-top: 12px; font-size: 0.75rem; color: #475569; line-height: 1.6; white-space: pre-wrap; }
-        .example-header { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; }
+        .example-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; margin-top: 12px; font-size: 0.75rem; color: #475569; line-height: 1.6; white-space: pre-wrap; border-left: 4px solid #cbd5e1; }
+        .example-header { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; }
 
-        .ctrl-btn { padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; border: 1px solid #e2e8f0; background: white; color: #64748b; flex: 1; display: flex; justify-content: center; }
-        .ctrl-btn.active { background: #0284c7; border-color: #0284c7; color: white; }
+        .ctrl-btn { padding: 10px 12px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; border: 1px solid #e2e8f0; background: white; color: #64748b; flex: 1; display: flex; justify-content: center; }
+        .ctrl-btn.active { background: #0284c7; border-color: #0284c7; color: white; shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.3); }
 
-        .key-btn { width: 40px; height: 40px; border-radius: 8px; border: 1px solid #e2e8f0; font-weight: 700; background: white; flex: 1; display: flex; align-items: center; justify-content: center; }
-        .key-btn.active { background: #0284c7; color: white; border-color: #0284c7; }
+        .key-btn { width: 42px; height: 42px; border-radius: 10px; border: 1px solid #e2e8f0; font-weight: 800; background: white; flex: 1; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .key-btn.active { background: #0284c7; color: white; border-color: #0284c7; transform: translateY(-2px); }
 
-        .bloom-btn { border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; text-align: center; color: #64748b; background: white; width: 100%; transition: all 0.2s; }
+        .bloom-btn { border: 1px solid #e2e8f0; padding: 12px; border-radius: 10px; font-size: 0.8rem; font-weight: 600; text-align: center; color: #64748b; background: white; width: 100%; transition: all 0.2s; }
+        .bloom-btn.active { transform: scale(1.02); }
         .bloom-btn.active.sky { background: #e0f2fe; border-color: #7dd3fc; color: #0369a1; font-weight: 800; }
         .bloom-btn.active.blue { background: #dbeafe; border-color: #93c5fd; color: #1e40af; font-weight: 800; }
         .bloom-btn.active.indigo { background: #e0e7ff; border-color: #a5b4fc; color: #3730a3; font-weight: 800; }
 
-        /* --- RESULT FORMATTING --- */
-        .prose h3 { color: #0c4a6e; font-size: 1.1rem; font-weight: 800; border-bottom: 2px solid #e0f2fe; margin-top: 2rem; margin-bottom: 1rem; padding-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.025em; }
-        .prose p { margin-bottom: 1rem; line-height: 1.6; text-align: justify; }
+        .prose h3 { color: #0c4a6e; font-size: 1.15rem; font-weight: 800; border-bottom: 2px solid #e0f2fe; margin-top: 2rem; margin-bottom: 1.2rem; padding-bottom: 0.5rem; text-transform: uppercase; }
+        .prose p { margin-bottom: 1.2rem; line-height: 1.7; text-align: justify; }
         .prose li { display: block; margin-bottom: 1rem; }
-        .prose hr { border-top: 2px dashed #cbd5e1; margin: 3rem 0; }
-        .gabarito-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 5px solid #16a34a; padding: 1.5rem; border-radius: 12px; margin-top: 2.5rem; }
+        .gabarito-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 6px solid #16a34a; padding: 1.75rem; border-radius: 16px; margin-top: 3rem; }
         
         input, textarea { font-size: 16px !important; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 h-16 flex items-center px-4 lg:px-6 justify-between shadow-sm">
-        <div class="flex items-center gap-3">
-            <div class="bg-inep-600 p-2 rounded-lg text-white shrink-0 shadow-md shadow-inep-100"><i data-lucide="graduation-cap" class="w-5 h-5"></i></div>
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 h-16 flex items-center px-4 lg:px-8 justify-between shadow-sm">
+        <div class="flex items-center gap-4">
+            <div class="bg-inep-600 p-2 rounded-xl text-white shrink-0 shadow-lg shadow-inep-100"><i data-lucide="graduation-cap" class="w-6 h-6"></i></div>
             <div class="leading-tight">
-                <h1 class="text-lg lg:text-xl font-bold text-slate-900 leading-none tracking-tight">Academicus AI</h1>
-                <p class="text-[10px] lg:text-xs text-slate-500 font-bold uppercase tracking-widest mt-0.5">Studio de Criação de Questões</p>
+                <h1 class="text-xl lg:text-2xl font-black text-slate-900 leading-none tracking-tighter">Academicus AI</h1>
+                <p class="text-[10px] font-black text-inep-500 uppercase tracking-widest mt-0.5">Studio de Criação de Questões</p>
             </div>
         </div>
-        <div class="flex bg-slate-100 p-1 rounded-xl">
-            <button onclick="setMode('generator')" id="tab-gen" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-white shadow-sm text-inep-700 transition-all">Design</button>
-            <button onclick="setMode('auditor')" id="tab-aud" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 transition-all">Auditoria</button>
+        <div class="flex bg-slate-100 p-1.5 rounded-2xl">
+            <button onclick="setMode('generator')" id="tab-gen" class="px-5 py-2 rounded-xl text-xs font-bold bg-white shadow-md text-inep-700 transition-all">Design</button>
+            <button onclick="setMode('auditor')" id="tab-aud" class="px-5 py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800 transition-all">Auditoria</button>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto w-full p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1">
+    <main class="max-w-7xl mx-auto w-full p-4 lg:p-10 grid grid-cols-1 lg:grid-cols-12 gap-10 flex-1">
         
-        <aside class="lg:col-span-5 space-y-6">
-            <div id="panel-generator" class="space-y-6">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-                    <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 pb-3 border-b border-slate-50">
-                        <i data-lucide="book-open" class="w-4 h-4 text-inep-600"></i> Contexto da Avaliação
-                    </h3>
-                    <div class="space-y-4">
+        <aside class="lg:col-span-5 space-y-8">
+            <div id="panel-generator" class="space-y-8">
+                <div class="bg-white p-7 rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-200/50 space-y-6">
+                    <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
+                        <div class="p-2 bg-inep-50 rounded-lg"><i data-lucide="book-open" class="w-5 h-5 text-inep-600"></i></div>
+                        <h3 class="text-base font-bold text-slate-800 uppercase tracking-tight">Especifições Técnicas</h3>
+                    </div>
+                    <div class="space-y-5">
                         <div>
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 block">Curso / Área</label>
-                            <input id="curso" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-inep-500 transition-all" placeholder="Ex: Psicologia, Direito...">
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-2 block">Curso / Área de Domínio</label>
+                            <input id="curso" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm outline-none focus:bg-white focus:border-inep-500 focus:ring-4 focus:ring-inep-500/10 transition-all" placeholder="Ex: Neuropsicopedagogia, Engenharia Civil...">
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 block">Objeto de Conhecimento</label>
-                            <textarea id="conteudo" rows="3" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm resize-none outline-none focus:bg-white focus:border-inep-500 transition-all" placeholder="Descreva o tema..."></textarea>
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-2 block">Objeto de Conhecimento</label>
+                            <textarea id="conteudo" rows="4" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm resize-none outline-none focus:bg-white focus:border-inep-500 focus:ring-4 focus:ring-inep-500/10 transition-all" placeholder="Descreva detalhadamente o tema ou habilidade a ser avaliada..."></textarea>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Taxonomia de Bloom</label>
-                    <div class="flex flex-col gap-1.5">
+                <div class="bg-white p-7 rounded-[2rem] border border-slate-200 shadow-sm space-y-5">
+                    <label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest block">Taxonomia de Bloom (Nível Cognitivo)</label>
+                    <div class="flex flex-col gap-2">
                         <button onclick="setBloom('Criar')" id="bloom-Criar" class="bloom-btn">Criar</button>
                         <button onclick="setBloom('Avaliar')" id="bloom-Avaliar" class="bloom-btn">Avaliar</button>
                         <button onclick="setBloom('Analisar')" id="bloom-Analisar" class="bloom-btn">Analisar</button>
@@ -108,76 +108,85 @@
                         <button onclick="setBloom('Entender')" id="bloom-Entender" class="bloom-btn">Entender</button>
                         <button onclick="setBloom('Lembrar')" id="bloom-Lembrar" class="bloom-btn active sky">Lembrar</button>
                     </div>
-                    <div id="bloom-info-box" class="mt-4 p-4 rounded-xl border transition-all duration-300 hidden">
-                        <h4 id="bloom-info-title" class="font-bold text-sm mb-1 uppercase tracking-tight"></h4>
-                        <p id="bloom-info-desc" class="text-xs italic mb-3"></p>
-                        <div class="pt-2 border-t border-black/5">
-                            <span class="text-[9px] font-extrabold uppercase opacity-60">Verbos Recomendados</span>
-                            <p id="bloom-info-verbs" class="text-xs font-semibold mt-0.5"></p>
+                    <div id="bloom-info-box" class="mt-4 p-5 rounded-2xl border transition-all duration-300 hidden">
+                        <h4 id="bloom-info-title" class="font-black text-sm mb-1 uppercase tracking-tight"></h4>
+                        <p id="bloom-info-desc" class="text-xs italic mb-4 leading-relaxed"></p>
+                        <div class="pt-3 border-t border-black/5">
+                            <span class="text-[9px] font-black uppercase opacity-60 tracking-wider">Verbos Sugeridos para o Comando</span>
+                            <p id="bloom-info-verbs" class="text-xs font-bold mt-1 leading-relaxed"></p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Modelagem da Questão</label>
-                    <div id="types-container" class="space-y-3"></div>
+                <div class="space-y-4">
+                    <label class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest block px-1">Arquitetura da Questão</label>
+                    <div id="types-container" class="space-y-4"></div>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
-                    <span class="text-xs font-bold uppercase text-slate-500 tracking-tight">Quantidade de Itens</span>
-                    <div class="flex items-center gap-3">
-                        <button onclick="updateQty(-1)" class="w-8 h-8 border rounded-lg bg-white shadow-sm flex items-center justify-center hover:bg-slate-50 transition-colors">-</button>
-                        <span id="qty-val" class="font-bold text-slate-700 w-6 text-center">1</span>
-                        <button onclick="updateQty(1)" class="w-8 h-8 border rounded-lg bg-white shadow-sm flex items-center justify-center hover:bg-slate-50 transition-colors">+</button>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase text-slate-500 tracking-wider">Quantidade</span>
+                    <div class="flex items-center gap-4 bg-slate-50 p-1.5 rounded-xl border border-slate-100">
+                        <button onclick="updateQty(-1)" class="w-10 h-10 border rounded-lg bg-white shadow-sm flex items-center justify-center hover:bg-slate-50 transition-colors font-bold">-</button>
+                        <span id="qty-val" class="font-black text-slate-800 w-6 text-center text-lg">1</span>
+                        <button onclick="updateQty(1)" class="w-10 h-10 border rounded-lg bg-white shadow-sm flex items-center justify-center hover:bg-slate-50 transition-colors font-bold">+</button>
                     </div>
                 </div>
 
-                <button onclick="gerar()" id="btn-main" class="w-full bg-inep-600 text-white font-extrabold py-4 rounded-xl shadow-lg shadow-inep-200 active:scale-95 transition-transform text-base">Gerar Questão Studio Pro</button>
+                <button onclick="gerar()" id="btn-main" class="w-full bg-inep-600 text-white font-black py-5 rounded-[1.5rem] shadow-xl shadow-inep-200 active:scale-95 transition-all text-lg tracking-tight uppercase">Gerar Avaliação Studio Pro</button>
             </div>
 
-            <div id="panel-auditor" class="hidden bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
-                <i data-lucide="microscope" class="w-10 h-10 text-emerald-600 mx-auto mb-3"></i>
-                <h3 class="font-bold text-emerald-800">Auditoria Técnica</h3>
-                <textarea id="audit-input" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl mt-4 mb-4 text-sm font-mono h-64 outline-none focus:bg-white focus:border-emerald-500 transition-all" placeholder="Cole a questão completa..."></textarea>
-                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-emerald-700">Executar Auditoria</button>
+            <div id="panel-auditor" class="hidden bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm text-center">
+                <i data-lucide="microscope" class="w-12 h-12 text-emerald-600 mx-auto mb-4"></i>
+                <h3 class="font-black text-emerald-800 text-lg uppercase">Auditoria de Itens</h3>
+                <p class="text-xs text-slate-500 mt-2">Análise psicométrica e técnica baseada no padrão INEP/ENADE.</p>
+                <textarea id="audit-input" class="w-full p-5 bg-slate-50 border border-slate-200 rounded-2xl mt-6 mb-6 text-sm font-mono h-72 outline-none focus:bg-white focus:border-emerald-500 transition-all" placeholder="Cole aqui a questão completa..."></textarea>
+                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 text-white font-black py-4 rounded-2xl shadow-lg hover:bg-emerald-700 transition-all uppercase tracking-tight">Executar Laudo Técnico</button>
             </div>
         </aside>
 
         <div id="result-anchor" class="lg:col-span-7">
-            <div class="bg-white min-h-[700px] border border-slate-200 rounded-3xl shadow-sm p-6 lg:p-12 relative flex flex-col">
-                <div id="tools" class="flex justify-end gap-2 mb-6 opacity-0 transition-all duration-500">
-                    <button onclick="exportWord()" class="flex items-center gap-2 px-4 py-2 border border-blue-200 rounded-xl text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors">
+            <div class="bg-white min-h-[800px] border border-slate-200 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 p-6 lg:p-14 relative flex flex-col">
+                <div id="tools" class="flex justify-end gap-3 mb-10 opacity-0 transition-all duration-700 translate-y-2">
+                    <button onclick="exportWord()" class="flex items-center gap-2 px-5 py-2.5 border-2 border-blue-100 rounded-2xl text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors">
                         <i data-lucide="file-text" class="w-4 h-4"></i> Word
                     </button>
-                    <button onclick="exportPdf()" class="flex items-center gap-2 px-4 py-2 border border-red-200 rounded-xl text-xs font-bold text-red-700 bg-red-50 hover:bg-red-100 transition-colors">
+                    <button onclick="exportPdf()" class="flex items-center gap-2 px-5 py-2.5 border-2 border-red-100 rounded-2xl text-xs font-bold text-red-700 bg-red-50 hover:bg-red-100 transition-colors">
                         <i data-lucide="file-down" class="w-4 h-4"></i> PDF
                     </button>
                 </div>
-                <div id="placeholder" class="flex-1 flex flex-col items-center justify-center text-center p-8 opacity-40">
-                    <i data-lucide="sparkles" class="w-16 h-16 text-slate-300 mb-4"></i>
-                    <h3 class="text-xl font-bold text-slate-400 uppercase tracking-widest">Aguardando Input</h3>
+                <div id="placeholder" class="flex-1 flex flex-col items-center justify-center text-center p-8 opacity-30">
+                    <i data-lucide="sparkles" class="w-20 h-20 text-slate-300 mb-6"></i>
+                    <h3 class="text-2xl font-black text-slate-400 uppercase tracking-[0.2em]">Aguardando</h3>
                 </div>
-                <div id="output" class="hidden prose prose-slate max-w-none text-sm leading-relaxed"></div>
+                <div id="output" class="hidden prose prose-slate max-w-none text-sm leading-relaxed animate-fade-in"></div>
             </div>
         </div>
     </main>
 
     <script>
         const BLOOM_INFO = {
-            "Criar": { color: "indigo", desc: "Colocar elementos juntos para formar um todo funcional; planejar ou produzir.", verbs: "GERAR, PLANEJAR, DESENVOLVER, CONSTRUIR, PROJETAR." },
-            "Avaliar": { color: "indigo", desc: "Fazer julgamentos baseados em critérios e padrões por meio de checagem e crítica.", verbs: "JULGAR, CRITICAR, SELECIONAR, VALIDAR, CONCLUIR." },
-            "Analisar": { color: "blue", desc: "Separar o material em suas partes constituintes e determinar relações.", verbs: "DIFERENCIAR, ORGANIZAR, ATRIBUIR, DECOMPOR, COMPARAR." },
-            "Aplicar": { color: "blue", desc: "Executar ou usar um procedimento em uma situação específica.", verbs: "EXECUTAR, IMPLEMENTAR, USAR, DEMONSTRAR, RESOLVER." },
-            "Entender": { color: "sky", desc: "Construir significado a partir de mensagens instrucionais.", verbs: "EXPLICAR, RESUMIR, INFERIR, PARAFRASEAR, INTERPRETAR." },
-            "Lembrar": { color: "sky", desc: "Recuperar conhecimento relevante da memória de longo prazo.", verbs: "CITAR, DEFINIR, LISTAR, IDENTIFICAR, RECORDAR." }
+            "Criar": { color: "indigo", desc: "Produzir um novo ponto de vista, um novo produto ou uma nova forma de ver as coisas. Juntar partes para formar um todo coerente.", verbs: "GERAR, PLANEJAR, DESENVOLVER, CONSTRUIR, PROJETAR, PROPOR, FORMULAR, ARQUITETAR." },
+            "Avaliar": { color: "indigo", desc: "Fazer julgamentos baseados em critérios e padrões por meio de checagem e crítica. Emitir pareceres fundamentados.", verbs: "JULGAR, CRITICAR, SELECIONAR, VALIDAR, REVISAR, CONCLUIR, ARGUMENTAR, ESTIMAR." },
+            "Analisar": { color: "blue", desc: "Separar o material em suas partes constituintes e determinar como as partes se relacionam entre si e com um propósito geral.", verbs: "DIFERENCIAR, ORGANIZAR, ATRIBUIR, DECOMPOR, INVESTIGAR, COMPARAR, CONTRASTAR, EXAMINAR." },
+            "Aplicar": { color: "blue", desc: "Executar ou usar um procedimento em uma situação específica ou em um novo contexto.", verbs: "EXECUTAR, IMPLEMENTAR, USAR, DEMONSTRAR, CALCULAR, RESOLVER, OPERAR, ILUSTRAR." },
+            "Entender": { color: "sky", desc: "Construir significado a partir de mensagens instrucionais, interpretando e resumindo informações.", verbs: "EXPLICAR, RESUMIR, INFERIR, PARAFRASEAR, INTERPRETAR, EXEMPLIFICAR, CLASSIFICAR." },
+            "Lembrar": { color: "sky", desc: "Recuperar conhecimento relevante da memória de longo prazo para identificar ou recordar fatos.", verbs: "CITAR, DEFINIR, LISTAR, IDENTIFICAR, NOMEAR, RECORDAR, ENUMERAR, LOCALIZAR." }
         };
 
         const TYPES = {
-            "SINGLE": { label: "Resposta Única", icon: "check-circle", example: "As mitocôndrias são organelas fundamentais para a vida eucariótica.\n\nQual a principal função da mitocôndria na célula animal.\n\na) Realizar a fotossíntese.\nb) Produzir ATP através da respiração celular.\nc) Sintetizar proteínas no citoplasma.\nd) Armazenar material genético.\ne) Realizar a digestão intracelular." },
-            "INCOMPLETE": { label: "Afirmação Incompleta", icon: "pen-tool", example: "A Primeira Lei de Newton descreve o comportamento de corpos em equilíbrio.\n\nA inércia é definida, no contexto da física clássica, como a tendência natural de um corpo em\n\na) aumentar sua velocidade constantemente.\nb) permanecer em seu estado de repouso ou movimento retilíneo uniforme.\nc) alterar sua massa independentemente da força.\nd) desacelerar na ausência de atrito externo.\ne) reagir instantaneamente a forças internas." },
-            "MULTIPLE": { label: "Complementação Múltipla", icon: "layers" },
-            "ASSERTION": { label: "Asserção e Razão", icon: "git-compare", example: "O Transtorno do Processamento Auditivo Central (TPAC) afeta a interpretação sonora.\n\nAnalise as seguintes asserções e a relação proposta entre elas.\n\nI. O diagnóstico diferencial do TPAC é essencial, pois seus sintomas mimetizam outras dificuldades de aprendizagem.\n\n<div class=\"text-center font-bold py-2\">PORQUE</div>\n\nII. O TPAC envolve uma falha específica nas vias auditivas centrais, exigindo abordagem multidisciplinar.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas." },
-            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "A Inteligência Artificial Generativa tem reconfigurado drasticamente o cenário do ensino superior.\n\nCom base nesse contexto, redija um texto dissertativo analisando os seguintes aspectos.\n\na) O impacto da IA na personalização da aprendizagem.\nb) Os desafios éticos relacionados à autoria e plágio.\nc) O papel do docente na mediação do uso dessas ferramentas." }
+            "SINGLE": { label: "Resposta Única", icon: "check-circle", desc: "Modelo clássico de enunciado fechado.", example: "As mitocôndrias são organelas fundamentais para a vida celular eucariótica. Elas desempenham funções vitais relacionadas ao metabolismo energético por meio da cadeia transportadora de elétrons.\n\nQual a principal função da mitocôndria na célula animal.\n\na) Realizar a fotossíntese para produção de glicose.\nb) Produzir ATP através do processo de respiração celular.\nc) Sintetizar proteínas específicas no citoplasma rugoso.\nd) Armazenar e replicar o material genético principal.\ne) Realizar a digestão intracelular de macromoléculas." },
+            "INCOMPLETE": { label: "Afirmação Incompleta", icon: "pen-tool", desc: "O enunciado termina abruptamente e é completado pelas opções.", example: "A Primeira Lei de Newton descreve o comportamento de corpos em repouso ou em movimento retilíneo uniforme quando a resultante das forças externas é nula.\n\nA inércia é definida, no contexto da física clássica, como a tendência natural de um corpo em\n\na) aumentar sua velocidade constantemente.\nb) permanecer em seu estado de repouso ou movimento retilíneo uniforme.\nc) alterar sua massa independentemente da força aplicada.\nd) desacelerar na ausência de atrito externo.\ne) reagir instantaneamente a forças internas do sistema." },
+            "MULTIPLE": { label: "Complementação Múltipla", icon: "layers", desc: "Análise combinatória de itens numerados em romanos." },
+            "ASSERTION": { label: "Asserção e Razão", icon: "git-compare", desc: "Avalia a relação de causalidade entre duas proposições.", example: "O Transtorno do Processamento Auditivo Central (TPAC) afeta a interpretação sonora.\n\nAnalise as seguintes asserções e a relação proposta entre elas.\n\nI. O diagnóstico diferencial do TPAC em uma avaliação neuropsicopedagógica é essencial, pois seus sintomas podem mimetizar outras dificuldades de aprendizagem, como o TDAH.\n\n<div class=\"text-center font-bold py-3\">PORQUE</div>\n\nII. O TPAC envolve uma falha específica nas vias auditivas centrais, exigindo uma abordagem multidisciplinar para a diferenciação clínica correta.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas." },
+            "DISCURSIVE": { label: "Discursiva", icon: "file-text", desc: "Questão aberta que exige produção textual estruturada.", example: "A Inteligência Artificial Generativa tem reconfigurado drasticamente o cenário do ensino superior e os processos tradicionais de avaliação da aprendizagem.\n\nCom base nesse contexto, redija um texto dissertativo analisando os seguintes aspectos.\n\na) O impacto da IA na personalização da aprendizagem.\nb) Os desafios éticos relacionados à autoria e ao plágio acadêmico.\nc) O novo papel do docente na mediação do uso dessas ferramentas tecnológicas." }
+        };
+
+        const ASSERTION_LOGIC = {
+            'A': 'As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.',
+            'B': 'As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.',
+            'C': 'A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.',
+            'D': 'A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.',
+            'E': 'As asserções I e II são proposições falsas.'
         };
 
         let STATE = { bloom: 'Lembrar', type: 'SINGLE', assertionKey: 'A', multiRange: 4, quantity: 1 };
@@ -193,18 +202,18 @@
                 div.className = `type-card ${active ? 'active' : ''}`;
                 div.onclick = () => { STATE.type = key; renderTypes(); };
                 
-                let html = `<div class="flex items-center gap-3"><i data-lucide="${info.icon}" class="w-5 h-5"></i><div class="flex-1 font-bold text-sm text-slate-800">${info.label}</div><div class="radio-circle"></div></div>`;
+                let html = `<div class="flex items-center gap-4"><i data-lucide="${info.icon}" class="w-6 h-6"></i><div class="flex-1 font-bold text-sm text-slate-800">${info.label}</div><div class="radio-circle"></div></div>`;
                 
                 if (active) {
                     let exText = info.example || "";
                     if (key === 'MULTIPLE') {
                         let cmd = STATE.multiRange === 3 ? "É correto o que se afirma em" : "É correto apenas o que se afirma em";
                         let alts = STATE.multiRange === 3 ? "a) I, apenas.\nb) II, apenas.\nc) I e III, apenas.\nd) II e III, apenas.\ne) I, II e III." : "a) I e II.\nb) I e IV.\nc) II e III.\nd) I, III e IV.\ne) II, III e IV.";
-                        exText = `A água possui propriedades únicas que permitem o equilíbrio biológico.\n\nAvalie as afirmações a seguir.\n\nI. A água atua como um solvente universal.\nII. O calor específico da água é baixo.\nIII. A molécula de água possui caráter apolar.\n\n${cmd}\n\n${alts}`;
+                        exText = `A água possui propriedades únicas que permitem o equilíbrio biológico nos ecossistemas terrestres e aquáticos.\n\nAvalie as afirmações a seguir.\n\nI. A água atua como um solvente universal em sistemas biológicos.\nII. O calor específico da água é baixo, facilitando variações térmicas rápidas.\nIII. A molécula de água possui caráter apolar.\n\n${cmd}.\n\n${alts}`;
                     }
-                    html += `<div class="example-box"><div class="example-header"><i data-lucide="sparkles" class="w-3 h-3"></i> Exemplo Completo</div><div class="whitespace-pre-line">${exText}</div></div>`;
+                    html += `<div class="example-box"><div class="example-header"><i data-lucide="sparkles" class="w-3 h-3 text-inep-400"></i> Exemplo Íntegro</div><div class="whitespace-pre-line">${exText}</div></div>`;
                     if (key === 'MULTIPLE') html += `<div class="mt-4 flex gap-2">${[3,4,5].map(n => `<button onclick="event.stopPropagation(); STATE.multiRange=${n}; renderTypes();" class="ctrl-btn ${STATE.multiRange===n?'active':''}">I a ${n===3?'III':n===4?'IV':'V'}</button>`).join('')}</div>`;
-                    if (key === 'ASSERTION') html += `<div class="mt-4 flex gap-2">${['A','B','C','D','E'].map(l => `<button onclick="event.stopPropagation(); STATE.assertionKey='${l}'; renderTypes();" class="key-btn ${STATE.assertionKey===l?'active':''}" title="${l}">${l}</button>`).join('')}</div>`;
+                    if (key === 'ASSERTION') html += `<div class="mt-4 flex gap-2">${['A','B','C','D','E'].map(l => `<button onclick="event.stopPropagation(); STATE.assertionKey='${l}'; renderTypes();" class="key-btn ${STATE.assertionKey===l?'active':''}" title="${l}">${l}</button>`).join('')}</div><div class="mt-3 p-3 bg-slate-50 rounded-xl text-[10px] font-bold text-inep-700 italic border-l-4 border-inep-500 shadow-sm animate-fade-in">${ASSERTION_LOGIC[STATE.assertionKey]}</div>`;
                 }
                 div.innerHTML = html;
                 container.appendChild(div);
@@ -224,9 +233,11 @@
             const colorClass = info.color === 'sky' ? 'Sky' : info.color === 'blue' ? 'Blue' : 'Indigo';
             box.classList.add(`bg-bloom${colorClass}-100`, `border-bloom${colorClass}-border`);
             document.getElementById('bloom-info-title').innerText = val;
-            document.getElementById('bloom-info-title').className = `font-bold text-sm mb-1 uppercase tracking-tight text-bloom${colorClass}-800`;
+            document.getElementById('bloom-info-title').className = `font-black text-sm mb-1 uppercase tracking-tight text-bloom${colorClass}-800`;
             document.getElementById('bloom-info-desc').innerText = info.desc;
+            document.getElementById('bloom-info-desc').className = `text-xs italic mb-4 leading-relaxed text-bloom${colorClass}-800 opacity-80`;
             document.getElementById('bloom-info-verbs').innerText = info.verbs;
+            document.getElementById('bloom-info-verbs').className = `text-xs font-bold mt-1 leading-relaxed text-bloom${colorClass}-800`;
         }
 
         function updateQty(n) { STATE.quantity = Math.max(1, Math.min(10, STATE.quantity + n)); document.getElementById('qty-val').innerText = STATE.quantity; }
@@ -235,8 +246,8 @@
             const isGen = mode === 'generator';
             document.getElementById('panel-generator').classList.toggle('hidden', !isGen);
             document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
-            document.getElementById('tab-gen').className = isGen ? "px-4 py-1.5 rounded-lg text-xs font-bold bg-white shadow-sm text-inep-700" : "px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800";
-            document.getElementById('tab-aud').className = !isGen ? "px-4 py-1.5 rounded-lg text-xs font-bold bg-white shadow-sm text-inep-700" : "px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800";
+            document.getElementById('tab-gen').className = isGen ? "px-5 py-2 rounded-xl text-xs font-bold bg-white shadow-md text-inep-700 transition-all" : "px-5 py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800 transition-all";
+            document.getElementById('tab-aud').className = !isGen ? "px-5 py-2 rounded-xl text-xs font-bold bg-white shadow-md text-inep-700 transition-all" : "px-5 py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800 transition-all";
         }
 
         async function gerar() {
@@ -244,16 +255,16 @@
             const original = btn.innerHTML;
             const curso = document.getElementById('curso').value;
             const conteudo = document.getElementById('conteudo').value;
-            if(!curso || !conteudo) return alert("Preencha Curso e Conteúdo.");
-            btn.innerHTML = 'Processando IA...'; btn.disabled = true;
+            if(!curso || !conteudo) return alert("Erro: Campos de curso e conteúdo são obrigatórios.");
+            btn.innerHTML = 'Processando com IA...'; btn.disabled = true;
 
             let promptExtras = "";
-            if (STATE.type === 'ASSERTION') promptExtras = `GABARITO: ${STATE.assertionKey}. REGRAS: Comandos encerram com PONTO FINAL (.). O PORQUE deve vir centralizado em HTML: <div style="text-align:center; font-weight:bold; margin:10px 0;">PORQUE</div>.`;
-            if (STATE.type === 'MULTIPLE') promptExtras = `COMANDO FINAL (SEM PONTO FINAL): "${STATE.multiRange === 3 ? 'É correto o que se afirma em' : 'É correto apenas o que se afirma em'}". BALANCEAMENTO: Cada numeral romano (I a ${STATE.multiRange}) deve aparecer exatamente 3 vezes nas alternativas A-E.`;
+            if (STATE.type === 'ASSERTION') promptExtras = `GABARITO: ${STATE.assertionKey}. REGRAS: Comandos de ligação encerram com PONTO FINAL (.). O PORQUE deve vir em negrito e centralizado em HTML: <div style="text-align:center; font-weight:bold; margin:15px 0;">PORQUE</div>.`;
+            if (STATE.type === 'MULTIPLE') promptExtras = `COMANDO FINAL: "${STATE.multiRange === 3 ? 'É correto o que se afirma em' : 'É correto apenas o que se afirma em'}". BALANCEAMENTO: Cada numeral romano deve aparecer exatamente 3 vezes.`;
             if (STATE.type === 'INCOMPLETE') promptExtras = `REGRA: Enunciado SEM pontuação final. Alternativas começam com minúscula.`;
-            if (STATE.type === 'DISCURSIVE') promptExtras = `COMANDO: Deve encerrar com PONTO FINAL (.) e solicitar produção textual com grade de correção detalhada.`;
+            if (STATE.type === 'DISCURSIVE') promptExtras = `COMANDO: Termina com PONTO FINAL (.). Solicite produção textual detalhada com grade de correção.`;
 
-            const prompt = `Atue como Especialista INEP. Curso: ${curso}. Tema: ${conteudo}. Tipo: ${TYPES[STATE.type].label}. Bloom: ${STATE.bloom}. Qtd: ${STATE.quantity}. NUNCA use rótulos como "TEXTO BASE". Termine comandos com ponto final (exceto na Múltipla). ${promptExtras}\nSAÍDA: (Texto suporte). (Enunciado/Comando). (Alternativas verticais com linha em branco). Separador "---" para múltiplas questões.`;
+            const prompt = `Atue como Especialista INEP. Curso: ${curso}. Tema: ${conteudo}. Tipo: ${TYPES[STATE.type].label}. Bloom: ${STATE.bloom}. Qtd: ${STATE.quantity}. NUNCA use rótulos como "TEXTO BASE". Comandos terminam com ponto final. ${promptExtras}\nSAÍDA: (Texto suporte). (Enunciado/Comando). (Alternativas verticais com linha em branco). Separador "---" para múltiplas questões.`;
 
             try {
                 const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt }) });
@@ -262,25 +273,26 @@
                 document.getElementById('output').classList.remove('hidden');
                 document.getElementById('tools').classList.remove('opacity-0');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
-            } catch(e) { alert("Erro na API."); } finally { btn.innerHTML = original; btn.disabled = false; }
+                if (window.innerWidth < 1024) setTimeout(() => { document.getElementById('result-anchor').scrollIntoView({ behavior: 'smooth' }); }, 100);
+            } catch(e) { alert("Erro ao conectar com a API do servidor."); } finally { btn.innerHTML = original; btn.disabled = false; }
         }
 
         async function auditar() {
             const txt = document.getElementById('audit-input').value;
-            if(!txt) return alert("Cole uma questão.");
+            if(!txt) return alert("Erro: Cole o texto de uma questão.");
             const btn = document.getElementById('btn-aud');
             btn.innerHTML = 'Analisando...'; btn.disabled = true;
             try {
-                const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt: `ATUE COMO AUDITOR INEP. Analise estrutura e taxonomia técnica desta questão: ${txt}` }) });
+                const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt: `ATUE COMO AUDITOR INEP. Analise estrutura técnica e taxonomia: ${txt}` }) });
                 const data = await res.json();
                 document.getElementById('placeholder').classList.add('hidden');
                 document.getElementById('output').classList.remove('hidden');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
-            } catch(e) { alert("Erro na Auditoria."); } finally { btn.innerHTML = 'Executar Auditoria'; btn.disabled = false; }
+            } catch(e) { alert("Erro na auditoria."); } finally { btn.innerHTML = 'Executar Laudo Técnico'; btn.disabled = false; }
         }
 
         function exportWord() { const text = document.getElementById('output').innerText; const doc = new docx.Document({ sections: [{ children: [new docx.Paragraph({ children: [new docx.TextRun(text)] })] }] }); docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao_Academicus.docx")); }
-        function exportPdf() { const el = document.getElementById('output'); html2pdf().set({ margin: 10, filename: 'Academicus_Pro.pdf' }).from(el).save(); }
+        function exportPdf() { const el = document.getElementById('output'); html2pdf().set({ margin: 15, filename: 'Academicus_StudioPro.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(el).save(); }
 
         init();
     </script>
