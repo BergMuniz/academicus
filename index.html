@@ -32,6 +32,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         body { background-color: #f8fafc; color: #1e293b; -webkit-font-smoothing: antialiased; }
 
+        /* --- UI COMPONENTS --- */
         .type-card { border: 1px solid #e2e8f0; border-radius: 12px; background: white; padding: 16px; cursor: pointer; transition: all 0.2s; overflow: hidden; }
         .type-card.active { border-color: #0284c7; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.1); }
         .radio-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #cbd5e1; flex-shrink: 0; transition: all 0.2s; }
@@ -51,10 +52,14 @@
         .bloom-btn.active.blue { background: #dbeafe; border-color: #93c5fd; color: #1e40af; font-weight: 800; }
         .bloom-btn.active.indigo { background: #e0e7ff; border-color: #a5b4fc; color: #3730a3; font-weight: 800; }
 
+        /* --- RESULT FORMATTING --- */
         .prose h3 { color: #0c4a6e; font-size: 1.1rem; font-weight: 800; border-bottom: 2px solid #e0f2fe; margin-top: 2rem; margin-bottom: 1rem; padding-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.025em; }
         .prose p { margin-bottom: 1rem; line-height: 1.6; text-align: justify; }
         .prose li { display: block; margin-bottom: 1rem; }
+        .prose hr { border-top: 2px dashed #cbd5e1; margin: 3rem 0; }
         .gabarito-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 5px solid #16a34a; padding: 1.5rem; border-radius: 12px; margin-top: 2.5rem; }
+        
+        input, textarea { font-size: 16px !important; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -84,20 +89,17 @@
                     <div class="space-y-4">
                         <div>
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 block">Curso / Área</label>
-                            <input id="curso" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-inep-500 transition-all" placeholder="Ex: Psicologia, Medicina, Direito...">
+                            <input id="curso" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-inep-500 transition-all" placeholder="Ex: Psicologia, Direito...">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 block">Objeto de Conhecimento</label>
-                            <textarea id="conteudo" rows="3" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm resize-none outline-none focus:bg-white focus:border-inep-500 transition-all" placeholder="Descreva o tema, competência ou habilidade..."></textarea>
+                            <textarea id="conteudo" rows="3" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm resize-none outline-none focus:bg-white focus:border-inep-500 transition-all" placeholder="Descreva o tema..."></textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Taxonomia de Bloom</label>
-                        <span class="text-[10px] font-bold text-slate-300">Nível Cognitivo</span>
-                    </div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Taxonomia de Bloom</label>
                     <div class="flex flex-col gap-1.5">
                         <button onclick="setBloom('Criar')" id="bloom-Criar" class="bloom-btn">Criar</button>
                         <button onclick="setBloom('Avaliar')" id="bloom-Avaliar" class="bloom-btn">Avaliar</button>
@@ -123,10 +125,10 @@
 
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <span class="text-xs font-bold uppercase text-slate-500 tracking-tight">Quantidade de Itens</span>
-                    <div class="flex items-center gap-3 bg-slate-50 p-1 rounded-lg border border-slate-100">
-                        <button onclick="updateQty(-1)" class="w-8 h-8 border rounded-lg bg-white shadow-sm flex items-center justify-center hover:bg-slate-50">-</button>
+                    <div class="flex items-center gap-3">
+                        <button onclick="updateQty(-1)" class="w-8 h-8 border rounded-lg bg-white shadow-sm flex items-center justify-center hover:bg-slate-50 transition-colors">-</button>
                         <span id="qty-val" class="font-bold text-slate-700 w-6 text-center">1</span>
-                        <button onclick="updateQty(1)" class="w-8 h-8 border rounded-lg bg-white shadow-sm flex items-center justify-center hover:bg-slate-50">+</button>
+                        <button onclick="updateQty(1)" class="w-8 h-8 border rounded-lg bg-white shadow-sm flex items-center justify-center hover:bg-slate-50 transition-colors">+</button>
                     </div>
                 </div>
 
@@ -135,9 +137,9 @@
 
             <div id="panel-auditor" class="hidden bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
                 <i data-lucide="microscope" class="w-10 h-10 text-emerald-600 mx-auto mb-3"></i>
-                <h3 class="font-bold text-emerald-800">Auditoria Técnica Pedagógica</h3>
-                <textarea id="audit-input" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl mt-4 mb-4 text-sm font-mono h-64 outline-none focus:bg-white focus:border-emerald-500 transition-all" placeholder="Cole aqui a questão completa para análise técnica..."></textarea>
-                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-emerald-700 transition-colors">Executar Auditoria de Itens</button>
+                <h3 class="font-bold text-emerald-800">Auditoria Técnica</h3>
+                <textarea id="audit-input" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl mt-4 mb-4 text-sm font-mono h-64 outline-none focus:bg-white focus:border-emerald-500 transition-all" placeholder="Cole a questão completa..."></textarea>
+                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-emerald-700">Executar Auditoria</button>
             </div>
         </aside>
 
@@ -154,37 +156,28 @@
                 <div id="placeholder" class="flex-1 flex flex-col items-center justify-center text-center p-8 opacity-40">
                     <i data-lucide="sparkles" class="w-16 h-16 text-slate-300 mb-4"></i>
                     <h3 class="text-xl font-bold text-slate-400 uppercase tracking-widest">Aguardando Input</h3>
-                    <p class="text-sm text-slate-400 mt-2 max-w-[280px]">Preencha as especificações técnicas e clique em "Gerar" para criar sua avaliação.</p>
                 </div>
-                <div id="output" class="hidden prose prose-slate max-w-none text-sm leading-relaxed animate-fade-in-up"></div>
+                <div id="output" class="hidden prose prose-slate max-w-none text-sm leading-relaxed"></div>
             </div>
         </div>
     </main>
 
     <script>
         const BLOOM_INFO = {
-            "Criar": { color: "indigo", desc: "Colocar elementos juntos para formar um todo coerente ou funcional; gerar, planejar ou produzir.", verbs: "GERAR, PLANEJAR, DESENVOLVER, CONSTRUIR, PROJETAR, PROPOR." },
-            "Avaliar": { color: "indigo", desc: "Fazer julgamentos baseados em critérios e padrões por meio de checagem e crítica.", verbs: "JULGAR, CRITICAR, SELECIONAR, VALIDAR, REVISAR, CONCLUIR." },
-            "Analisar": { color: "blue", desc: "Separar o material em suas partes constituintes e determinar como as partes se relacionam entre si e com uma estrutura ou propósito geral.", verbs: "DIFERENCIAR, ORGANIZAR, ATRIBUIR, DECOMPOR, INVESTIGAR, COMPARAR." },
-            "Aplicar": { color: "blue", desc: "Executar ou usar um procedimento em uma situação específica.", verbs: "EXECUTAR, IMPLEMENTAR, USAR, DEMONSTRAR, CALCULAR, RESOLVER." },
-            "Entender": { color: "sky", desc: "Construir significado a partir de mensagens instrucionais, incluindo comunicação oral, escrita e gráfica.", verbs: "EXPLICAR, RESUMIR, INFERIR, PARAFRASEAR, EXEMPLIFICAR, INTERPRETAR." },
-            "Lembrar": { color: "sky", desc: "Recuperar conhecimento relevante da memória de longo prazo.", verbs: "CITAR, DEFINIR, LISTAR, IDENTIFICAR, NOMEAR, RECORDAR." }
+            "Criar": { color: "indigo", desc: "Colocar elementos juntos para formar um todo funcional; planejar ou produzir.", verbs: "GERAR, PLANEJAR, DESENVOLVER, CONSTRUIR, PROJETAR." },
+            "Avaliar": { color: "indigo", desc: "Fazer julgamentos baseados em critérios e padrões por meio de checagem e crítica.", verbs: "JULGAR, CRITICAR, SELECIONAR, VALIDAR, CONCLUIR." },
+            "Analisar": { color: "blue", desc: "Separar o material em suas partes constituintes e determinar relações.", verbs: "DIFERENCIAR, ORGANIZAR, ATRIBUIR, DECOMPOR, COMPARAR." },
+            "Aplicar": { color: "blue", desc: "Executar ou usar um procedimento em uma situação específica.", verbs: "EXECUTAR, IMPLEMENTAR, USAR, DEMONSTRAR, RESOLVER." },
+            "Entender": { color: "sky", desc: "Construir significado a partir de mensagens instrucionais.", verbs: "EXPLICAR, RESUMIR, INFERIR, PARAFRASEAR, INTERPRETAR." },
+            "Lembrar": { color: "sky", desc: "Recuperar conhecimento relevante da memória de longo prazo.", verbs: "CITAR, DEFINIR, LISTAR, IDENTIFICAR, RECORDAR." }
         };
 
         const TYPES = {
-            "SINGLE": { label: "Resposta Única", icon: "check-circle", example: "As mitocôndrias são organelas fundamentais para a vida celular eucariótica. Elas desempenham funções vitais relacionadas ao metabolismo energético.\n\nQual a principal função da mitocôndria na célula animal.\n\na) Realizar a fotossíntese.\nb) Produzir ATP através da respiração celular.\nc) Sintetizar proteínas no citoplasma.\nd) Armazenar material genético.\ne) Realizar a digestão intracelular." },
-            "INCOMPLETE": { label: "Afirmação Incompleta", icon: "pen-tool", example: "A Primeira Lei de Newton, também conhecida como Lei da Inércia, descreve o comportamento de corpos em equilíbrio ou em movimento sem forças resultantes.\n\nA inércia é definida, no contexto da física clássica, como a tendência natural de um corpo em\n\na) aumentar sua velocidade constantemente.\nb) permanecer em seu estado de repouso ou movimento retilíneo uniforme.\nc) alterar sua massa independentemente da força aplicada.\nd) desacelerar na ausência de atrito externo.\ne) reagir instantaneamente a forças internas do sistema." },
+            "SINGLE": { label: "Resposta Única", icon: "check-circle", example: "As mitocôndrias são organelas fundamentais para a vida eucariótica.\n\nQual a principal função da mitocôndria na célula animal.\n\na) Realizar a fotossíntese.\nb) Produzir ATP através da respiração celular.\nc) Sintetizar proteínas no citoplasma.\nd) Armazenar material genético.\ne) Realizar a digestão intracelular." },
+            "INCOMPLETE": { label: "Afirmação Incompleta", icon: "pen-tool", example: "A Primeira Lei de Newton descreve o comportamento de corpos em equilíbrio.\n\nA inércia é definida, no contexto da física clássica, como a tendência natural de um corpo em\n\na) aumentar sua velocidade constantemente.\nb) permanecer em seu estado de repouso ou movimento retilíneo uniforme.\nc) alterar sua massa independentemente da força.\nd) desacelerar na ausência de atrito externo.\ne) reagir instantaneamente a forças internas." },
             "MULTIPLE": { label: "Complementação Múltipla", icon: "layers" },
-            "ASSERTION": { label: "Asserção e Razão", icon: "git-compare", example: "O Transtorno do Processamento Auditivo Central (TPAC) afeta a forma como o sistema nervoso central interpreta as informações sonoras.\n\nAnalise as seguintes asserções e a relação proposta entre elas.\n\nI. O diagnóstico diferencial do TPAC em uma avaliação neuropsicopedagógica é essencial, pois seus sintomas podem mimetizar outras dificuldades de aprendizagem, como TDAH.\n\n<div class=\"text-center font-bold py-2\">PORQUE</div>\n\nII. O TPAC envolve uma falha específica nas vias auditivas centrais, exigindo uma abordagem multidisciplinar para a diferenciação clínica.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas." },
-            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "A Inteligência Artificial Generativa tem reconfigurado drasticamente o cenário do ensino superior e os processos avaliativos.\n\nCom base nesse contexto, redija um texto dissertativo analisando os seguintes aspectos.\n\na) O impacto da IA na personalização da aprendizagem.\nb) Os desafios éticos relacionados à autoria e plágio acadêmico.\nc) O papel do docente na mediação do uso dessas ferramentas." }
-        };
-
-        const ASSERTION_LOGIC = {
-            'A': 'As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.',
-            'B': 'As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.',
-            'C': 'A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.',
-            'D': 'A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.',
-            'E': 'As asserções I e II são proposições falsas.'
+            "ASSERTION": { label: "Asserção e Razão", icon: "git-compare", example: "O Transtorno do Processamento Auditivo Central (TPAC) afeta a interpretação sonora.\n\nAnalise as seguintes asserções e a relação proposta entre elas.\n\nI. O diagnóstico diferencial do TPAC é essencial, pois seus sintomas mimetizam outras dificuldades de aprendizagem.\n\n<div class=\"text-center font-bold py-2\">PORQUE</div>\n\nII. O TPAC envolve uma falha específica nas vias auditivas centrais, exigindo abordagem multidisciplinar.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.\nc) A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.\nd) A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.\ne) As asserções I e II são proposições falsas." },
+            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "A Inteligência Artificial Generativa tem reconfigurado drasticamente o cenário do ensino superior.\n\nCom base nesse contexto, redija um texto dissertativo analisando os seguintes aspectos.\n\na) O impacto da IA na personalização da aprendizagem.\nb) Os desafios éticos relacionados à autoria e plágio.\nc) O papel do docente na mediação do uso dessas ferramentas." }
         };
 
         let STATE = { bloom: 'Lembrar', type: 'SINGLE', assertionKey: 'A', multiRange: 4, quantity: 1 };
@@ -207,11 +200,11 @@
                     if (key === 'MULTIPLE') {
                         let cmd = STATE.multiRange === 3 ? "É correto o que se afirma em" : "É correto apenas o que se afirma em";
                         let alts = STATE.multiRange === 3 ? "a) I, apenas.\nb) II, apenas.\nc) I e III, apenas.\nd) II e III, apenas.\ne) I, II e III." : "a) I e II.\nb) I e IV.\nc) II e III.\nd) I, III e IV.\ne) II, III e IV.";
-                        exText = `A água é essencial para a vida e possui propriedades únicas que permitem a manutenção do equilíbrio biológico.\n\nAvalie as afirmações a seguir.\n\nI. A água atua como um solvente universal em sistemas vivos.\nII. O calor específico da água é baixo, facilitando variações bruscas de temperatura.\nIII. A molécula de água possui caráter apolar.\n\n${cmd}.\n\n${alts}`;
+                        exText = `A água possui propriedades únicas que permitem o equilíbrio biológico.\n\nAvalie as afirmações a seguir.\n\nI. A água atua como um solvente universal.\nII. O calor específico da água é baixo.\nIII. A molécula de água possui caráter apolar.\n\n${cmd}\n\n${alts}`;
                     }
                     html += `<div class="example-box"><div class="example-header"><i data-lucide="sparkles" class="w-3 h-3"></i> Exemplo Completo</div><div class="whitespace-pre-line">${exText}</div></div>`;
                     if (key === 'MULTIPLE') html += `<div class="mt-4 flex gap-2">${[3,4,5].map(n => `<button onclick="event.stopPropagation(); STATE.multiRange=${n}; renderTypes();" class="ctrl-btn ${STATE.multiRange===n?'active':''}">I a ${n===3?'III':n===4?'IV':'V'}</button>`).join('')}</div>`;
-                    if (key === 'ASSERTION') html += `<div class="mt-4 flex gap-2">${['A','B','C','D','E'].map(l => `<button onclick="event.stopPropagation(); STATE.assertionKey='${l}'; renderTypes();" class="key-btn ${STATE.assertionKey===l?'active':''}" title="${ASSERTION_LOGIC[l]}">${l}</button>`).join('')}</div><p class="text-[10px] text-slate-400 mt-2 font-medium italic border-l-2 border-inep-500 pl-2">${ASSERTION_LOGIC[STATE.assertionKey]}</p>`;
+                    if (key === 'ASSERTION') html += `<div class="mt-4 flex gap-2">${['A','B','C','D','E'].map(l => `<button onclick="event.stopPropagation(); STATE.assertionKey='${l}'; renderTypes();" class="key-btn ${STATE.assertionKey===l?'active':''}" title="${l}">${l}</button>`).join('')}</div>`;
                 }
                 div.innerHTML = html;
                 container.appendChild(div);
@@ -255,11 +248,12 @@
             btn.innerHTML = 'Processando IA...'; btn.disabled = true;
 
             let promptExtras = "";
-            if (STATE.type === 'ASSERTION') promptExtras = `GABARITO: ${STATE.assertionKey}. REGRAS: Comandos terminam em PONTO FINAL (.). O PORQUE deve vir centralizado em HTML: <div style="text-align:center; font-weight:bold; margin:10px 0;">PORQUE</div>.`;
-            if (STATE.type === 'MULTIPLE') promptExtras = `COMANDO FINAL: "${STATE.multiRange === 3 ? 'É correto o que se afirma em.' : 'É correto apenas o que se afirma em.'}". BALANCEAMENTO: Cada numeral romano (I a ${STATE.multiRange}) deve aparecer exatamente 3 vezes nas alternativas.`;
+            if (STATE.type === 'ASSERTION') promptExtras = `GABARITO: ${STATE.assertionKey}. REGRAS: Comandos encerram com PONTO FINAL (.). O PORQUE deve vir centralizado em HTML: <div style="text-align:center; font-weight:bold; margin:10px 0;">PORQUE</div>.`;
+            if (STATE.type === 'MULTIPLE') promptExtras = `COMANDO FINAL (SEM PONTO FINAL): "${STATE.multiRange === 3 ? 'É correto o que se afirma em' : 'É correto apenas o que se afirma em'}". BALANCEAMENTO: Cada numeral romano (I a ${STATE.multiRange}) deve aparecer exatamente 3 vezes nas alternativas A-E.`;
             if (STATE.type === 'INCOMPLETE') promptExtras = `REGRA: Enunciado SEM pontuação final. Alternativas começam com minúscula.`;
+            if (STATE.type === 'DISCURSIVE') promptExtras = `COMANDO: Deve encerrar com PONTO FINAL (.) e solicitar produção textual com grade de correção detalhada.`;
 
-            const prompt = `Atue como Especialista INEP. Curso: ${curso}. Tema: ${conteudo}. Tipo: ${TYPES[STATE.type].label}. Bloom: ${STATE.bloom}. Qtd: ${STATE.quantity}. NUNCA use rótulos como "TEXTO BASE". Termine comandos com ponto final. ${promptExtras}\nSAÍDA: (Texto suporte). (Enunciado/Comando). (Alternativas verticais com linha em branco). Separador "---" para múltiplas questões.`;
+            const prompt = `Atue como Especialista INEP. Curso: ${curso}. Tema: ${conteudo}. Tipo: ${TYPES[STATE.type].label}. Bloom: ${STATE.bloom}. Qtd: ${STATE.quantity}. NUNCA use rótulos como "TEXTO BASE". Termine comandos com ponto final (exceto na Múltipla). ${promptExtras}\nSAÍDA: (Texto suporte). (Enunciado/Comando). (Alternativas verticais com linha em branco). Separador "---" para múltiplas questões.`;
 
             try {
                 const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt }) });
@@ -268,7 +262,7 @@
                 document.getElementById('output').classList.remove('hidden');
                 document.getElementById('tools').classList.remove('opacity-0');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
-            } catch(e) { alert(e.message); } finally { btn.innerHTML = original; btn.disabled = false; }
+            } catch(e) { alert("Erro na API."); } finally { btn.innerHTML = original; btn.disabled = false; }
         }
 
         async function auditar() {
@@ -282,7 +276,7 @@
                 document.getElementById('placeholder').classList.add('hidden');
                 document.getElementById('output').classList.remove('hidden');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
-            } catch(e) { alert(e.message); } finally { btn.innerHTML = 'Executar Auditoria de Itens'; btn.disabled = false; }
+            } catch(e) { alert("Erro na Auditoria."); } finally { btn.innerHTML = 'Executar Auditoria'; btn.disabled = false; }
         }
 
         function exportWord() { const text = document.getElementById('output').innerText; const doc = new docx.Document({ sections: [{ children: [new docx.Paragraph({ children: [new docx.TextRun(text)] })] }] }); docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao_Academicus.docx")); }
