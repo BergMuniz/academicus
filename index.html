@@ -46,22 +46,23 @@
         .diff-card.active-medium .diff-bar { background: #3b82f6; }
 
         /* PIRÂMIDE DE BLOOM */
-        .bloom-pyramid-btn { padding: 10px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border: 1px solid #e2e8f0; border-radius: 12px; transition: all 0.3s; background: white; color: #64748b; }
+        .bloom-pyramid-btn { padding: 10px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; border: 1px solid #e2e8f0; border-radius: 12px; transition: all 0.3s; background: white; color: #64748b; }
         .bloom-pyramid-btn.active { transform: scale(1.05); }
         #bloom-Criar.active, #bloom-Avaliar.active { background: #4f46e5; color: white; border-color: #4f46e5; }
         #bloom-Analisar.active, #bloom-Aplicar.active { background: #2563eb; color: white; border-color: #2563eb; }
         #bloom-Entender.active, #bloom-Lembrar.active { background: #0ea5e9; color: white; border-color: #0ea5e9; }
 
-        /* SELETORES DE GABARITO */
-        .key-btn { width: 44px; height: 44px; border-radius: 12px; border: 1px solid #e2e8f0; font-weight: 900; background: white; flex: 1; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        /* SELETORES GABARITO */
+        .key-btn { width: 42px; height: 42px; border-radius: 12px; border: 1px solid #e2e8f0; font-weight: 900; background: white; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .key-btn.active { background: #0284c7; color: white; border-color: #0284c7; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2); }
+
+        .ctrl-btn { padding: 8px 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; border: 1px solid #e2e8f0; background: white; color: #64748b; flex: 1; display: flex; justify-content: center; }
+        .ctrl-btn.active { background: #0284c7; border-color: #0284c7; color: white; }
 
         .prose h3 { color: #0c4a6e; font-size: 1.2rem; font-weight: 900; border-bottom: 3px solid #e0f2fe; margin-top: 2.5rem; margin-bottom: 1.5rem; padding-bottom: 0.6rem; text-transform: uppercase; }
         .prose p { margin-bottom: 1.5rem; line-height: 1.8; text-align: justify; font-size: 1rem; }
         .prose li { display: block; margin-bottom: 1.2rem; }
-        .gabarito-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 8px solid #16a34a; padding: 2.25rem; border-radius: 20px; margin-top: 4rem; }
-        
-        input, textarea { font-size: 16px !important; }
+        .gabarito-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 8px solid #16a34a; padding: 2rem; border-radius: 20px; margin-top: 4rem; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -70,13 +71,13 @@
         <div class="flex items-center gap-5">
             <div class="bg-inep-600 p-2.5 rounded-2xl text-white shrink-0 shadow-xl shadow-inep-100"><i data-lucide="graduation-cap" class="w-7 h-7"></i></div>
             <div class="leading-tight">
-                <h1 class="text-2xl font-black text-slate-900 tracking-tighter">Academicus AI</h1>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tighter uppercase">Academicus AI</h1>
                 <p class="text-[11px] font-black text-inep-500 uppercase tracking-widest mt-1">Studio de Criação de Questões</p>
             </div>
         </div>
         <div class="flex bg-slate-100 p-1.5 rounded-2xl">
             <button onclick="setMode('generator')" id="tab-gen" class="px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 uppercase">Design</button>
-            <button onclick="setMode('auditor')" id="tab-aud" class="px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 uppercase">Auditoria</button>
+            <button onclick="setMode('auditor')" id="tab-aud" class="px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 uppercase transition-all">Auditoria</button>
         </div>
     </header>
 
@@ -85,7 +86,7 @@
         <aside class="lg:col-span-5 space-y-10">
             <div id="panel-generator" class="space-y-10">
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-2xl space-y-8">
-                    <h3 class="text-lg font-black text-slate-800 uppercase flex items-center gap-3">
+                    <h3 class="text-lg font-black text-slate-800 uppercase flex items-center gap-3 pb-4 border-b border-slate-50">
                         <i data-lucide="book-open" class="text-inep-600"></i> Especificações
                     </h3>
                     <div class="space-y-6">
@@ -97,15 +98,15 @@
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm space-y-6">
                     <label class="text-[11px] font-black text-slate-500 uppercase tracking-widest block">Nível de Dificuldade</label>
                     <div class="grid grid-cols-3 gap-3">
-                        <div onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card"><div class="diff-bar" style="height:35%"></div><span class="text-[10px] font-bold">Fácil</span></div>
-                        <div onclick="setDiff('Médio')" id="diff-Médio" class="diff-card active-medium"><div class="diff-bar" style="height:65%; background:#3b82f6"></div><span class="text-[10px] font-bold">Médio</span></div>
-                        <div onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card"><div class="diff-bar" style="height:100%"></div><span class="text-[10px] font-bold">Difícil</span></div>
+                        <div onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card"><div class="diff-bar" style="height:35%"></div><span class="text-[10px] font-bold text-slate-500">Fácil</span></div>
+                        <div onclick="setDiff('Médio')" id="diff-Médio" class="diff-card active-medium"><div class="diff-bar" style="height:65%; background:#3b82f6"></div><span class="text-[10px] font-bold text-inep-700">Médio</span></div>
+                        <div onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card"><div class="diff-bar" style="height:100%"></div><span class="text-[10px] font-bold text-slate-500">Difícil</span></div>
                     </div>
                 </div>
 
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm space-y-6">
                     <label class="text-[11px] font-black text-slate-500 uppercase tracking-widest block">Taxonomia de Bloom</label>
-                    <div class="flex flex-col items-center gap-1.5 bg-slate-50 p-5 rounded-[2.5rem]">
+                    <div class="flex flex-col items-center gap-1.5 bg-slate-50 p-6 rounded-[2.5rem] border border-slate-100">
                         <button onclick="setBloom('Criar')" id="bloom-Criar" class="bloom-pyramid-btn w-[40%]">Criar</button>
                         <button onclick="setBloom('Avaliar')" id="bloom-Avaliar" class="bloom-pyramid-btn w-[50%]">Avaliar</button>
                         <button onclick="setBloom('Analisar')" id="bloom-Analisar" class="bloom-pyramid-btn w-[60%]">Analisar</button>
@@ -115,8 +116,8 @@
                     </div>
                     <div id="bloom-info-box" class="mt-4 p-5 rounded-2xl border hidden">
                         <h4 id="bloom-info-title" class="font-black text-sm mb-1 uppercase"></h4>
-                        <p id="bloom-info-desc" class="text-xs italic mb-4 leading-relaxed text-slate-600"></p>
-                        <div class="pt-3 border-t border-black/5">
+                        <p id="bloom-info-desc" class="text-xs italic mb-5 leading-relaxed text-slate-600 font-medium"></p>
+                        <div class="pt-4 border-t border-black/5">
                             <span class="text-[10px] font-black uppercase opacity-60">Verbos Sugeridos</span>
                             <p id="bloom-info-verbs" class="text-xs font-bold mt-1 text-slate-800"></p>
                         </div>
@@ -127,29 +128,29 @@
 
                 <div class="bg-white p-7 rounded-[2.5rem] border border-slate-200 shadow-sm flex items-center justify-between">
                     <span class="text-xs font-black uppercase text-slate-500">Quantidade</span>
-                    <div class="flex items-center gap-5">
-                        <button onclick="updateQty(-1)" class="w-12 h-12 border-2 rounded-xl flex items-center justify-center font-black">-</button>
-                        <span id="qty-val" class="font-black text-slate-900 text-2xl">1</span>
-                        <button onclick="updateQty(1)" class="w-12 h-12 border-2 rounded-xl flex items-center justify-center font-black">+</button>
+                    <div class="flex items-center gap-5 bg-slate-50 p-2 rounded-2xl">
+                        <button onclick="updateQty(-1)" class="w-12 h-12 border-2 rounded-xl bg-white shadow-sm flex items-center justify-center font-black">-</button>
+                        <span id="qty-val" class="font-black text-slate-900 text-2xl w-8 text-center">1</span>
+                        <button onclick="updateQty(1)" class="w-12 h-12 border-2 rounded-xl bg-white shadow-sm flex items-center justify-center font-black">+</button>
                     </div>
                 </div>
 
-                <button onclick="gerar()" id="btn-main" class="w-full bg-inep-600 text-white font-black py-6 rounded-[2rem] shadow-2xl active:scale-95 transition-all text-xl uppercase tracking-tighter">Gerar Questão Studio Pro</button>
+                <button onclick="gerar()" id="btn-main" class="w-full bg-inep-600 text-white font-black py-6 rounded-[2rem] shadow-2xl active:scale-95 hover:bg-inep-700 transition-all text-xl uppercase tracking-tighter">Gerar Questão Studio Pro</button>
             </div>
 
             <div id="panel-auditor" class="hidden bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm text-center">
-                <i data-lucide="microscope" class="w-12 h-12 text-emerald-600 mx-auto mb-6"></i>
-                <h3 class="font-black text-emerald-800 text-xl uppercase">Auditoria Técnica</h3>
-                <textarea id="audit-input" class="w-full p-6 bg-slate-50 border border-slate-200 rounded-[2rem] mt-8 mb-8 text-sm font-mono h-80 outline-none focus:bg-white transition-all" placeholder="Cole a questão completa..."></textarea>
-                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl shadow-xl uppercase">Executar Auditoria</button>
+                <div class="p-4 bg-emerald-50 rounded-2xl inline-block mb-6"><i data-lucide="microscope" class="w-12 h-12 text-emerald-600"></i></div>
+                <h3 class="font-black text-emerald-800 text-xl uppercase tracking-tighter">Auditoria de Itens</h3>
+                <textarea id="audit-input" class="w-full p-6 bg-slate-50 border border-slate-200 rounded-[2rem] mt-8 mb-8 text-sm font-mono h-80 outline-none focus:bg-white focus:ring-8 focus:ring-emerald-500/5 transition-all" placeholder="Cole a questão completa..."></textarea>
+                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-emerald-700 transition-all uppercase tracking-wide">Executar Laudo Técnico</button>
             </div>
         </aside>
 
         <div id="result-anchor" class="lg:col-span-7">
             <div class="bg-white min-h-[900px] border border-slate-200 rounded-[3.5rem] shadow-2xl p-8 lg:p-16 relative flex flex-col">
                 <div id="tools" class="flex justify-end gap-4 mb-12 opacity-0 transition-all duration-1000">
-                    <button onclick="exportWord()" class="px-6 py-3 border-2 border-blue-100 rounded-2xl text-xs font-black text-blue-700 bg-blue-50 hover:bg-blue-100">Word</button>
-                    <button onclick="exportPdf()" class="px-6 py-3 border-2 border-red-100 rounded-2xl text-xs font-black text-red-700 bg-red-50 hover:bg-red-100">PDF</button>
+                    <button onclick="exportWord()" class="px-6 py-3 border-2 border-blue-100 rounded-2xl text-xs font-black text-blue-700 bg-blue-50">Word</button>
+                    <button onclick="exportPdf()" class="px-6 py-3 border-2 border-red-100 rounded-2xl text-xs font-black text-red-700 bg-red-50">PDF</button>
                 </div>
                 <div id="placeholder" class="flex-1 flex flex-col items-center justify-center text-center p-12 opacity-20">
                     <i data-lucide="sparkles" class="w-24 h-24 text-slate-300 mb-8"></i>
@@ -162,23 +163,23 @@
 
     <script>
         const BLOOM_INFO = {
-            "Criar": { color: "indigo", desc: "Produzir um novo ponto de vista ou produto. Juntar partes para formar um todo coerente.", verbs: "GERAR, PLANEJAR, DESENVOLVER, CONSTRUIR, PROJETAR." },
-            "Avaliar": { color: "indigo", desc: "Fazer julgamentos baseados em critérios. Emitir conclusões fundamentadas.", verbs: "JULGAR, CRITICAR, SELECIONAR, VALIDAR, REVISAR." },
-            "Analisar": { color: "blue", desc: "Separar material em partes constituintes e determinar relações estruturais.", verbs: "DIFERENCIAR, ORGANIZAR, ATRIBUIR, DECOMPOR, INVESTIGAR." },
-            "Aplicar": { color: "blue", desc: "Executar ou usar um procedimento em uma situação específica ou novo contexto.", verbs: "EXECUTAR, IMPLEMENTAR, USAR, DEMONSTRAR, RESOLVER." },
-            "Entender": { color: "sky", desc: "Construir significado a partir de mensagens, interpretando e resumindo informações.", verbs: "EXPLICAR, RESUMIR, INFERIR, PARAFRASEAR, INTERPRETAR." },
-            "Lembrar": { color: "sky", desc: "Recuperar conhecimento relevante da memória de longo prazo para recordar fatos.", verbs: "CITAR, DEFINIR, LISTAR, IDENTIFICAR, RECORDAR." }
+            "Criar": { color: "indigo", desc: "Produzir um novo ponto de vista ou produto. Juntar partes para formar um todo coerente.", verbs: "GERAR, PLANEJAR, DESENVOLVER, CONSTRUIR, PROJETAR, PROPOR." },
+            "Avaliar": { color: "indigo", desc: "Fazer julgamentos baseados em critérios e padrões por meio de checagem e crítica fundamentada.", verbs: "JULGAR, CRITICAR, SELECIONAR, VALIDAR, REVISAR, CONCLUIR." },
+            "Analisar": { color: "blue", desc: "Separar material em partes constituintes e determinar relações estruturais entre elas.", verbs: "DIFERENCIAR, ORGANIZAR, ATRIBUIR, DECOMPOR, INVESTIGAR." },
+            "Aplicar": { color: "blue", desc: "Executar ou usar um procedimento em uma situação específica ou contexto prático.", verbs: "EXECUTAR, IMPLEMENTAR, USAR, DEMONSTRAR, CALCULAR, RESOLVER." },
+            "Entender": { color: "sky", desc: "Construir significado a partir de mensagens, interpretando, exemplificando e resumindo.", verbs: "EXPLICAR, RESUMIR, INFERIR, PARAFRASEAR, INTERPRETAR." },
+            "Lembrar": { color: "sky", desc: "Recuperar conhecimento relevante da memória de longo prazo para recordar fatos.", verbs: "CITAR, DEFINIR, LISTAR, IDENTIFICAR, NOMEAR, RECORDAR." }
         };
 
         const TYPES = {
-            "SINGLE": { label: "Resposta Única", icon: "check-circle", example: "Texto suporte fundamentado (+500 caracteres).\n\n<strong>Fonte:</strong> Junqueira, L. C. Biologia Celular. 2012.\n\nQual o conceito principal apresentado.\n\na) Alternativa correta.\nb) Distrator.\nc) Distrator.\nd) Distrator.\ne) Distrator." },
-            "INCOMPLETE": { label: "Afirmação Incompleta", icon: "pen-tool", example: "O fenômeno descrito no texto fundamentado é caracterizado pela\n\n<strong>Fonte:</strong> Pesquisa NAP 2026.\n\na) alternativa correta.\nb) alternativa incorreta.\nc) alternativa incorreta.\nd) alternativa incorreta.\ne) alternativa incorreta." },
-            "MULTIPLE": { label: "Complementação Múltipla", icon: "layers" },
-            "ASSERTION": { label: "Asserção e Razão", icon: "git-compare" },
-            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> UNESCO. IA e Educação. 2023.\n\nCom base no texto, redija um texto dissertativo analisando os seguintes aspectos.\n\na) Tópico técnico um.\nb) Tópico técnico dois.\nc) Tópico técnico três." }
+            "SINGLE": { label: "Resposta Única", icon: "check-circle", example: "Texto suporte denso e fundamentado com +500 caracteres.\n\n<strong>Fonte:</strong> Junqueira, L. Biologia Celular. 2012.\n\nQual a principal função do conceito apresentado no texto.\n\na) Alternativa correta.\nb) Distrator.\nc) Distrator.\nd) Distrator.\ne) Distrator." },
+            "INCOMPLETE": { label: "Afirmação Incompleta", icon: "pen-tool", example: "O fenômeno descrito no texto fundamentado é caracterizado pela\n\n<strong>Fonte:</strong> Pesquisa Pedagógica NAP. 2026.\n\na) alternativa correta.\nb) alternativa incorreta.\nc) alternativa incorreta.\nd) alternativa incorreta.\ne) alternativa incorreta." },
+            "MULTIPLE": { label: "Complementação Múltipla", icon: "layers", example: "Texto contextualizado denso (+500 caracteres).\n\n<strong>Fonte:</strong> Referência Real.\n\nAvalie as afirmações a seguir.\n\nI. Afirmação técnica.\nII. Afirmação técnica.\nIII. Afirmação técnica.\n\nÉ correto apenas o que se afirma em.\n\na) I.\nb) II.\nc) III.\nd) I e II.\ne) I, II e III." },
+            "ASSERTION": { label: "Asserção e Razão", icon: "git-compare", example: "Texto técnico denso (+500 caracteres).\n\n<strong>Fonte:</strong> Katz, J. Tratado de Audiologia. 1999.\n\nAnalise as seguintes asserções e a relação proposta entre elas.\n\nI. Proposição um.\n\n<div class=\"text-center font-bold py-3\">PORQUE</div>\n\nII. Proposição dois.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são verdadeiras, mas a II não justifica a I.\nc) A asserção I é verdadeira e a II é falsa.\nd) A asserção I é falsa e a II é verdadeira.\ne) Ambas são falsas." },
+            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> UNESCO. IA e Educação. 2023.\n\nCom base nesse contexto, redija um texto dissertativo analisando os seguintes aspectos.\n\na) Tópico técnico um.\nb) Tópico técnico dois.\nc) Tópico técnico três." }
         };
 
-        const ASSERTION_LOGIC = { 'A': 'As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.', 'B': 'As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.', 'C': 'A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.', 'D': 'A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.', 'E': 'As asserções I e II são proposições falsas.' };
+        const ASSERTION_LOGIC = { 'A': 'As asserções I e II são verdadeiras, e a II é uma justificativa correta da I.', 'B': 'As asserções I e II são verdadeiras, mas a II não é uma justificativa correta da I.', 'C': 'A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.', 'D': 'A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.', 'E': 'As asserções I e II são proposições falsas.' };
 
         let STATE = { diff: 'Médio', bloom: 'Lembrar', type: 'SINGLE', assertionKey: 'A', multiRange: 4, quantity: 1 };
 
@@ -192,25 +193,24 @@
                 const div = document.createElement('div');
                 div.className = `type-card ${active ? 'active' : ''}`;
                 div.onclick = () => { STATE.type = key; renderTypes(); };
-                let html = `<div class="flex items-center gap-4"><i data-lucide="${info.icon}" class="w-6 h-6 text-inep-600"></i><div class="flex-1 font-bold text-sm text-slate-800">${info.label}</div><div class="radio-circle"></div></div>`;
+                
+                let html = `<div class="flex items-center gap-4"><i data-lucide="${info.icon}" class="w-6 h-6 text-inep-600"></i><div class="flex-1 font-bold text-sm text-slate-800 uppercase tracking-tighter">${info.label}</div><div class="radio-circle"></div></div>`;
+                
                 if (active) {
-                    let exText = info.example || "";
+                    html += `<div class="example-box font-medium">${info.example}</div>`;
                     if (key === 'MULTIPLE') {
-                        exText = `Texto contextualizado (+500 caracteres).\n\n<strong>Fonte:</strong> Ref. Real.\n\nAvalie as afirmações a seguir.\n\nI. Item técnico.\nII. Item técnico.\nIII. Item técnico.\n\nÉ correto apenas o que se afirma em.\n\na) I.\nb) II.\nc) III.\nd) I e II.\ne) I, II e III.`;
+                        html += `<div class="mt-5 flex gap-2">`;
+                        [3,4,5].forEach(n => {
+                            html += `<button onclick="event.stopPropagation(); STATE.multiRange=${n}; renderTypes();" class="ctrl-btn ${STATE.multiRange===n?'active':''}">I a ${n===3?'III':n===4?'IV':'V'}</button>`;
+                        });
+                        html += `</div>`;
                     }
-                    if (key === 'ASSERTION') {
-                        exText = `Texto técnico (+500 caracteres).\n\n<strong>Fonte:</strong> Ref.\n\nAnalise as seguintes asserções e a relação proposta entre elas.\n\nI. Proposição.\n\n<div class=\"text-center font-bold py-3\">PORQUE</div>\n\nII. Razão.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) Alternativa A completa.\nb) Alternativa B completa.\nc) Alternativa C completa.\nd) Alternativa D completa.\ne) Alternativa E completa.`;
-                    }
-                    html += `<div class="example-box font-medium">${exText}</div>`;
-                    
-                    if (key === 'MULTIPLE') html += `<div class="mt-5 flex gap-2">${[3,4,5].map(n => `<button onclick="event.stopPropagation(); STATE.multiRange=${n}; renderTypes();" class="ctrl-btn ${STATE.multiRange===n?'active':''}">I a ${n===3?'III':n===4?'IV':'V'}</button>`).join('')}</div>`;
-                    
                     if (key === 'ASSERTION') {
                         html += `<div class="mt-5 flex gap-2">`;
                         ['A','B','C','D','E'].forEach(l => {
-                            html += `<button onclick="event.stopPropagation(); STATE.assertionKey='${l}'; renderTypes();" class="key-btn ${STATE.assertionKey===l?'active':''}" title="${ASSERTION_LOGIC[l]}">${l}</button>`;
+                            html += `<button onclick="event.stopPropagation(); STATE.assertionKey='${l}'; renderTypes();" class="key-btn ${STATE.assertionKey===l?'active':''}" title="${l}">${l}</button>`;
                         });
-                        html += `</div><div class="mt-4 p-4 bg-slate-50 rounded-2xl text-[10px] font-bold text-inep-700 italic border-l-4 border-inep-500 animate-fade-in">${ASSERTION_LOGIC[STATE.assertionKey]}</div>`;
+                        html += `</div><div class="mt-4 p-4 bg-slate-50 rounded-2xl text-[10px] font-bold text-inep-700 italic border-l-4 border-inep-500 animate-fade-in shadow-sm">${ASSERTION_LOGIC[STATE.assertionKey]}</div>`;
                     }
                 }
                 div.innerHTML = html; container.appendChild(div);
@@ -229,7 +229,9 @@
         function setBloom(val) {
             STATE.bloom = val; const info = BLOOM_INFO[val];
             document.querySelectorAll('.bloom-pyramid-btn').forEach(b => { b.classList.remove('active'); if(b.id === `bloom-${val}`) b.classList.add('active'); });
-            const box = document.getElementById('bloom-info-box'); box.classList.remove('hidden');
+            const box = document.getElementById('bloom-info-box'); box.classList.remove('hidden', 'bg-bloomSky-100', 'bg-bloomBlue-100', 'bg-bloomIndigo-100');
+            const colorClass = info.color === 'sky' ? 'Sky' : info.color === 'blue' ? 'Blue' : 'Indigo';
+            box.classList.add(`bg-bloom${colorClass}-100`);
             document.getElementById('bloom-info-title').innerText = val;
             document.getElementById('bloom-info-desc').innerText = info.desc;
             document.getElementById('bloom-info-verbs').innerText = info.verbs;
@@ -241,22 +243,22 @@
             const isGen = mode === 'generator';
             document.getElementById('panel-generator').classList.toggle('hidden', !isGen);
             document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
-            document.getElementById('tab-gen').className = isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 transition-all uppercase" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 transition-all uppercase";
-            document.getElementById('tab-aud').className = !isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 transition-all" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 transition-all";
+            document.getElementById('tab-gen').className = isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 uppercase" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 transition-all uppercase";
+            document.getElementById('tab-aud').className = !isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 uppercase" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 transition-all uppercase";
         }
 
         async function gerar() {
             const btn = document.getElementById('btn-main'); const curso = document.getElementById('curso').value; const conteudo = document.getElementById('conteudo').value;
-            if(!curso || !conteudo) return alert("Erro: Preencha todos os campos.");
-            btn.innerHTML = 'Construindo Questão de Avaliação Profissional...'; btn.disabled = true;
+            if(!curso || !conteudo) return alert("Erro: Campos de curso e conteúdo são obrigatórios.");
+            btn.innerHTML = 'Construindo Questão Profissional...'; btn.disabled = true;
 
             let promptExtras = "";
-            if (STATE.type === 'ASSERTION') promptExtras = `GABARITO ALVO: Alternativa ${STATE.assertionKey}. REGRAS: Gere obrigatoriamente as alternativas A, B, C, D e E com o texto padrão do ENADE. Comandos terminam em PONTO FINAL (.). O PORQUE deve vir centralizado em HTML: <div style="text-align:center; font-weight:bold; margin:15px 0;">PORQUE</div>.`;
-            if (STATE.type === 'MULTIPLE') promptExtras = `REGRAS: Gere obrigatoriamente as alternativas A, B, C, D e E. Use balanceamento ENADE (cada numeral romano deve aparecer exatamente 3 vezes).`;
-            if (STATE.type === 'INCOMPLETE') promptExtras = `REGRA: Enunciado SEM pontuação final. Alternativas minúsculas.`;
-            if (STATE.type === 'DISCURSIVE') promptExtras = `ESTRUTURA: Itens a), b) e c) obrigatórios em linhas separadas. GRADE DE CORREÇÃO OBRIGATÓRIA: Título centralizado e negrito: <div style="text-align:center; font-weight:bold; margin-top:30px; text-transform:uppercase;">GRADE DE CORREÇÃO</div>. ITENS: "Critério - Descrição" sem pontos numéricos.`;
+            if (STATE.type === 'ASSERTION') promptExtras = `GABARITO ALVO: Letra ${STATE.assertionKey}. Gere obrigatoriamente as alternativas A, B, C, D e E com o texto técnico do padrão ENADE. Comandos terminam em PONTO FINAL (.). O PORQUE deve vir centralizado: <div style="text-align:center; font-weight:bold; margin:15px 0;">PORQUE</div>.`;
+            if (STATE.type === 'MULTIPLE') promptExtras = `BALANCEAMENTO: Gere 5 alternativas (A-E). Cada numeral romano (I a ${STATE.multiRange}) deve aparecer exatamente 3 vezes no total das alternativas.`;
+            if (STATE.type === 'INCOMPLETE') promptExtras = `REGRA CRÍTICA: O enunciado deve ser uma frase incompleta, SEM ponto final. As alternativas devem iniciar com letra minúscula.`;
+            if (STATE.type === 'DISCURSIVE') promptExtras = `ESTRUTURA: Use obrigatoriamente os itens a), b) e c) para resposta em linhas separadas. GRADE DE CORREÇÃO: Título centralizado e negrito: <div style="text-align:center; font-weight:bold; margin-top:30px; text-transform:uppercase;">GRADE DE CORREÇÃO</div>. ITENS: "Critério - Descrição" sem pontos numéricos.`;
 
-            const prompt = `Atue como Especialista INEP. NUNCA use "Prezado docente," nem rótulos como "Texto de suporte:". QUANTIDADE: ${STATE.quantity}. REGRAS: Texto base +500 caracteres fundamentados. Fonte bibliográfica real logo abaixo do texto em HTML: <strong>Fonte:</strong> [Referência]. Itens/Alternativas A-E um abaixo do outro. Explicação pedagógica completa no final. Separe com "---". ${promptExtras}`;
+            const prompt = `Atue como Especialista INEP. NUNCA use "Prezado docente," nem rótulos como "Texto de suporte:". QUANTIDADE: Gere ${STATE.quantity} questões. REGRAS: Texto base +500 caracteres fundamentados. Fonte bibliográfica real logo abaixo do texto base em HTML: <strong>Fonte:</strong> [Referência]. Itens/Alternativas um abaixo do outro com quebra de linha. Explicação profunda no final de cada questão. Separe questões com "---". ${promptExtras}`;
 
             try {
                 const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt }) });
@@ -266,32 +268,28 @@
                 document.getElementById('tools').classList.remove('opacity-0');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
                 if (window.innerWidth < 1024) setTimeout(() => { document.getElementById('result-anchor').scrollIntoView({ behavior: 'smooth' }); }, 100);
-            } catch(e) { alert("Erro de conexão."); } finally { btn.innerHTML = 'Gerar Questão Studio Pro'; btn.disabled = false; }
+            } catch(e) { alert("Erro na API."); } finally { btn.innerHTML = 'Gerar Questão Studio Pro'; btn.disabled = false; }
         }
 
         async function auditar() {
-            const txt = document.getElementById('audit-input').value; if(!txt) return alert("Cole a questão.");
+            const txt = document.getElementById('audit-input').value; if(!txt) return alert("Erro: Cole uma questão.");
             const btn = document.getElementById('btn-aud'); btn.innerHTML = 'Analisando...'; btn.disabled = true;
             try {
-                const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt: `ATUE COMO AUDITOR INEP. Analise estrutura técnica e taxonomia completa desta questão: ${txt}` }) });
+                const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt: `ATUE COMO AUDITOR INEP. Analise a estrutura técnica e taxonomia completa desta questão: ${txt}` }) });
                 const data = await res.json();
                 document.getElementById('placeholder').classList.add('hidden');
                 document.getElementById('output').classList.remove('hidden');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
-            } catch(e) { alert("Erro na auditoria."); } finally { btn.innerHTML = 'Executar Auditoria'; btn.disabled = false; }
+            } catch(e) { alert("Erro na auditoria."); } finally { btn.innerHTML = 'Executar Laudo Técnico'; btn.disabled = false; }
         }
 
         function exportWord() {
-            const text = document.getElementById('output').innerText;
-            const lines = text.split('\n');
+            const text = document.getElementById('output').innerText; const lines = text.split('\n');
             const doc = new docx.Document({ sections: [{ children: lines.map(line => new docx.Paragraph({ children: [new docx.TextRun({ text: line, size: 24, font: "Arial" })], spacing: { after: 200 } })) }] });
             docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao_StudioPro.docx"));
         }
 
-        function exportPdf() {
-            const el = document.getElementById('output');
-            html2pdf().set({ margin: 20, filename: 'Academicus_StudioPro.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(el).save();
-        }
+        function exportPdf() { const el = document.getElementById('output'); html2pdf().set({ margin: 20, filename: 'Academicus_StudioPro.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(el).save(); }
 
         init();
     </script>
