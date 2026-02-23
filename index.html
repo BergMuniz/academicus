@@ -39,13 +39,13 @@
 
         .example-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-top: 14px; font-size: 0.75rem; color: #475569; line-height: 1.7; white-space: pre-wrap; border-left: 5px solid #cbd5e1; }
         
-        /* ESCADA DIFICULDADE */
+        /* ESCADA DE DIFICULDADE */
         .diff-card { border-radius: 16px; border: 1px solid #e2e8f0; padding: 12px; height: 100px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; cursor: pointer; background: white; transition: all 0.2s; }
         .diff-bar { width: 100%; border-radius: 6px 6px 0 0; margin-bottom: 8px; background: #e2e8f0; }
         .diff-card.active-medium { background: #eff6ff; border-color: #60a5fa; }
         .diff-card.active-medium .diff-bar { background: #3b82f6; }
 
-        /* PIRÂMIDE BLOOM */
+        /* PIRÂMIDE DE BLOOM */
         .bloom-pyramid-btn { padding: 10px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; border: 1px solid #e2e8f0; border-radius: 12px; transition: all 0.3s; background: white; color: #64748b; }
         .bloom-pyramid-btn.active { transform: scale(1.05); }
         #bloom-Criar.active, #bloom-Avaliar.active { background: #4f46e5; color: white; border-color: #4f46e5; }
@@ -60,7 +60,7 @@
         .ctrl-btn.active { background: #0284c7; border-color: #0284c7; color: white; }
 
         .prose h3 { color: #0c4a6e; font-size: 1.2rem; font-weight: 900; border-bottom: 3px solid #e0f2fe; margin-top: 2.5rem; margin-bottom: 1.5rem; padding-bottom: 0.6rem; text-transform: uppercase; }
-        .prose p { margin-bottom: 1.5rem; line-height: 1.8; text-align: justify; }
+        .prose p { margin-bottom: 1.5rem; line-height: 1.8; text-align: justify; font-size: 1rem; }
         .gabarito-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 8px solid #16a34a; padding: 2rem; border-radius: 20px; margin-top: 4rem; }
     </style>
 </head>
@@ -76,7 +76,7 @@
         </div>
         <div class="flex bg-slate-100 p-1.5 rounded-2xl">
             <button onclick="setMode('generator')" id="tab-gen" class="px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 uppercase">Design</button>
-            <button onclick="setMode('auditor')" id="tab-aud" class="px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 transition-all uppercase">Auditoria</button>
+            <button onclick="setMode('auditor')" id="tab-aud" class="px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 uppercase">Auditoria</button>
         </div>
     </header>
 
@@ -85,12 +85,12 @@
         <aside class="lg:col-span-5 space-y-10">
             <div id="panel-generator" class="space-y-10">
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-2xl space-y-8">
-                    <h3 class="text-lg font-black text-slate-800 uppercase flex items-center gap-3">
+                    <h3 class="text-lg font-black text-slate-800 uppercase flex items-center gap-3 pb-4 border-b border-slate-50">
                         <i data-lucide="book-open" class="text-inep-600"></i> Especificações
                     </h3>
                     <div class="space-y-6">
-                        <input id="curso" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm outline-none focus:bg-white transition-all font-medium" placeholder="Curso / Área...">
-                        <textarea id="conteudo" rows="4" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm resize-none outline-none focus:bg-white transition-all font-medium" placeholder="Objeto de Conhecimento..."></textarea>
+                        <input id="curso" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm outline-none focus:bg-white font-medium" placeholder="Curso / Área...">
+                        <textarea id="conteudo" rows="4" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm resize-none outline-none focus:bg-white font-medium" placeholder="Objeto de Conhecimento..."></textarea>
                     </div>
                 </div>
 
@@ -105,7 +105,7 @@
 
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm space-y-6">
                     <label class="text-[11px] font-black text-slate-500 uppercase tracking-widest block">Taxonomia de Bloom</label>
-                    <div class="flex flex-col items-center gap-1.5 bg-slate-50 p-5 rounded-[2.5rem]">
+                    <div class="flex flex-col items-center gap-1.5 bg-slate-50 p-5 rounded-[2.5rem] border border-slate-100">
                         <button onclick="setBloom('Criar')" id="bloom-Criar" class="bloom-pyramid-btn w-[40%]">Criar</button>
                         <button onclick="setBloom('Avaliar')" id="bloom-Avaliar" class="bloom-pyramid-btn w-[50%]">Avaliar</button>
                         <button onclick="setBloom('Analisar')" id="bloom-Analisar" class="bloom-pyramid-btn w-[60%]">Analisar</button>
@@ -114,10 +114,10 @@
                         <button onclick="setBloom('Lembrar')" id="bloom-Lembrar" class="bloom-pyramid-btn active w-[90%]">Lembrar</button>
                     </div>
                     <div id="bloom-info-box" class="mt-4 p-5 rounded-2xl border hidden">
-                        <h4 id="bloom-info-title" class="font-black text-sm mb-1 uppercase text-bloomSky-800"></h4>
+                        <h4 id="bloom-info-title" class="font-black text-sm mb-1 uppercase"></h4>
                         <p id="bloom-info-desc" class="text-xs italic mb-4 leading-relaxed text-slate-600 font-medium"></p>
                         <div class="pt-4 border-t border-black/5">
-                            <span class="text-[10px] font-black uppercase opacity-60 tracking-widest">Verbos Sugeridos</span>
+                            <span class="text-[10px] font-black uppercase opacity-60">Verbos Sugeridos</span>
                             <p id="bloom-info-verbs" class="text-xs font-bold mt-1 text-slate-800"></p>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                 <div id="types-container" class="space-y-4"></div>
 
                 <div class="bg-white p-7 rounded-[2.5rem] border border-slate-200 shadow-sm flex items-center justify-between">
-                    <span class="text-xs font-black uppercase text-slate-500 tracking-widest">Quantidade</span>
+                    <span class="text-xs font-black uppercase text-slate-500">Quantidade</span>
                     <div class="flex items-center gap-5">
                         <button onclick="updateQty(-1)" class="w-12 h-12 border-2 rounded-xl bg-white shadow-sm flex items-center justify-center font-black">-</button>
                         <span id="qty-val" class="font-black text-slate-900 text-2xl w-8 text-center">1</span>
@@ -155,7 +155,7 @@
                     <i data-lucide="sparkles" class="w-24 h-24 text-slate-300 mb-8"></i>
                     <h3 class="text-3xl font-black text-slate-400 uppercase tracking-[0.3em]">Studio</h3>
                 </div>
-                <div id="output" class="hidden prose prose-slate max-w-none text-base leading-relaxed animate-fade-in font-medium"></div>
+                <div id="output" class="hidden prose prose-slate max-w-none text-base leading-relaxed animate-fade-in font-medium font-inter"></div>
             </div>
         </div>
     </main>
@@ -173,11 +173,11 @@
         const ASSERTION_LOGIC = { 'A': 'As asserções I e II são verdadeiras, e a II é uma justificativa correta da I.', 'B': 'As asserções I e II são verdadeiras, mas a II não é uma justificativa correta da I.', 'C': 'A asserção I é verdadeira, e a II é falsa.', 'D': 'A asserção I é falsa, e a II é verdadeira.', 'E': 'As asserções I e II são falsas.' };
 
         const TYPES = {
-            "SINGLE": { label: "Resposta Única", icon: "check-circle", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> Junqueira, L. Biologia Celular. 2012.\n\nQual a função do conceito técnico apresentado.\n\na) Alternativa correta.\nb) Distrator.\nc) Distrator.\nd) Distrator.\ne) Distrator." },
+            "SINGLE": { label: "Resposta Única", icon: "check-circle", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> Junqueira, L. Biologia Celular. 2012.\n\nQual a função do conceito técnico apresentado.\n\na) Alternativa correta.\nb) Distrator.\nc) Distrator.\nd) Distrator.\ e) Distrator." },
             "INCOMPLETE": { label: "Afirmação Incompleta", icon: "pen-tool", example: "O fenômeno descrito no texto fundamentado é caracterizado pela\n\n<strong>Fonte:</strong> Pesquisa NAP 2026.\n\na) alternativa correta.\nb) alternativa incorreta.\nc) alternativa incorreta.\nd) alternativa incorreta.\ne) alternativa incorreta." },
             "MULTIPLE": { label: "Complementação Múltipla", icon: "layers" },
             "ASSERTION": { label: "Asserção e Razão", icon: "git-compare" },
-            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> UNESCO. IA e Educação. 2023.\n\nCom base no texto, redija um texto dissertativo analisando os seguintes aspectos.\n\na) Tópico técnico um.\nb) Tópico técnico dois.\nc) Tópico técnico três." }
+            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> UNESCO. IA e Educação. 2023.\n\nCom base no texto, redija um texto dissertativo analisando.\n\na) Tópico técnico um.\nb) Tópico técnico dois.\nc) Tópico técnico três." }
         };
 
         let STATE = { diff: 'Médio', bloom: 'Lembrar', type: 'SINGLE', assertionKey: 'A', multiRange: 5, quantity: 1 };
@@ -198,7 +198,14 @@
                     let exText = info.example || "";
                     if (key === 'MULTIPLE') {
                         let cmd = STATE.multiRange === 3 ? "É correto o que se afirma em" : "É correto apenas o que se afirma em";
-                        let alts = STATE.multiRange === 3 ? "a) I, apenas.\nb) II, apenas.\nc) III, apenas.\nd) I e II, apenas.\ne) I, II e III." : "a) I e II.\nb) I, IV e V.\nc) II e III.\nd) I, III e IV.\ne) II, III, IV e V.";
+                        let alts = "";
+                        if (STATE.multiRange === 3) {
+                            alts = "a) I, apenas.\nb) III, apenas.\nc) I e II, apenas.\nd) II e III, apenas.\ne) I, II e III.";
+                        } else if (STATE.multiRange === 4) {
+                            alts = "a) I e II.\nb) I e IV.\nc) II e III.\nd) I, III e IV.\ne) II, III e IV.";
+                        } else {
+                            alts = "a) I, II e III.\nb) I, IV e V.\nc) II, III e IV.\nd) I, III e V.\ne) II, IV e V.";
+                        }
                         let itemsStr = "I. Item um.\nII. Item dois.\nIII. Item três.";
                         if(STATE.multiRange >= 4) itemsStr += "\nIV. Item quatro.";
                         if(STATE.multiRange == 5) itemsStr += "\nV. Item cinco.";
@@ -258,7 +265,7 @@
 
         async function gerar() {
             const btn = document.getElementById('btn-main'); const curso = document.getElementById('curso').value; const conteudo = document.getElementById('conteudo').value;
-            if(!curso || !conteudo) return alert("Erro: Campos obrigatórios.");
+            if(!curso || !conteudo) return alert("Erro: Preencha os campos obrigatórios.");
             btn.innerHTML = 'Construindo Questão Profissional...'; btn.disabled = true;
 
             let promptExtras = "";
@@ -266,12 +273,12 @@
             if (STATE.type === 'MULTIPLE') {
                 let cmd = STATE.multiRange === 3 ? "É correto o que se afirma em" : "É correto apenas o que se afirma em";
                 let altsReq = STATE.multiRange === 3 ? "Use 'apenas' nas alternativas (ex: I, apenas.)." : "NÃO use 'apenas' nas alternativas.";
-                promptExtras = `COMANDO: "${cmd}" (SEM PONTO FINAL). BALANCEAMENTO: Cada numeral (I a ${STATE.multiRange}) deve aparecer EXATAMENTE 3 vezes no conjunto das alternativas A-E. ${altsReq}`;
+                promptExtras = `COMANDO: "${cmd}" (SEM PONTO FINAL). BALANCEAMENTO: Gere 5 alternativas (A-E). Cada numeral (I a ${STATE.multiRange}) deve aparecer EXATAMENTE 3 VEZES no conjunto total das alternativas A-E. ${altsReq}`;
             }
             if (STATE.type === 'INCOMPLETE') promptExtras = `REGRA: Enunciado SEM ponto final. Alternativas minúsculas.`;
             if (STATE.type === 'DISCURSIVE') promptExtras = `ESTRUTURA: Itens a), b) e c) obrigatórios em linhas separadas. GRADE DE CORREÇÃO: Título centralizado e negrito: <div style="text-align:center; font-weight:bold; margin-top:30px; text-transform:uppercase;">GRADE DE CORREÇÃO</div>. ITENS DA GRADE: "Critério - Descrição" sem pontos numéricos.`;
 
-            const prompt = `Atue como Especialista INEP. NUNCA use "Prezado docente," ou rótulos. QUANTIDADE: ${STATE.quantity}. REGRAS: Texto base +500 caracteres fundamentados. Fonte real abaixo do texto base em HTML: <strong>Fonte:</strong> [Referência]. Itens/Alternativas um abaixo do outro. Explicação profunda no final. Separe questões com "---". ${promptExtras}`;
+            const prompt = `Atue como Especialista INEP. NUNCA use "Prezado docente," ou rótulos. QUANTIDADE: ${STATE.quantity}. REGRAS: Texto base +500 caracteres fundamentados. Fonte real abaixo do texto base em HTML: <strong>Fonte:</strong> [Referência]. Itens/Alternativas um abaixo do outro com quebra de linha. Explicação profunda no final. Separe questões com "---". ${promptExtras}`;
 
             try {
                 const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt }) });
@@ -288,12 +295,12 @@
             const txt = document.getElementById('audit-input').value; if(!txt) return alert("Cole a questão.");
             const btn = document.getElementById('btn-aud'); btn.innerHTML = 'Analisando...'; btn.disabled = true;
             try {
-                const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt: `ATUE COMO AUDITOR INEP. Analise estrutura e taxonomia técnica completa: ${txt}` }) });
+                const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt: `ATUE COMO AUDITOR INEP. Analise a estrutura técnica e taxonomia completa: ${txt}` }) });
                 const data = await res.json();
                 document.getElementById('placeholder').classList.add('hidden');
                 document.getElementById('output').classList.remove('hidden');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
-            } catch(e) { alert("Erro na auditoria."); } finally { btn.innerHTML = 'Executar Laudo Técnico'; btn.disabled = false; }
+            } catch(e) { alert("Erro na auditoria."); } finally { btn.innerHTML = 'Executar Auditoria'; btn.disabled = false; }
         }
 
         function exportWord() {
@@ -302,7 +309,7 @@
             docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao_StudioPro.docx"));
         }
 
-        function exportPdf() { const el = document.getElementById('output'); html2pdf().set({ margin: 20, filename: 'Academicus_StudioPro.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(el).save(); }
+        function exportPdf() { const el = document.getElementById('output'); html2pdf().set({ margin: 15, filename: 'Academicus_StudioPro.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(el).save(); }
 
         init();
     </script>
