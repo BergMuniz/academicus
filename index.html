@@ -39,17 +39,20 @@
 
         .example-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-top: 14px; font-size: 0.75rem; color: #475569; line-height: 1.7; white-space: pre-wrap; border-left: 5px solid #cbd5e1; }
         
+        /* ESCADA DE DIFICULDADE */
         .diff-card { border-radius: 16px; border: 1px solid #e2e8f0; padding: 12px; height: 100px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; cursor: pointer; background: white; transition: all 0.2s; }
         .diff-bar { width: 100%; border-radius: 6px 6px 0 0; margin-bottom: 8px; background: #e2e8f0; transition: all 0.3s; }
         .diff-card.active-medium { background: #eff6ff; border-color: #60a5fa; }
         .diff-card.active-medium .diff-bar { background: #3b82f6; }
 
+        /* PIRÂMIDE DE BLOOM */
         .bloom-pyramid-btn { padding: 10px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; border: 1px solid #e2e8f0; border-radius: 12px; transition: all 0.3s; background: white; color: #64748b; }
-        .bloom-pyramid-btn.active { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .bloom-pyramid-btn.active { transform: scale(1.05); }
         #bloom-Criar.active, #bloom-Avaliar.active { background: #4f46e5; color: white; border-color: #4f46e5; }
         #bloom-Analisar.active, #bloom-Aplicar.active { background: #2563eb; color: white; border-color: #2563eb; }
         #bloom-Entender.active, #bloom-Lembrar.active { background: #0ea5e9; color: white; border-color: #0ea5e9; }
 
+        /* SELETORES */
         .key-btn { width: 42px; height: 42px; border-radius: 12px; border: 1px solid #e2e8f0; font-weight: 900; background: white; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .key-btn.active { background: #0284c7; color: white; border-color: #0284c7; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2); }
 
@@ -58,7 +61,6 @@
 
         .prose h3 { color: #0c4a6e; font-size: 1.2rem; font-weight: 900; border-bottom: 3px solid #e0f2fe; margin-top: 2.5rem; margin-bottom: 1.5rem; padding-bottom: 0.6rem; text-transform: uppercase; }
         .prose p { margin-bottom: 1.5rem; line-height: 1.8; text-align: justify; font-size: 1rem; }
-        .prose li { display: block; margin-bottom: 1.2rem; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -94,9 +96,9 @@
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm space-y-6">
                     <label class="text-[11px] font-black text-slate-500 uppercase tracking-widest block">Nível de Dificuldade</label>
                     <div class="grid grid-cols-3 gap-3">
-                        <div onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card"><div class="diff-bar" style="height:35%"></div><span class="text-[10px] font-bold text-slate-500 uppercase">Fácil</span></div>
-                        <div onclick="setDiff('Médio')" id="diff-Médio" class="diff-card active-medium"><div class="diff-bar" style="height:65%; background:#3b82f6"></div><span class="text-[10px] font-bold text-inep-700 uppercase">Médio</span></div>
-                        <div onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card"><div class="diff-bar" style="height:100%"></div><span class="text-[10px] font-bold text-slate-500 uppercase">Difícil</span></div>
+                        <div onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card"><div class="diff-bar" style="height:35%"></div><span class="text-[10px] font-bold text-slate-500">Fácil</span></div>
+                        <div onclick="setDiff('Médio')" id="diff-Médio" class="diff-card active-medium"><div class="diff-bar" style="height:65%; background:#3b82f6"></div><span class="text-[10px] font-bold text-inep-700">Médio</span></div>
+                        <div onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card"><div class="diff-bar" style="height:100%"></div><span class="text-[10px] font-bold text-slate-500">Difícil</span></div>
                     </div>
                 </div>
 
@@ -111,7 +113,7 @@
                         <button onclick="setBloom('Lembrar')" id="bloom-Lembrar" class="bloom-pyramid-btn active w-[90%]">Lembrar</button>
                     </div>
                     <div id="bloom-info-box" class="mt-4 p-5 rounded-2xl border hidden">
-                        <h4 id="bloom-info-title" class="font-black text-sm mb-1 uppercase text-bloomSky-800"></h4>
+                        <h4 id="bloom-info-title" class="font-black text-sm mb-1 uppercase"></h4>
                         <p id="bloom-info-desc" class="text-xs italic mb-4 leading-relaxed text-slate-600 font-medium"></p>
                         <div class="pt-4 border-t border-black/5">
                             <span class="text-[10px] font-black uppercase opacity-60">Verbos Sugeridos</span>
@@ -136,9 +138,9 @@
 
             <div id="panel-auditor" class="hidden bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm text-center">
                 <div class="p-4 bg-emerald-50 rounded-2xl inline-block mb-6"><i data-lucide="microscope" class="w-12 h-12 text-emerald-600"></i></div>
-                <h3 class="font-black text-emerald-800 text-xl uppercase tracking-tighter">Auditoria Técnica</h3>
-                <textarea id="audit-input" class="w-full p-6 bg-slate-50 border border-slate-200 rounded-[2rem] mt-8 mb-8 text-sm font-mono h-80 outline-none focus:bg-white" placeholder="Cole a questão completa para auditoria..."></textarea>
-                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-emerald-700 transition-all uppercase tracking-wide">Executar Auditoria</button>
+                <h3 class="font-black text-emerald-800 text-xl uppercase tracking-tighter">Auditoria de Itens</h3>
+                <textarea id="audit-input" class="w-full p-6 bg-slate-50 border border-slate-200 rounded-[2rem] mt-8 mb-8 text-sm font-mono h-80 outline-none focus:bg-white" placeholder="Cole a questão completa para laudo..."></textarea>
+                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-emerald-700 transition-all uppercase">Executar Auditoria</button>
             </div>
         </aside>
 
@@ -174,7 +176,7 @@
             "INCOMPLETE": { label: "Afirmação Incompleta", icon: "pen-tool", example: "O fenômeno descrito no texto fundamentado é caracterizado pela\n\n<strong>Fonte:</strong> Pesquisa NAP 2026.\n\na) alternativa correta.\nb) alternativa incorreta.\nc) alternativa incorreta.\nd) alternativa incorreta.\ne) alternativa incorreta." },
             "MULTIPLE": { label: "Complementação Múltipla", icon: "layers" },
             "ASSERTION": { label: "Asserção e Razão", icon: "git-compare" },
-            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> UNESCO. IA e Educação. 2023.\n\nCom base no texto, redija um texto dissertativo analisando os seguintes aspectos.\n\na) Primeiro tópico técnico.\nb) Segundo tópico técnico.\nc) Terceiro tópico técnico." }
+            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> UNESCO. IA e Educação. 2023.\n\nCom base no texto, redija um texto dissertativo analisando.\n\na) Tópico técnico um.\nb) Tópico técnico dois.\nc) Tópico técnico três." }
         };
 
         let STATE = { diff: 'Médio', bloom: 'Lembrar', type: 'SINGLE', assertionKey: 'A', multiRange: 5, quantity: 1 };
@@ -195,7 +197,7 @@
                     let exText = info.example || "";
                     if (key === 'MULTIPLE') {
                         let cmd = STATE.multiRange === 3 ? "É correto o que se afirma em" : "É correto apenas o que se afirma em";
-                        let alts = STATE.multiRange === 3 ? "a) I, apenas.\nb) II, apenas.\nc) III, apenas.\nd) I e II, apenas.\ne) I, II e III." : "a) I e II.\nb) I, III e IV.\nc) II e IV.\nd) II, III e IV.\ne) I, II, III e IV.";
+                        let alts = STATE.multiRange === 3 ? "a) I, apenas.\nb) III, apenas.\nc) I e II, apenas.\nd) II e III, apenas.\ne) I, II e III." : "a) I e II.\nb) I, III e IV.\nc) II e IV.\nd) II, III e IV.\ne) I, II, III e IV.";
                         let itemsStr = "I. Item um.\nII. Item dois.\nIII. Item três.";
                         if(STATE.multiRange >= 4) itemsStr += "\nIV. Item quatro.";
                         if(STATE.multiRange == 5) itemsStr += "\nV. Item cinco.";
@@ -216,7 +218,7 @@
                     if (key === 'ASSERTION') {
                         html += `<div class="mt-5 flex gap-2">`;
                         ['A','B','C','D','E'].forEach(l => {
-                            html += `<button onclick="event.stopPropagation(); STATE.assertionKey='${l}'; renderTypes();" class="key-btn ${STATE.assertionKey===l?'active':''}" title="${ASSERTION_LOGIC[l]}">${l}</button>`;
+                            html += `<button onclick="event.stopPropagation(); STATE.assertionKey='${l}'; renderTypes();" class="key-btn ${STATE.assertionKey===l?'active':''}" title="${l}">${l}</button>`;
                         });
                         html += `</div><div class="mt-4 p-4 bg-slate-50 rounded-2xl text-[10px] font-bold text-inep-700 italic border-l-4 border-inep-500 animate-fade-in shadow-sm">${ASSERTION_LOGIC[STATE.assertionKey]}</div>`;
                     }
@@ -250,7 +252,7 @@
             document.getElementById('panel-generator').classList.toggle('hidden', !isGen);
             document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
             document.getElementById('tab-gen').className = isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 uppercase" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 transition-all uppercase";
-            document.getElementById('tab-aud').className = !isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 transition-all" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 transition-all uppercase";
+            document.getElementById('tab-aud').className = !isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 uppercase transition-all" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 uppercase";
         }
 
         async function gerar() {
@@ -259,16 +261,16 @@
             btn.innerHTML = 'Construindo Questão Profissional...'; btn.disabled = true;
 
             let promptExtras = "";
-            if (STATE.type === 'ASSERTION') promptExtras = `GABARITO: Letra ${STATE.assertionKey}. Gere alternativas A-E padrão ENADE. O PORQUE deve vir centralizado: <div style="text-align:center; font-weight:bold; margin:15px 0;">PORQUE</div>.`;
+            if (STATE.type === 'ASSERTION') promptExtras = `GABARITO: Letra ${STATE.assertionKey}. Gere obrigatoriamente as alternativas A-E padrão ENADE. O PORQUE deve vir centralizado: <div style="text-align:center; font-weight:bold; margin:15px 0;">PORQUE</div>.`;
             if (STATE.type === 'MULTIPLE') {
                 let cmd = STATE.multiRange === 3 ? "É correto o que se afirma em" : "É correto apenas o que se afirma em";
                 let altsReq = STATE.multiRange === 3 ? "Use 'apenas' nas alternativas (ex: I, apenas.)." : "NÃO use 'apenas' nas alternativas.";
-                promptExtras = `COMANDO: "${cmd}" (SEM PONTO FINAL). BALANCEAMENTO: Gere 5 alternativas (A-E). Cada numeral (I a ${STATE.multiRange}) deve aparecer EXATAMENTE 3 VEZES no total das alternativas A-E. ${altsReq}`;
+                promptExtras = `COMANDO: "${cmd}" (SEM PONTO FINAL). BALANCEAMENTO INEP: Gere 5 alternativas (A-E). Cada numeral romano (I a ${STATE.multiRange}) deve aparecer EXATAMENTE 3 VEZES na soma total de todas as alternativas A-E. ${altsReq}`;
             }
             if (STATE.type === 'INCOMPLETE') promptExtras = `REGRA: Enunciado SEM ponto final. Alternativas minúsculas.`;
-            if (STATE.type === 'DISCURSIVE') promptExtras = `ESTRUTURA: Itens a), b) e c) obrigatórios em linhas separadas. GRADE DE CORREÇÃO: Título centralizado e negrito: <div style="text-align:center; font-weight:bold; margin-top:30px; text-transform:uppercase;">GRADE DE CORREÇÃO</div>. ITENS DA GRADE: "Critério - Descrição Técnica Profissional" (sem numeração de pontos).`;
+            if (STATE.type === 'DISCURSIVE') promptExtras = `ESTRUTURA: Itens a), b) e c) obrigatórios. GRADE DE CORREÇÃO: Título centralizado e negrito: <div style="text-align:center; font-weight:bold; margin-top:30px; text-transform:uppercase;">GRADE DE CORREÇÃO</div>. ITENS DA GRADE: "Critério - Descrição" sem pontos numéricos.`;
 
-            const prompt = `Atue como Especialista INEP. NUNCA use "Prezado docente," ou rótulos. QUANTIDADE: ${STATE.quantity}. REGRAS: Texto base +500 caracteres fundamentados. Fonte real abaixo do texto base em HTML: <strong>Fonte:</strong> [Referência]. Itens/Alternativas um abaixo do outro com quebra de linha. Explicação pedagógica profunda no final. Separe por "---". ${promptExtras}`;
+            const prompt = `Atue como Especialista INEP. NUNCA use "Prezado docente," ou rótulos ("Texto de suporte:", "Fonte:", "Comando:", "Itens:"). QUANTIDADE: ${STATE.quantity}. REGRAS: Texto base +500 caracteres fundamentados. Fonte bibliográfica real logo abaixo do texto base em HTML: <strong>Fonte:</strong> [Referência em peso normal]. Itens/Alternativas um abaixo do outro com quebra de linha. Explicação pedagógica profunda no final. Separe por "---". ${promptExtras}`;
 
             try {
                 const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt }) });
@@ -296,10 +298,10 @@
         function exportWord() {
             const text = document.getElementById('output').innerText; const lines = text.split('\n');
             const doc = new docx.Document({ sections: [{ children: lines.map(line => new docx.Paragraph({ children: [new docx.TextRun({ text: line, size: 24, font: "Arial" })], spacing: { after: 200 } })) }] });
-            docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao_StudioPro.docx"));
+            docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Relatorio_NAP_Questoes.docx"));
         }
 
-        function exportPdf() { const el = document.getElementById('output'); html2pdf().set({ margin: 15, filename: 'Academicus_StudioPro.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(el).save(); }
+        function exportPdf() { const el = document.getElementById('output'); html2pdf().set({ margin: 20, filename: 'Relatorio_StudioPro.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(el).save(); }
 
         init();
     </script>
