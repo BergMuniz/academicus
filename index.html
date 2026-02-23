@@ -39,25 +39,29 @@
 
         .example-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-top: 14px; font-size: 0.75rem; color: #475569; line-height: 1.7; white-space: pre-wrap; border-left: 5px solid #cbd5e1; }
         
+        /* ESCADA DE DIFICULDADE */
         .diff-card { border-radius: 16px; border: 1px solid #e2e8f0; padding: 12px; height: 100px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; cursor: pointer; background: white; transition: all 0.2s; }
-        .diff-bar { width: 100%; border-radius: 6px 6px 0 0; margin-bottom: 8px; background: #e2e8f0; }
+        .diff-bar { width: 100%; border-radius: 6px 6px 0 0; margin-bottom: 8px; background: #e2e8f0; transition: all 0.3s; }
         .diff-card.active-medium { background: #eff6ff; border-color: #60a5fa; }
         .diff-card.active-medium .diff-bar { background: #3b82f6; }
 
-        .bloom-pyramid-btn { padding: 10px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border: 1px solid #e2e8f0; border-radius: 12px; transition: all 0.3s; background: white; color: #64748b; }
+        /* PIRÂMIDE DE BLOOM */
+        .bloom-pyramid-btn { padding: 10px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; border: 1px solid #e2e8f0; border-radius: 12px; transition: all 0.3s; background: white; color: #64748b; }
         .bloom-pyramid-btn.active { transform: scale(1.05); }
         #bloom-Criar.active, #bloom-Avaliar.active { background: #4f46e5; color: white; border-color: #4f46e5; }
         #bloom-Analisar.active, #bloom-Aplicar.active { background: #2563eb; color: white; border-color: #2563eb; }
         #bloom-Entender.active, #bloom-Lembrar.active { background: #0ea5e9; color: white; border-color: #0ea5e9; }
 
-        .key-btn { width: 44px; height: 44px; border-radius: 12px; border: 1px solid #e2e8f0; font-weight: 900; background: white; flex: 1; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .key-btn.active { background: #0284c7; color: white; border-color: #0284c7; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2); }
+        /* SELETORES */
+        .key-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid #e2e8f0; font-weight: 900; background: white; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .key-btn.active { background: #0284c7; color: white; border-color: #0284c7; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2); }
 
-        .ctrl-btn { padding: 10px 14px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; border: 1px solid #e2e8f0; background: white; color: #64748b; flex: 1; display: flex; justify-content: center; }
+        .ctrl-btn { padding: 8px 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; border: 1px solid #e2e8f0; background: white; color: #64748b; flex: 1; display: flex; justify-content: center; }
         .ctrl-btn.active { background: #0284c7; border-color: #0284c7; color: white; }
 
         .prose h3 { color: #0c4a6e; font-size: 1.2rem; font-weight: 900; border-bottom: 3px solid #e0f2fe; margin-top: 2.5rem; margin-bottom: 1.5rem; padding-bottom: 0.6rem; text-transform: uppercase; }
-        .prose p { margin-bottom: 1.5rem; line-height: 1.8; text-align: justify; }
+        .prose p { margin-bottom: 1.5rem; line-height: 1.8; text-align: justify; font-size: 1rem; }
+        .prose li { display: block; margin-bottom: 1.2rem; }
         .gabarito-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 8px solid #16a34a; padding: 2rem; border-radius: 20px; margin-top: 4rem; }
     </style>
 </head>
@@ -73,7 +77,7 @@
         </div>
         <div class="flex bg-slate-100 p-1.5 rounded-2xl">
             <button onclick="setMode('generator')" id="tab-gen" class="px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 uppercase">Design</button>
-            <button onclick="setMode('auditor')" id="tab-aud" class="px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 uppercase">Auditoria</button>
+            <button onclick="setMode('auditor')" id="tab-aud" class="px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 transition-all uppercase">Auditoria</button>
         </div>
     </header>
 
@@ -94,9 +98,9 @@
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm space-y-6">
                     <label class="text-[11px] font-black text-slate-500 uppercase tracking-widest block">Nível de Dificuldade</label>
                     <div class="grid grid-cols-3 gap-3">
-                        <div onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card"><div class="diff-bar" style="height:35%"></div><span class="text-[10px] font-bold text-slate-500">Fácil</span></div>
-                        <div onclick="setDiff('Médio')" id="diff-Médio" class="diff-card active-medium"><div class="diff-bar" style="height:65%; background:#3b82f6"></div><span class="text-[10px] font-bold text-inep-700">Médio</span></div>
-                        <div onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card"><div class="diff-bar" style="height:100%"></div><span class="text-[10px] font-bold text-slate-500">Difícil</span></div>
+                        <div onclick="setDiff('Fácil')" id="diff-Fácil" class="diff-card"><div class="diff-bar" style="height:35%"></div><span class="text-[10px] font-bold">Fácil</span></div>
+                        <div onclick="setDiff('Médio')" id="diff-Médio" class="diff-card active-medium"><div class="diff-bar" style="height:65%; background:#3b82f6"></div><span class="text-[10px] font-bold">Médio</span></div>
+                        <div onclick="setDiff('Difícil')" id="diff-Difícil" class="diff-card"><div class="diff-bar" style="height:100%"></div><span class="text-[10px] font-bold">Difícil</span></div>
                     </div>
                 </div>
 
@@ -111,8 +115,8 @@
                         <button onclick="setBloom('Lembrar')" id="bloom-Lembrar" class="bloom-pyramid-btn active w-[90%]">Lembrar</button>
                     </div>
                     <div id="bloom-info-box" class="mt-4 p-5 rounded-2xl border hidden">
-                        <h4 id="bloom-info-title" class="font-black text-sm mb-1 uppercase"></h4>
-                        <p id="bloom-info-desc" class="text-xs italic mb-4 leading-relaxed text-slate-600"></p>
+                        <h4 id="bloom-info-title" class="font-black text-sm mb-1 uppercase text-bloomSky-800"></h4>
+                        <p id="bloom-info-desc" class="text-xs italic mb-4 leading-relaxed text-slate-600 font-medium"></p>
                         <div class="pt-4 border-t border-black/5">
                             <span class="text-[10px] font-black uppercase opacity-60">Verbos Sugeridos</span>
                             <p id="bloom-info-verbs" class="text-xs font-bold mt-1 text-slate-800"></p>
@@ -123,11 +127,11 @@
                 <div id="types-container" class="space-y-4"></div>
 
                 <div class="bg-white p-7 rounded-[2.5rem] border border-slate-200 shadow-sm flex items-center justify-between">
-                    <span class="text-xs font-black uppercase text-slate-500 tracking-widest">Quantidade</span>
+                    <span class="text-xs font-black uppercase text-slate-500">Quantidade</span>
                     <div class="flex items-center gap-5">
-                        <button onclick="updateQty(-1)" class="w-12 h-12 border-2 rounded-xl flex items-center justify-center font-black">-</button>
+                        <button onclick="updateQty(-1)" class="w-12 h-12 border-2 rounded-xl bg-white shadow-sm flex items-center justify-center font-black">-</button>
                         <span id="qty-val" class="font-black text-slate-900 text-2xl w-8 text-center">1</span>
-                        <button onclick="updateQty(1)" class="w-12 h-12 border-2 rounded-xl flex items-center justify-center font-black">+</button>
+                        <button onclick="updateQty(1)" class="w-12 h-12 border-2 rounded-xl bg-white shadow-sm flex items-center justify-center font-black">+</button>
                     </div>
                 </div>
 
@@ -136,9 +140,9 @@
 
             <div id="panel-auditor" class="hidden bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm text-center">
                 <i data-lucide="microscope" class="w-12 h-12 text-emerald-600 mx-auto mb-6"></i>
-                <h3 class="font-black text-emerald-800 text-xl uppercase tracking-tighter">Auditoria Técnica</h3>
-                <textarea id="audit-input" class="w-full p-6 bg-slate-50 border border-slate-200 rounded-[2rem] mt-8 mb-8 text-sm font-mono h-80 outline-none focus:bg-white" placeholder="Cole a questão completa..."></textarea>
-                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl shadow-xl hover:bg-emerald-700 transition-all uppercase">Executar Laudo Técnico</button>
+                <h3 class="font-black text-emerald-800 text-xl uppercase">Auditoria Técnica</h3>
+                <textarea id="audit-input" class="w-full p-6 bg-slate-50 border border-slate-200 rounded-[2rem] mt-8 mb-8 text-sm font-mono h-80 outline-none focus:bg-white transition-all" placeholder="Cole a questão completa..."></textarea>
+                <button onclick="auditar()" id="btn-aud" class="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl shadow-xl uppercase">Executar Laudo Técnico</button>
             </div>
         </aside>
 
@@ -167,17 +171,17 @@
             "Lembrar": { color: "sky", desc: "Recuperar conhecimento relevante da memória.", verbs: "CITAR, DEFINIR, LISTAR, IDENTIFICAR, RECORDAR." }
         };
 
+        const ASSERTION_LOGIC = { 'A': 'As asserções I e II são verdadeiras, e a II é uma justificativa correta da I.', 'B': 'As asserções I e II são verdadeiras, mas a II não é uma justificativa correta da I.', 'C': 'A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.', 'D': 'A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.', 'E': 'As asserções I e II são proposições falsas.' };
+
         const TYPES = {
-            "SINGLE": { label: "Resposta Única", icon: "check-circle", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> Junqueira, L. Biologia Celular. 2012.\n\nQual a principal função do conceito apresentado.\n\na) Alternativa correta.\nb) Alternativa incorreta.\nc) Alternativa incorreta.\nd) Alternativa incorreta.\ne) Alternativa incorreta." },
+            "SINGLE": { label: "Resposta Única", icon: "check-circle", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> Junqueira, L. Biologia Celular. 2012.\n\nQual a função do conceito técnico apresentado.\n\na) Alternativa correta.\nb) Distrator.\nc) Distrator.\nd) Distrator.\ne) Distrator." },
             "INCOMPLETE": { label: "Afirmação Incompleta", icon: "pen-tool", example: "O fenômeno descrito no texto fundamentado é caracterizado pela\n\n<strong>Fonte:</strong> Pesquisa NAP 2026.\n\na) alternativa correta.\nb) alternativa incorreta.\nc) alternativa incorreta.\nd) alternativa incorreta.\ne) alternativa incorreta." },
             "MULTIPLE": { label: "Complementação Múltipla", icon: "layers" },
             "ASSERTION": { label: "Asserção e Razão", icon: "git-compare" },
-            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> UNESCO. IA e Educação. 2023.\n\nCom base no texto, redija um texto dissertativo analisando os seguintes aspectos.\n\na) Tópico técnico um.\nb) Tópico técnico dois.\nc) Tópico técnico três." }
+            "DISCURSIVE": { label: "Discursiva", icon: "file-text", example: "Texto suporte denso (+500 caracteres).\n\n<strong>Fonte:</strong> UNESCO. IA e Educação. 2023.\n\nCom base no texto, redija um texto dissertativo analisando.\n\na) Tópico técnico um.\nb) Tópico técnico dois.\nc) Tópico técnico três." }
         };
 
-        const ASSERTION_LOGIC = { 'A': 'As asserções I e II são verdadeiras, e a II é uma justificativa correta da I.', 'B': 'As asserções I e II são verdadeiras, mas a II não é uma justificativa correta da I.', 'C': 'A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.', 'D': 'A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.', 'E': 'As asserções I e II são proposições falsas.' };
-
-        let STATE = { diff: 'Médio', bloom: 'Lembrar', type: 'SINGLE', assertionKey: 'A', multiRange: 4, quantity: 1 };
+        let STATE = { diff: 'Médio', bloom: 'Lembrar', type: 'SINGLE', assertionKey: 'A', multiRange: 5, quantity: 1 };
 
         function init() { renderTypes(); lucide.createIcons(); setBloom('Lembrar'); }
 
@@ -189,18 +193,24 @@
                 const div = document.createElement('div');
                 div.className = `type-card ${active ? 'active' : ''}`;
                 div.onclick = () => { STATE.type = key; renderTypes(); };
+                
                 let html = `<div class="flex items-center gap-4"><i data-lucide="${info.icon}" class="w-6 h-6 text-inep-600"></i><div class="flex-1 font-bold text-sm text-slate-800 uppercase tracking-tighter">${info.label}</div><div class="radio-circle"></div></div>`;
+                
                 if (active) {
                     let exText = info.example || "";
                     if (key === 'MULTIPLE') {
                         let cmd = STATE.multiRange === 3 ? "É correto o que se afirma em" : "É correto apenas o que se afirma em";
-                        let alts = STATE.multiRange === 3 ? "a) I, apenas.\nb) II, apenas.\nc) III, apenas.\nd) I e II, apenas.\ne) I, II e III." : "a) I e II.\nb) I e IV.\nc) II e III.\nd) I, III e IV.\ne) II, III e IV.";
-                        exText = `Texto contextualizado (+500 caracteres).\n\n<strong>Fonte:</strong> Referência Real.\n\nAvalie as afirmações a seguir.\n\nI. Proposição técnica.\nII. Proposição técnica.\nIII. Proposição técnica.\n\n${cmd}\n\n${alts}`;
+                        let alts = STATE.multiRange === 3 ? "a) I, apenas.\nb) II, apenas.\nc) III, apenas.\nd) I e II, apenas.\ne) I, II e III." : "a) I e II.\nb) I, IV e V.\nc) II e III.\nd) I, III e IV.\ne) II, III, IV e V.";
+                        let itemsStr = "I. Item um.\nII. Item dois.\nIII. Item três.";
+                        if(STATE.multiRange >= 4) itemsStr += "\nIV. Item quatro.";
+                        if(STATE.multiRange == 5) itemsStr += "\nV. Item cinco.";
+                        exText = `Texto denso (+500 caracteres).\n\n<strong>Fonte:</strong> Referência Real.\n\nAvalie as afirmações a seguir.\n\n${itemsStr}\n\n${cmd}\n\n${alts}`;
                     }
                     if (key === 'ASSERTION') {
-                        exText = `Texto técnico denso (+500 caracteres).\n\n<strong>Fonte:</strong> Katz, J. Tratado de Audiologia. 1999.\n\nAnalise as seguintes asserções e a relação proposta entre elas.\n\nI. Proposição um.\n\n<div class=\"text-center font-bold py-3\">PORQUE</div>\n\nII. Proposição dois.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.\nb) As asserções I e II são verdadeiras, mas a II não justifica a I.\nc) A asserção I é verdadeira e a II é falsa.\nd) A asserção I é falsa e a II é verdadeira.\ne) Ambas são falsas.`;
+                        exText = `Texto técnico (+500 caracteres).\n\n<strong>Fonte:</strong> Katz, J. 1999.\n\nAnalise as asserções e a relação proposta.\n\nI. Proposição.\n\n<div class=\"text-center font-bold py-3\">PORQUE</div>\n\nII. Razão.\n\nA respeito dessas asserções, assinale a opção correta.\n\na) ${ASSERTION_LOGIC['A']}\nb) ${ASSERTION_LOGIC['B']}\nc) ${ASSERTION_LOGIC['C']}\nd) ${ASSERTION_LOGIC['D']}\ne) ${ASSERTION_LOGIC['E']}`;
                     }
                     html += `<div class="example-box font-medium">${exText}</div>`;
+                    
                     if (key === 'MULTIPLE') {
                         html += `<div class="mt-5 flex gap-2">`;
                         [3,4,5].forEach(n => {
@@ -211,9 +221,9 @@
                     if (key === 'ASSERTION') {
                         html += `<div class="mt-5 flex gap-2">`;
                         ['A','B','C','D','E'].forEach(l => {
-                            html += `<button onclick="event.stopPropagation(); STATE.assertionKey='${l}'; renderTypes();" class="key-btn ${STATE.assertionKey===l?'active':''}" title="${ASSERTION_LOGIC[l]}">${l}</button>`;
+                            html += `<button onclick="event.stopPropagation(); STATE.assertionKey='${l}'; renderTypes();" class="key-btn ${STATE.assertionKey===l?'active':''}" title="${l}">${l}</button>`;
                         });
-                        html += `</div><div class="mt-4 p-4 bg-slate-50 rounded-2xl text-[10px] font-bold text-inep-700 italic border-l-4 border-inep-500 animate-fade-in shadow-sm">${ASSERTION_LOGIC[STATE.assertionKey]}</div>`;
+                        html += `</div><div class="mt-4 p-4 bg-slate-50 rounded-2xl text-[10px] font-bold text-inep-700 italic border-l-4 border-inep-500 shadow-sm animate-fade-in">${ASSERTION_LOGIC[STATE.assertionKey]}</div>`;
                     }
                 }
                 div.innerHTML = html; container.appendChild(div);
@@ -244,26 +254,26 @@
             const isGen = mode === 'generator';
             document.getElementById('panel-generator').classList.toggle('hidden', !isGen);
             document.getElementById('panel-auditor').classList.toggle('hidden', isGen);
-            document.getElementById('tab-gen').className = isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 uppercase" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 transition-all uppercase";
-            document.getElementById('tab-aud').className = !isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 transition-all" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 transition-all uppercase";
+            document.getElementById('tab-gen').className = isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 uppercase" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 uppercase";
+            document.getElementById('tab-aud').className = !isGen ? "px-6 py-2.5 rounded-xl text-xs font-black bg-white shadow-lg text-inep-700 transition-all" : "px-6 py-2.5 rounded-xl text-xs font-black text-slate-500 hover:text-slate-800 uppercase";
         }
 
         async function gerar() {
             const btn = document.getElementById('btn-main'); const curso = document.getElementById('curso').value; const conteudo = document.getElementById('conteudo').value;
-            if(!curso || !conteudo) return alert("Erro: Preencha os campos obrigatórios.");
+            if(!curso || !conteudo) return alert("Erro: Campos obrigatórios.");
             btn.innerHTML = 'Construindo Questão Profissional...'; btn.disabled = true;
 
             let promptExtras = "";
-            if (STATE.type === 'ASSERTION') promptExtras = `GABARITO: ${STATE.assertionKey}. REGRAS: Gere obrigatoriamente as alternativas A-E. O PORQUE deve vir centralizado: <div style="text-align:center; font-weight:bold; margin:15px 0;">PORQUE</div>.`;
+            if (STATE.type === 'ASSERTION') promptExtras = `GABARITO: Letra ${STATE.assertionKey}. Gere obrigatoriamente as alternativas A-E. O PORQUE deve vir centralizado: <div style="text-align:center; font-weight:bold; margin:15px 0;">PORQUE</div>.`;
             if (STATE.type === 'MULTIPLE') {
                 let cmd = STATE.multiRange === 3 ? "É correto o que se afirma em" : "É correto apenas o que se afirma em";
-                let altsReq = STATE.multiRange === 3 ? "Use 'apenas' em cada alternativa." : "NÃO use 'apenas' nas alternativas.";
-                promptExtras = `COMANDO: "${cmd}" (SEM PONTO FINAL). ${altsReq} Gere obrigatoriamente alternativas A-E com balanceamento ENADE.`;
+                let altsReq = STATE.multiRange === 3 ? "Use 'apenas' nas alternativas." : "NÃO use 'apenas' nas alternativas.";
+                promptExtras = `COMANDO: "${cmd}" (SEM PONTO FINAL). ${altsReq} Gere alternativas A-E com balanceamento ENADE.`;
             }
-            if (STATE.type === 'INCOMPLETE') promptExtras = `REGRA CRÍTICA: O enunciado deve terminar sem ponto final. As alternativas devem iniciar com letra minúscula.`;
-            if (STATE.type === 'DISCURSIVE') promptExtras = `ESTRUTURA: Itens a), b) e c) obrigatórios. GRADE DE CORREÇÃO: Título centralizado e negrito: <div style="text-align:center; font-weight:bold; margin-top:30px; text-transform:uppercase;">GRADE DE CORREÇÃO</div>. ITENS DA GRADE: "Critério - Descrição" sem pontos numéricos.`;
+            if (STATE.type === 'INCOMPLETE') promptExtras = `REGRA: Enunciado SEM ponto final. Alternativas minúsculas.`;
+            if (STATE.type === 'DISCURSIVE') promptExtras = `ESTRUTURA: Itens a), b) e c) obrigatórios em linhas separadas. GRADE DE CORREÇÃO: Título centralizado e negrito: <div style="text-align:center; font-weight:bold; margin-top:30px; text-transform:uppercase;">GRADE DE CORREÇÃO</div>. ITENS DA GRADE: "Critério - Descrição" sem menção a pontos numéricos.`;
 
-            const prompt = `Atue como Especialista INEP. NUNCA use vocativos ou rótulos. QUANTIDADE: ${STATE.quantity}. REGRAS: Texto base +500 caracteres. Fonte bibliográfica real abaixo do texto base em HTML: <strong>Fonte:</strong> [Referência]. Itens/Alternativas um abaixo do outro com quebra de linha. Explicação pedagógica profunda no final de cada questão. Separe questões com "---". ${promptExtras}`;
+            const prompt = `Atue como Especialista INEP. NUNCA use "Prezado docente," ou rótulos. QUANTIDADE: Gere EXATAMENTE ${STATE.quantity} questões. REGRAS: Texto base +500 caracteres fundamentados. Fonte real logo abaixo do texto base em HTML: <strong>Fonte:</strong> [Referência em peso normal]. Itens/Alternativas um abaixo do outro. Explicação profunda no final. Separe questões com "---". ${promptExtras}`;
 
             try {
                 const res = await fetch('/api/gemini', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ prompt }) });
@@ -272,6 +282,7 @@
                 document.getElementById('output').classList.remove('hidden');
                 document.getElementById('tools').classList.remove('opacity-0');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
+                if (window.innerWidth < 1024) setTimeout(() => { document.getElementById('result-anchor').scrollIntoView({ behavior: 'smooth' }); }, 100);
             } catch(e) { alert("Erro na API."); } finally { btn.innerHTML = 'Gerar Questão Studio Pro'; btn.disabled = false; }
         }
 
@@ -284,7 +295,7 @@
                 document.getElementById('placeholder').classList.add('hidden');
                 document.getElementById('output').classList.remove('hidden');
                 document.getElementById('output').innerHTML = marked.parse(data.text);
-            } catch(e) { alert("Erro na auditoria."); } finally { btn.innerHTML = 'Executar Auditoria'; btn.disabled = false; }
+            } catch(e) { alert("Erro na auditoria."); } finally { btn.innerHTML = 'Executar Laudo Técnico'; btn.disabled = false; }
         }
 
         function exportWord() {
@@ -293,7 +304,10 @@
             docx.Packer.toBlob(doc).then(blob => saveAs(blob, "Questao_StudioPro.docx"));
         }
 
-        function exportPdf() { const el = document.getElementById('output'); html2pdf().set({ margin: 15, filename: 'Academicus_StudioPro.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(el).save(); }
+        function exportPdf() {
+            const el = document.getElementById('output');
+            html2pdf().set({ margin: 20, filename: 'Academicus_StudioPro.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(el).save();
+        }
 
         init();
     </script>
